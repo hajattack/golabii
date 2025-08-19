@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Au Saffrose | Coming Soon</title>
+    <!--
+      Basic SEO metadata
+      A meaningful description encourages click‑through and ensures your site is properly indexed.
+    -->
+    <meta
+      name="description"
+      content="Au Saffrose donates 100% of profits to charity, community and you! Join the waitlist to be notified when our limited batch launches on Kickstarter and Indiegogo."
+    />
+    <meta name="robots" content="index, follow" />
+    <!-- Canonical URL prevents duplicate content penalties. -->
+    <link rel="canonical" href="https://golabii.com/" />
+    <!-- Open Graph tags for rich social sharing. -->
+    <meta property="og:title" content="Au Saffrose – Coming Soon" />
+    <meta
+      property="og:description"
+      content="A botanical elixir where every purchase empowers communities. Sign up to reserve your spot in our upcoming limited batch."
+    />
+    <meta property="og:image" content="assets/poster.png" />
+    <meta property="og:url" content="https://golabii.com/" />
+    <!-- Import web fonts for the refined look. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Playfair Display for headings, Great Vibes for the brand name and Lato for body text -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Top activism bar -->
+    <header class="topbar">
+      <div class="topbar__content">
+        <span>Kurdistan</span>
+        <span>❤️🤝</span>
+        <span>Iran</span>
+        <span>❤️🤝</span>
+        <span>Palestine</span>
+        <span>❤️🤝</span>
+        <span>Congo</span>
+        <span>❤️🤝</span>
+        <span>Yemen</span>
+        <span>❤️🤝</span>
+        <span>Myanmar</span>
+        <span>❤️</span>
+        <span class="topbar__message">We are not free, till we all are</span>
+      </div>
+    </header>
+    <!-- Main hero section -->
+    <main class="hero">
+      <!-- Media column: autoplaying video with a poster fallback -->
+      <div class="hero__media">
+        <video
+          playsinline
+          autoplay
+          muted
+          loop
+          preload="auto"
+          poster="assets/poster.png"
+          class="hero__video"
+        >
+          <source src="assets/hero.mov" type="video/quicktime" />
+          <!-- Fallback: if the browser cannot play .mov, show the poster image -->
+          <img src="assets/poster.png" alt="Au Saffrose product preview" />
+        </video>
+      </div>
+      <!-- Content column -->
+      <div class="hero__content">
+        <h1 class="brand">Au Saffrose</h1>
+        <p class="subtitle">100% profits to charity and community &amp; you!</p>
+        <h2 class="headline">Coming Soon to Kickstarter &amp; Indiegogo</h2>
+        <a
+          href="#waitlist"
+          class="cta-button"
+          aria-label="Join the waitlist to be notified about Au Saffrose launch"
+        >
+          🔔🌹&nbsp;Join&nbsp;the&nbsp;Waitlist
+        </a>
+        <p class="limited">LIMITED BATCH&nbsp;<span class="highlight">less than 900 spots</span> left</p>
+      </div>
+      <!-- Decorative icon column; these can be replaced with actual botanical illustrations later. -->
+      <aside class="hero__decor">
+        <span role="img" aria-label="saffron flower" class="decor__item">🪻</span>
+        <span role="img" aria-label="rose" class="decor__item">🌹</span>
+        <span role="img" aria-label="cardamom" class="decor__item">🍃</span>
+        <span role="img" aria-label="blue flower" class="decor__item">🌸</span>
+        <span role="img" aria-label="cotton" class="decor__item">🌿</span>
+      </aside>
+    </main>
+    <!-- Placeholder for waitlist link; this anchors the link; you can swap in your Google Form URL. -->
+    <section id="waitlist" class="waitlist-section">
+      <h2>Join our waitlist</h2>
+      <p>
+        Thank you for your interest in Au Saffrose. We're collecting contact details and a few
+        questions to better understand our community. Please follow the link below to fill
+        out a short survey and secure your spot in the limited batch.
+      </p>
+      <!-- Use target="_blank" so the form opens in a new tab, keeping visitors on the landing page. -->
+      <a
+        href="https://docs.google.com/forms/"
+        class="secondary-button"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Take the survey</a
+      >
+    </section>
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p>&copy; <span id="year"></span> Au Saffrose. All rights reserved.</p>
+    </footer>
+    <script>
+      // Dynamically set the year so the copyright stays current.
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
