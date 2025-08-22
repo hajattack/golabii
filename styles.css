@@ -83,18 +83,28 @@ a {
 }
 
 /* Media column */
+/* Media column */
 .hero__media {
   position: relative;
+  /* Use flex layout so the decorative column and video sit side by side */
+  display: flex;
+  align-items: center;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.hero__video,
-.hero__media img {
+/* The video should expand to fill the remaining space after the ingredient strip */
+.hero__video {
+  flex: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+/* Ensure images within hero__media (like the ingredient strip) don't stretch unexpectedly */
+.hero__media img {
   display: block;
 }
 
@@ -184,8 +194,8 @@ a {
   flex-direction: column;
   /* Center the button and limited text within their group */
   align-items: center;
-  /* Shift the CTA group right slightly; keep nearer to the text for better balance */
-  margin-left: 2rem;
+  /* Do not shift the CTA group; align it with the left edge of the text column */
+  margin-left: 0;
 }
 
 .hero__cta .cta-button {
@@ -206,14 +216,12 @@ a {
   gap: 1rem;
 }
 
+/* Ingredient strip column next to the video */
 .decor-image {
-  position: absolute;
-  /* Position the icons strip to the left side of the video */
-  left: -4.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
   width: 5rem;
   height: auto;
+  margin-right: 1rem;
   /* Let the background subtly show through */
   opacity: 0.9;
 }
