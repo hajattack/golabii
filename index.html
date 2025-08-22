@@ -27,9 +27,9 @@
     <!-- Import web fonts for the refined look. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Playfair Display for headings, Great Vibes for the brand name and Lato for body text -->
+    <!-- Playfair Display for headings, Dancing Script for the brand name and Lato for body text -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -38,12 +38,15 @@
     <!-- Top activism bar -->
     <header class="topbar">
       <div class="topbar__content">
-        <span>For children of Palestine</span>
+        <span>For innocent children of Gaza</span>
         <span>❤️🤝</span>
-        <span>Women of Iran</span>
+        <span>brave free women of Iran</span>
         <span>❤️🤝</span>
-        <span>Kolbars of Kurdistan</span>
-        <span class="topbar__message">We're not free till we are all free</span>
+        <span>marginalized kolbars of Kurdistan</span>
+        <span>❤️🤝</span>
+        <!-- Combine the final regions into a single span and include an ellipsis, without emojis between -->
+        <span>Yemen Congo Myanmar…</span>
+        <span class="topbar__message">not free till we all free</span>
       </div>
     </header>
     <!-- Main hero section -->
@@ -66,45 +69,42 @@
       </div>
       <!-- Content column -->
       <div class="hero__content">
-        <h1 class="brand">Golabii</h1>
-        <p class="subtitle">100% profits to charity and community &amp; you!</p>
-        <h2 class="headline">Coming Soon to Kickstarter &amp; Indiegogo</h2>
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLScfqtq33MlxU2TwnSIa-u1_7X2xRFeGVvP6t_5K7i3UjyZY5w/viewform?usp=header"
-          class="cta-button"
-          aria-label="Join the waitlist and fill out our survey"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Join&nbsp;the&nbsp;Waitlist
-        </a>
-        <p class="limited">LIMITED BATCH&nbsp;<span class="highlight">less than 900 spots</span> left</p>
+        <div class="hero__text">
+          <!-- Split the brand into two spans so the initial can use a more legible font -->
+          <h1 class="brand"><span class="brand-initial">G</span><span class="brand-rest">olabii</span></h1>
+          <p class="subtitle">100% profits to charity &amp; community</p>
+          <h2 class="headline">Coming Soon to Kickstarter &amp; Indiegogo</h2>
+        </div>
+        <div class="hero__cta">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScfqtq33MlxU2TwnSIa-u1_7X2xRFeGVvP6t_5K7i3UjyZY5w/viewform?usp=header"
+            class="cta-button"
+            aria-label="Join the waitlist and fill out our survey"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Join&nbsp;the&nbsp;Waitlist
+          </a>
+          <p class="limited">LIMITED BATCH&nbsp;<span class="highlight">less than 900 spots</span> left</p>
+        </div>
       </div>
       <!-- Decorative icon column; these can be replaced with actual botanical illustrations later. -->
       <aside class="hero__decor">
-        <span role="img" aria-label="saffron flower" class="decor__item">🪻</span>
-        <span role="img" aria-label="rose" class="decor__item">🌹</span>
-        <span role="img" aria-label="cardamom" class="decor__item">🍃</span>
-        <span role="img" aria-label="blue flower" class="decor__item">🌸</span>
-        <span role="img" aria-label="cotton" class="decor__item">🌿</span>
+        <img src="decor-icons.png" alt="Botanical ingredients" class="decor-image" />
       </aside>
     </main>
-    <!-- Placeholder for waitlist link; this anchors the link; you can swap in your Google Form URL. -->
-    <section id="waitlist" class="waitlist-section">
-      <h2>Join our waitlist</h2>
-      <p>
-        Thank you for your interest in Golabii. We're collecting contact details and a few
-        questions to better understand our community. Please follow the link below to fill
-        out a short survey and secure your spot in the limited batch.
+    <!-- Mission section encouraging visitors to learn more. This card peeks into view to entice scrolling. -->
+    <section id="mission" class="mission-section">
+      <h2 class="mission-title">Find out more about our mission</h2>
+      <p class="mission-text">
+        Try the favorite drink of kings of Persia, most refreshing botanical drink of your
+        life made with luxury and love at affordable prices. A new kind of drink for a new
+        kind of company, one in which we don't shortcut the ingredients you put in your
+        body, one in which we all help to give back to people who deserve a better life
+        than the one evil men in power have bestowed on humanity. Be in the frontier for
+        a new way of living a better life as a human, because everyone deserves luxury,
+        not just the elite.
       </p>
-      <!-- Use target="_blank" so the form opens in a new tab, keeping visitors on the landing page. -->
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLScfqtq33MlxU2TwnSIa-u1_7X2xRFeGVvP6t_5K7i3UjyZY5w/viewform?usp=header"
-        class="secondary-button"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Take the survey</a
-      >
     </section>
     <!-- Footer -->
     <footer class="site-footer">

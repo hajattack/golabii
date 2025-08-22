@@ -16,7 +16,7 @@
   --color-accent-dark: #9b1b33;
   --color-primary: #7c0a27; /* deeper red for topbar */
   --color-text: #3d2b27;
-  --font-brand: 'Great Vibes', cursive;
+  --font-brand: 'Dancing Script', cursive;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Lato', sans-serif;
 }
@@ -100,23 +100,37 @@ a {
 .hero__content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* Align the text group to the top and the CTA group to the bottom */
+  justify-content: space-between;
   padding: 1rem;
+  height: 100%;
 }
 
 .brand {
+  /* Use the cursive font for most letters and a serif for the initial via nested spans */
   font-family: var(--font-brand);
-  /* Increase the brand size for more impact */
-  font-size: 3.5rem;
+  /* Dramatically increase the brand size to be the most prominent element */
+  font-size: 5rem;
   font-weight: 400;
   color: var(--color-accent-dark);
   margin-bottom: 0.5rem;
 }
 
+/* Style the brand initial separately for greater legibility */
+.brand-initial {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-rest {
+  font-family: var(--font-brand);
+}
+
 .subtitle {
   font-family: var(--font-heading);
-  /* Enlarge subtitle for better readability */
-  font-size: 1.4rem;
+  /* Increase subtitle size, but keep it smaller than the headline */
+  font-size: 1.6rem;
   font-weight: 500;
   color: var(--color-text);
   margin-bottom: 1rem;
@@ -124,31 +138,35 @@ a {
 
 .headline {
   font-family: var(--font-heading);
-  /* Make the headline more prominent */
-  font-size: 2.5rem;
+  /* Make the headline the second largest element after the brand */
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
   line-height: 1.2;
+  /* Use the darker accent on the headline; the button will use the lighter accent */
   color: var(--color-accent-dark);
 }
 
 .cta-button {
   display: inline-block;
-  background: linear-gradient(90deg, #e56a6a, var(--color-accent));
+  /* Use the lighter accent for the button (swap with headline colour) */
+  background: var(--color-accent);
   color: #fff;
-  padding: 0.75rem 1.25rem;
+  /* Make the button narrower and keep text centred */
+  padding: 0.6rem 1rem;
   font-size: 1rem;
   font-weight: 700;
   border-radius: 9999px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: background 0.3s ease;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.4rem;
+  width: fit-content;
 }
 
 .cta-button:hover,
 .cta-button:focus {
-  background: linear-gradient(90deg, var(--color-accent), #e56a6a);
+  background: var(--color-primary);
 }
 
 .limited {
@@ -162,62 +180,71 @@ a {
   font-weight: 700;
 }
 
+/* Layout for text and call-to-action groups inside the hero content */
+.hero__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Shift the CTA group further right to separate it from the main text */
+  margin-left: 4rem;
+}
+
+.hero__cta .cta-button {
+  margin-bottom: 0.3rem;
+}
+
+.hero__cta .limited {
+  text-align: center;
+}
+
 /* Decorative icons */
+/* Decorative image column */
 .hero__decor {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  font-size: 1.6rem;
 }
 
-.decor__item {
-  display: inline-block;
-  padding: 0.5rem;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4px);
+.decor-image {
+  max-width: 6rem;
+  width: 100%;
+  height: auto;
+  /* Reduce opacity to let the background subtly show through */
+  opacity: 0.75;
 }
 
-/* Waitlist section */
-.waitlist-section {
+/* Mission section card */
+.mission-section {
   max-width: 900px;
-  margin: 4rem auto;
+  margin: 5rem auto;
   padding: 2rem;
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
+  position: relative;
+  top: -3rem; /* overlap slightly with the hero section */
 }
 
-.waitlist-section h2 {
+.mission-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--color-accent-dark);
   margin-bottom: 1rem;
 }
 
-.waitlist-section p {
-  margin-bottom: 1.5rem;
+.mission-text {
   color: var(--color-text);
-}
-
-.secondary-button {
-  display: inline-block;
-  background: var(--color-primary);
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: background 0.3s ease;
-}
-
-.secondary-button:hover,
-.secondary-button:focus {
-  background: var(--color-accent-dark);
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* Footer */
@@ -252,16 +279,16 @@ a {
     padding: 1rem 0;
   }
   .brand {
-    /* Slightly larger brand on tablets */
-    font-size: 2.8rem;
+    /* Slightly reduce brand size on tablets while keeping it dominant */
+    font-size: 3.4rem;
   }
   .subtitle {
-    /* Increase subtitle size on tablets */
-    font-size: 1.3rem;
+    /* Adjust subtitle size for tablets */
+    font-size: 1.4rem;
   }
   .headline {
-    /* Larger headline on tablets */
-    font-size: 2rem;
+    /* Adjust headline size for tablets */
+    font-size: 2.2rem;
   }
   .cta-button {
     font-size: 0.9rem;
@@ -288,14 +315,14 @@ a {
     padding: 2rem 1.5rem;
   }
   .brand {
-    /* Keep the brand legible on small screens */
-    font-size: 2.6rem;
+    /* Scale down the brand for small screens but maintain hierarchy */
+    font-size: 2.8rem;
   }
   .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
   .headline {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
   .waitlist-section {
     margin-top: 2.5rem;
