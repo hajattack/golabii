@@ -203,7 +203,7 @@ a {
 }
 
 .hero__cta .limited {
-  text-align: center;
+  text-align: left;
 }
 
 /* Decorative icons */
@@ -221,7 +221,8 @@ a {
   position: static;
   width: 5rem;
   height: auto;
-  margin-right: 1rem;
+  /* Sit flush against the video without extra spacing */
+  margin-right: 0;
   /* Let the background subtly show through */
   opacity: 0.9;
 }
@@ -231,7 +232,8 @@ a {
   max-width: 900px;
   margin: 5rem auto;
   padding: 2rem;
-  background: #fff;
+  /* Use a light pastel pink background instead of white to subtly stand out */
+  background: #f8e6eb;
   border-radius: 1rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
@@ -279,7 +281,8 @@ a {
     text-align: center;
   }
   .hero__content {
-    align-items: center;
+  /* Align the button and limited text with the left edge of the text for better alignment */
+  align-items: flex-start;
     padding: 1rem 0;
   }
   .brand {
