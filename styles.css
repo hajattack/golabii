@@ -145,8 +145,9 @@ a {
   background: var(--color-accent);
   color: #fff;
   /* Make the button narrower and keep text centred */
-  padding: 0.8rem 1.5rem;
-  font-size: 1.1rem;
+  /* Increase button size to stand out more */
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
   font-weight: 700;
   border-radius: 9999px;
   text-transform: uppercase;
@@ -183,8 +184,8 @@ a {
   flex-direction: column;
   /* Center the button and limited text within their group */
   align-items: center;
-  /* Shift the CTA group further right to separate it from the main text */
-  margin-left: 4rem;
+  /* Shift the CTA group right slightly; keep nearer to the text for better balance */
+  margin-left: 2rem;
 }
 
 .hero__cta .cta-button {
@@ -234,7 +235,8 @@ a {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 2.2rem;
-  color: var(--color-accent-dark);
+  /* Use a lighter pink/red hue for the mission heading */
+  color: #e78a9a;
   margin-bottom: 1rem;
 }
 
