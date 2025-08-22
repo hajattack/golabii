@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Playfair Display for headings, Dancing Script for the brand name and Lato for body text -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Sacramento&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -66,12 +66,14 @@
           <!-- Fallback: if the browser cannot play .mov, show the poster image -->
           <img src="poster.png" alt="Golabii product preview" />
         </video>
+        <!-- Overlay the botanical ingredient strip on the left of the video -->
+        <img src="decor-icons.png" alt="Botanical ingredients" class="decor-image" />
       </div>
       <!-- Content column -->
       <div class="hero__content">
         <div class="hero__text">
-          <!-- Split the brand into two spans so the initial can use a more legible font -->
-          <h1 class="brand"><span class="brand-initial">G</span><span class="brand-rest">olabii</span></h1>
+          <!-- Brand name: using a more legible script font throughout -->
+          <h1 class="brand">Golabii</h1>
           <p class="subtitle">100% profits to charity &amp; community</p>
           <h2 class="headline">Coming Soon to Kickstarter &amp; Indiegogo</h2>
         </div>
@@ -83,15 +85,11 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Join&nbsp;the&nbsp;Waitlist
+            Join&nbsp;the&nbsp;Waitlist!!!
           </a>
           <p class="limited">LIMITED BATCH&nbsp;<span class="highlight">less than 900 spots</span> left</p>
         </div>
       </div>
-      <!-- Decorative icon column; these can be replaced with actual botanical illustrations later. -->
-      <aside class="hero__decor">
-        <img src="decor-icons.png" alt="Botanical ingredients" class="decor-image" />
-      </aside>
     </main>
     <!-- Mission section encouraging visitors to learn more. This card peeks into view to entice scrolling. -->
     <section id="mission" class="mission-section">

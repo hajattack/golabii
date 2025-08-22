@@ -16,7 +16,7 @@
   --color-accent-dark: #9b1b33;
   --color-primary: #7c0a27; /* deeper red for topbar */
   --color-text: #3d2b27;
-  --font-brand: 'Dancing Script', cursive;
+  --font-brand: 'Sacramento', cursive;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Lato', sans-serif;
 }
@@ -72,7 +72,8 @@ a {
 /* Hero section layout */
 .hero {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.3fr;
+  /* Two-column layout: video/media and content */
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   padding: 3rem 5%;
   max-width: 1200px;
@@ -83,6 +84,7 @@ a {
 
 /* Media column */
 .hero__media {
+  position: relative;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -107,7 +109,6 @@ a {
 }
 
 .brand {
-  /* Use the cursive font for most letters and a serif for the initial via nested spans */
   font-family: var(--font-brand);
   /* Dramatically increase the brand size to be the most prominent element */
   font-size: 5rem;
@@ -116,16 +117,6 @@ a {
   margin-bottom: 0.5rem;
 }
 
-/* Style the brand initial separately for greater legibility */
-.brand-initial {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.brand-rest {
-  font-family: var(--font-brand);
-}
 
 .subtitle {
   font-family: var(--font-heading);
@@ -134,6 +125,7 @@ a {
   font-weight: 500;
   color: var(--color-text);
   margin-bottom: 1rem;
+  white-space: nowrap;
 }
 
 .headline {
@@ -153,8 +145,8 @@ a {
   background: var(--color-accent);
   color: #fff;
   /* Make the button narrower and keep text centred */
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   border-radius: 9999px;
   text-transform: uppercase;
@@ -189,7 +181,8 @@ a {
 .hero__cta {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* Center the button and limited text within their group */
+  align-items: center;
   /* Shift the CTA group further right to separate it from the main text */
   margin-left: 4rem;
 }
@@ -213,11 +206,15 @@ a {
 }
 
 .decor-image {
-  max-width: 6rem;
-  width: 100%;
+  position: absolute;
+  /* Position the icons strip to the left side of the video */
+  left: -4.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5rem;
   height: auto;
-  /* Reduce opacity to let the background subtly show through */
-  opacity: 0.75;
+  /* Let the background subtly show through */
+  opacity: 0.9;
 }
 
 /* Mission section card */
@@ -262,9 +259,6 @@ a {
   .hero {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
-  }
-  .hero__decor {
-    display: none; /* hide vertical icons on medium screens */
   }
 }
 
