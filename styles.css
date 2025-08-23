@@ -225,6 +225,8 @@ a {
   margin-right: 0;
   /* Let the background subtly show through */
   opacity: 0.9;
+  /* Hide the decorative column by default; it will be shown on small screens */
+  display: none;
 }
 
 /* Mission section card */
@@ -275,6 +277,13 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* On small screens, show the decorative column and center the CTA */
+  .decor-image {
+    display: block;
+  }
+  .hero__cta {
+    align-items: center;
+  }
   .hero {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
