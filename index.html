@@ -53,7 +53,8 @@
     <main class="hero">
       <!-- Media column: autoplaying video with a poster fallback -->
       <div class="hero__media">
-        <!-- Ingredient strip removed -->
+        <!-- Ingredient strip sits next to the video on small screens. It is hidden on larger screens via CSS. -->
+        <img src="decor-column.jpg" alt="Botanical ingredients" class="decor-image" />
         <video
           playsinline
           autoplay
@@ -63,8 +64,11 @@
           poster="poster.png"
           class="hero__video"
         >
+          <!-- First source uses an MP4 extension so Chrome can play the H.264 video -->
+          <source src="hero.mp4" type="video/mp4" />
+          <!-- Safari and other browsers that support QuickTime can still use the original MOV as a fallback -->
           <source src="hero.mov" type="video/quicktime" />
-          <!-- Fallback: if the browser cannot play .mov, show the poster image -->
+          <!-- If the browser cannot play either video source, show the poster image -->
           <img src="poster.png" alt="Golabii product preview" />
         </video>
       </div>
