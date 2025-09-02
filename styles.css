@@ -364,7 +364,8 @@ a {
   max-width: 700px;
   margin: 5rem auto;
   padding: 3rem 2rem;
-  background: var(--color-bg);
+  /* Semi-transparent panel over the floral background to improve readability */
+  background: rgba(253, 244, 239, 0.9);
   border-radius: 1rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   text-align: left;
@@ -440,7 +441,14 @@ fieldset.form-group legend {
 }
 
 fieldset.form-group label {
-  display: block;
+  /* Use flex to align the input and label text neatly on the same line */
+  /* Use flexbox so inputs and their labels align on one line, but allow
+     multi‑line wrapping without misalignment. Align items to flex-start
+     so the checkbox/radio sits at the top of multi‑line text. Add a
+     small gap for spacing. */
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
   margin-bottom: 0.4rem;
   font-family: var(--font-body);
   font-weight: 400;
@@ -450,7 +458,18 @@ fieldset.form-group label {
 /* Align checkboxes and radio buttons with their labels */
 fieldset.form-group input[type='checkbox'],
 fieldset.form-group input[type='radio'] {
-  margin-right: 0.5rem;
+  /* Add a slight top margin to vertically align the control with multi‑line
+     label text */
+  margin-right: 0.6rem;
+  margin-top: 0.2rem;
   transform: scale(1.2);
   accent-color: var(--color-accent-dark);
+}
+
+/* Apply the floral background image on the waitlist page */
+.waitlist-page {
+  background-image: url('waitlist-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
