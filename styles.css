@@ -442,13 +442,14 @@ fieldset.form-group legend {
 
 fieldset.form-group label {
   /* Use flex to align the input and label text neatly on the same line */
-  /* Use flexbox so inputs and their labels align on one line, but allow
-     multi‑line wrapping without misalignment. Align items to flex-start
-     so the checkbox/radio sits at the top of multi‑line text. Add a
-     small gap for spacing. */
-  display: flex;
+  /* Arrange each option using a two‑column grid: the first column
+     auto‑sizes to the width of the checkbox/radio, and the second
+     expands to fit the label text. Align items at the top so
+     multi‑line text starts from the same baseline as the control. */
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: flex-start;
-  gap: 0.5rem;
+  column-gap: 0.6rem;
   margin-bottom: 0.4rem;
   font-family: var(--font-body);
   font-weight: 400;
