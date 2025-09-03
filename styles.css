@@ -476,12 +476,43 @@ fieldset.form-group input[type='radio'] {
 }
 
 /* Apply the floral background image on the waitlist page */
-.waitlist-page {
-  background-image: url('waitlist-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
+    .waitlist-page {
+      /* Use the floral artwork as the full‑bleed page background for the
+         waitlist page. Ensure it fills the viewport without leaving
+         side gaps and does not repeat. */
+      background-image: url('waitlist-bg.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
+      min-height: 100vh;
+      /* Remove default body margin on pages using this class to ensure the
+         background fills the entire viewport without gaps on the sides. */
+      margin: 0;
+    }
+
+    /*
+      Add a subtle blush overlay over the background image on the waitlist
+      page. This creates a frosted glass/plexiglass effect that softens
+      the vivid artwork without reducing contrast for form text.  The
+      overlay is fixed and does not interfere with scrolling.  Pointer
+      events are disabled so the overlay does not block interactions.
+    */
+    .waitlist-page::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* Increase the opacity of the blush overlay to better fade the vibrant
+         background image and create a stronger plexiglass effect. A higher
+         alpha value makes the image appear more subdued behind the form. */
+      background-color: rgba(253, 244, 239, 0.75);
+      pointer-events: none;
+      z-index: -1;
+    }
 
 /*
   Option rows within waitlist fieldsets (radio & checkbox groups)
