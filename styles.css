@@ -426,7 +426,7 @@ a {
   margin-left: 0.1rem;
 }
 
-/* Style fieldset groups on the waitlist form */
+    /* Style fieldset groups on the waitlist form */
 fieldset.form-group {
   border: none;
   margin: 1.2rem 0;
@@ -440,21 +440,29 @@ fieldset.form-group legend {
   display: block;
 }
 
-fieldset.form-group label {
-  /* Use flex to align the input and label text neatly on the same line */
-  /* Arrange each option using a two‑column grid: the first column
-     auto‑sizes to the width of the checkbox/radio, and the second
-     expands to fit the label text. Align items at the top so
-     multi‑line text starts from the same baseline as the control. */
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: flex-start;
-  column-gap: 0.6rem;
-  margin-bottom: 0.4rem;
-  font-family: var(--font-body);
-  font-weight: 400;
-  cursor: pointer;
-}
+    /*
+      Remove grid layout from labels inside fieldset option groups.
+
+      The original rule targeted all <label> elements inside a fieldset
+      and applied a two‑column grid layout, which interfered with the
+      custom .option wrappers used for radio/checkbox inputs.  By
+      removing this declaration, labels inside .option wrappers will
+      inherit the normal block styling and flex alignment defined by
+      the .option class itself.
+    */
+    /* fieldset.form-group label { ... } rule removed intentionally */
+
+    /* Override label styling within option wrappers to ensure labels
+       align properly with their associated inputs.  This rule is more
+       specific than the generic fieldset styles that were removed
+       above, so it safely overrides any remaining inherited styles. */
+    fieldset.form-group .option label {
+      display: block;
+      margin: 0;
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.4;
+    }
 
 /* Align checkboxes and radio buttons with their labels */
 fieldset.form-group input[type='checkbox'],
