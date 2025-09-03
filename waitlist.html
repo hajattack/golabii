@@ -88,11 +88,26 @@
         <!-- How did you hear about us? (required) -->
         <fieldset class="form-group">
           <legend>How did you hear about us?<span class="required">*</span></legend>
-          <label><input type="radio" name="hear" value="Word of mouth" required /> Word of mouth</label>
-          <label><input type="radio" name="hear" value="Met our founder in the street" /> Met our founder in the street (He's always talking about us)</label>
-          <label><input type="radio" name="hear" value="In person tasting event" /> In person tasting event</label>
-          <label><input type="radio" name="hear" value="Social media" /> Social media</label>
-          <label><input type="radio" name="hear" value="College club event or referral" /> College club event/referral</label>
+          <div class="option">
+            <input type="radio" id="hear_word" name="hear" value="Word of mouth" required />
+            <label for="hear_word">Word of mouth</label>
+          </div>
+          <div class="option">
+            <input type="radio" id="hear_founder" name="hear" value="Met our founder in the street" />
+            <label for="hear_founder">Met our founder in the street (He's always talking about us)</label>
+          </div>
+          <div class="option">
+            <input type="radio" id="hear_event" name="hear" value="In person tasting event" />
+            <label for="hear_event">In person tasting event</label>
+          </div>
+          <div class="option">
+            <input type="radio" id="hear_social" name="hear" value="Social media" />
+            <label for="hear_social">Social media</label>
+          </div>
+          <div class="option">
+            <input type="radio" id="hear_club" name="hear" value="College club event or referral" />
+            <label for="hear_club">College club event/referral</label>
+          </div>
         </fieldset>
         <!-- City & Country (required) -->
         <div class="form-group">
@@ -118,11 +133,26 @@
         <!-- What matters most? (choose up to 3) -->
         <fieldset class="form-group">
           <legend>Which aspects would be most important to you? <small>(choose up to 3)</small></legend>
-          <label><input type="checkbox" name="important" value="No/low sugar" /> No/low sugar</label>
-          <label><input type="checkbox" name="important" value="Amazing taste" /> Amazing taste</label>
-          <label><input type="checkbox" name="important" value="Ethical sustainable packaging" /> Ethical sustainable packaging</label>
-          <label><input type="checkbox" name="important" value="Premium ingredients" /> Premium ingredients</label>
-          <label><input type="checkbox" name="important" value="Affordable price" /> Affordable price</label>
+          <div class="option">
+            <input type="checkbox" id="important_nosugar" name="important" value="No/low sugar" />
+            <label for="important_nosugar">No/low sugar</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="important_taste" name="important" value="Amazing taste" />
+            <label for="important_taste">Amazing taste</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="important_packaging" name="important" value="Ethical sustainable packaging" />
+            <label for="important_packaging">Ethical sustainable packaging</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="important_ingredients" name="important" value="Premium ingredients" />
+            <label for="important_ingredients">Premium ingredients</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="important_price" name="important" value="Affordable price" />
+            <label for="important_price">Affordable price</label>
+          </div>
         </fieldset>
         <!-- Additional comments (optional) -->
         <div class="form-group">

@@ -474,3 +474,29 @@ fieldset.form-group input[type='radio'] {
   background-position: center;
   background-attachment: fixed;
 }
+
+/*
+  Option rows within waitlist fieldsets (radio & checkbox groups)
+
+  Use a flexbox layout so the control (radio/checkbox) sits next to its
+  label text. Align items to flex-start to keep multi‑line labels
+  aligned with the top of the control. A small gap separates the control
+  and the text. These classes are applied to <div class="option"> wrappers
+  in waitlist.html.
+*/
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-body);
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.option input[type='radio'],
+.option input[type='checkbox'] {
+  margin-top: 0.2rem;
+  accent-color: var(--color-accent-dark);
+  transform: scale(1.2);
+}
