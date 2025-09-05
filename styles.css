@@ -509,7 +509,9 @@ fieldset.form-group input[type='radio'] {
       /* Increase the opacity of the blush overlay to better fade the vibrant
          background image and create a stronger plexiglass effect. A higher
          alpha value makes the image appear more subdued behind the form. */
-      background-color: rgba(253, 244, 239, 0.75);
+  /* Increase the blush overlay opacity slightly to further fade the floral background 
+     and enhance the plexiglass effect on the waitlist page. */
+  background-color: rgba(253, 244, 239, 0.8);
       pointer-events: none;
       z-index: -1;
     }
