@@ -11,7 +11,8 @@
 :root {
   --primary-font: 'Quicksand', sans-serif;
   --secondary-font: 'Nunito', sans-serif;
-  --background-color: #fdfdfd;
+  /* Use a soft pastel yellow as the base background colour */
+  --background-color: #FFF9E0;
   --text-color: #1e1e1e;
   --accent-color: #d88a32; /* warm saffron tone */
   --button-bg: #1e1e1e;
@@ -27,8 +28,12 @@ body {
   width: 100%;
   height: 100%;
   font-family: var(--secondary-font);
+  /* Animated pastel background. The background colour is set via CSS variables
+     and animated with a keyframe definition below. */
   background-color: var(--background-color);
   color: var(--text-color);
+  /* Fade between subtle pastel shades on a slow loop */
+  animation: pastelBackground 20s ease-in-out infinite alternate;
 }
 
 /* Hero section occupies the full viewport height */
@@ -63,25 +68,26 @@ body {
 .hero .image1 {
   top: 5%;
   left: 5%;
-  background-image: url('images/saffron_drip.png');
+  /* Update path now that images live in the repository root */
+  background-image: url('saffron_drip.png');
 }
 
 .hero .image2 {
   top: 8%;
   right: 6%;
-  background-image: url('images/bottle_persian.png');
+  background-image: url('bottle_persian.png');
 }
 
 .hero .image3 {
   bottom: 12%;
   left: 12%;
-  background-image: url('images/bottle_layered.png');
+  background-image: url('bottle_layered.png');
 }
 
 .hero .image4 {
   bottom: 8%;
   right: 12%;
-  background-image: url('images/couple_jar.png');
+  background-image: url('couple_jar.png');
 }
 
 /* Brand name styling */
@@ -109,7 +115,7 @@ body {
   color: #777777;
 }
 
-/* Call‑to‑action button */
+/* Call-to-action button */
 .hero .cta {
   display: inline-block;
   margin-top: 2rem;
@@ -222,4 +228,20 @@ body {
 
 .waitlist-container .back-link:hover {
   text-decoration: underline;
+}
+
+/* Animated pastel background keyframes
+   This keyframe animation slowly shifts the body background between
+   complementary pastel yellows. It adds a gentle, chic ambience to the page
+   without distracting from the main content. */
+@keyframes pastelBackground {
+  0% {
+    background-color: #FFF9E0;
+  }
+  50% {
+    background-color: #FFF3CC;
+  }
+  100% {
+    background-color: #FFFDEB;
+  }
 }
