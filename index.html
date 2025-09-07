@@ -1,118 +1,40 @@
+<!--
+  Redesign of the Golabii landing page
+
+  This page is a fresh take on the original golabii.com waitlist site.
+  It uses a minimal hero layout inspired by the provided inspiration
+  screenshot. The hero features a large brand name and supporting
+  taglines centred on the page with decorative product imagery
+  positioned around the edges. A prominent call‑to‑action button
+  encourages visitors to join the waitlist. All fonts are loaded
+  from Google Fonts and are free to use commercially.
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Golabii | Coming Soon</title>
-    <!--
-      Basic SEO metadata
-      A meaningful description encourages click‑through and ensures your site is properly indexed.
-    -->
-    <meta
-      name="description"
-      content="Golabii donates 100% of profits to charity, community and you! Join the waitlist to be notified when our limited batch launches on Kickstarter and Indiegogo."
-    />
-    <meta name="robots" content="index, follow" />
-    <!-- Canonical URL prevents duplicate content penalties. -->
-    <link rel="canonical" href="https://golabii.com/" />
-    <!-- Open Graph tags for rich social sharing. -->
-    <meta property="og:title" content="Golabii – Coming Soon" />
-    <meta
-      property="og:description"
-      content="A botanical elixir where every purchase empowers communities. Sign up to reserve your spot in our upcoming limited batch."
-    />
-    <meta property="og:image" content="poster.png" />
-    <meta property="og:url" content="https://golabii.com/" />
-    <!-- Import web fonts for the refined look. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Playfair Display for headings, Dancing Script for the brand name and Lato for body text -->
+    <title>Golabii | Floral Elixir</title>
+    <!-- Google fonts: soft, slightly playful yet professional -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Sacramento&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Top activism bar -->
-    <header class="topbar">
-      <div class="topbar__content">
-        <span>For innocent children of Gaza</span>
-        <span>❤️🤝</span>
-        <span>brave free women of Iran</span>
-        <span>❤️🤝</span>
-        <span>marginalized kolbars of Kurdistan</span>
-        <span>❤️🤝</span>
-        <!-- Combine the final regions into a single span and include an ellipsis, without emojis between -->
-        <span>Yemen Congo Myanmar…</span>
-        <span class="topbar__message">not free till we all free</span>
-      </div>
-    </header>
-    <!-- Main hero section -->
     <main class="hero">
-      <!-- Media column: autoplaying video with a poster fallback -->
-      <div class="hero__media">
-        <!-- Ingredient strip sits next to the video on small screens. It is hidden on larger screens via CSS. -->
-        <img src="decor-column.jpg" alt="Botanical ingredients" class="decor-image" />
-        <video
-          playsinline
-          autoplay
-          muted
-          loop
-          preload="auto"
-          poster="poster.png"
-          class="hero__video"
-        >
-          <!-- First source uses an MP4 extension so Chrome can play the H.264 video -->
-          <source src="hero.mp4" type="video/mp4" />
-          <!-- Safari and other browsers that support QuickTime can still use the original MOV as a fallback -->
-          <source src="hero.mov" type="video/quicktime" />
-          <!-- If the browser cannot play either video source, show the poster image -->
-          <img src="poster.png" alt="Golabii product preview" />
-        </video>
-      </div>
-      <!-- Content column -->
-      <div class="hero__content">
-        <div class="hero__text">
-          <!-- Brand name: using a more legible script font throughout -->
-          <h1 class="brand">Golabii</h1>
-          <p class="subtitle">100% profits to charity &amp; community</p>
-          <h2 class="headline">Coming Soon to Kickstarter &amp; Indiegogo</h2>
-        </div>
-        <div class="hero__cta">
-          <!-- Point the call-to-action to our custom waitlist page instead of an external Google Form. -->
-          <a
-            href="waitlist.html"
-            class="cta-button"
-            aria-label="Open our waitlist sign‑up page"
-          >
-            Join&nbsp;the&nbsp;Waitlist!!!
-          </a>
-          <p class="limited">LIMITED BATCH&nbsp;<span class="highlight">less than 900 spots</span> left</p>
-        </div>
-      </div>
+      <!-- Decorative images around the hero. Positioning handled in CSS -->
+      <div class="image image1"></div>
+      <div class="image image2"></div>
+      <div class="image image3"></div>
+      <div class="image image4"></div>
+
+      <!-- Central brand and messaging -->
+      <h1 class="brand">Golabii</h1>
+      <p class="subtitle">100% profits to charity &amp; community</p>
+      <p class="subtitle subtitle2">Coming soon to Kickstarter &amp; Indiegogo</p>
+      <a href="waitlist.html" class="cta">Join the Waitlist</a>
     </main>
-    <!-- Mission section encouraging visitors to learn more. This card peeks into view to entice scrolling. -->
-    <section id="mission" class="mission-section">
-      <!-- Update the mission heading and lighten its colour in CSS -->
-      <h2 class="mission-title">More about our mission</h2>
-      <p class="mission-text">
-        Try Kings of Persia's favorite refreshing drink, described as a shower inside your body made with
-        luxury and love at affordable prices with a mission for a better world. A new kind of botanical
-        drink for a new kind of company, one in which we don't shortcut the ingredients you consume, one
-        in which we help to give back to people who deserve a better life that was so unjustly taken
-        from them by those corrupted by power and evil. Be the frontier to try this new way of life
-        for a better world for everyone because we all deserve the best the universe has to offer.
-      </p>
-    </section>
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p>&copy; <span id="year"></span> Golabii. All rights reserved.</p>
-    </footer>
-    <script>
-      // Dynamically set the year so the copyright stays current.
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
   </body>
 </html>
