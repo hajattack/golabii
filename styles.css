@@ -1,543 +1,225 @@
 /*
-  Au Saffrose landing page styles
+  Core styles for the Golabii redesign.
 
-  The aesthetic is inspired by the provided mock‑ups: soft blush backgrounds, rich
-  saffron and rose tones, elegant typography and a sense of handcrafted warmth.
-
-  The layout uses CSS Grid and Flexbox to ensure the content adapts gracefully
-  between desktop and mobile viewports. Media queries adjust font sizes and
-  stacking behaviour for smaller screens.
+  This stylesheet defines a clean, modern layout with a heavy focus on
+  typography and whitespace. Four decorative images are positioned
+  around the hero to evoke the floral elixir brand. Responsive rules
+  adjust type sizes and image placement on smaller screens.
 */
 
-/* Reset and baseline styles */
+/* Root variables for easy theming */
 :root {
-  --color-bg: #fdf4ef;
-  --color-accent: #e04655; /* rose hue used for CTAs */
-  --color-accent-dark: #9b1b33;
-  --color-primary: #7c0a27; /* deeper red for topbar */
-  --color-text: #3d2b27;
-  --font-brand: 'Sacramento', cursive;
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Lato', sans-serif;
+  --primary-font: 'Quicksand', sans-serif;
+  --secondary-font: 'Nunito', sans-serif;
+  --background-color: #fdfdfd;
+  --text-color: #1e1e1e;
+  --accent-color: #d88a32; /* warm saffron tone */
+  --button-bg: #1e1e1e;
+  --button-text: #ffffff;
+  --button-hover-bg: #444444;
 }
 
-* {
+/* Reset some default margins/padding */
+html,
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: var(--secondary-font);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
-body {
-  font-family: var(--font-body);
-  line-height: 1.5;
-  color: var(--color-text);
-  background: var(--color-bg);
-  overflow-x: hidden;
+/* Hero section occupies the full viewport height */
+.hero {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Top activism bar */
-.topbar {
-  background: linear-gradient(180deg, #b02030 0%, #7c0a27 100%);
-  color: #fff;
-  font-size: 0.85rem;
-  padding: 0.4rem 0;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  letter-spacing: 0.05em;
-  position: relative;
-  z-index: 10;
-}
-
-.topbar__content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
-}
-
-.topbar__message {
-  margin-left: 0.5rem;
-  font-style: italic;
-}
-
-/* Hero section layout */
-.hero {
-  display: grid;
-  /* Two-column layout: video/media and content */
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  padding: 3rem 5%;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  flex: 1;
-}
-
-/* Media column */
-/* Media column */
-.hero__media {
-  position: relative;
-  /* Use flex layout so the decorative column and video sit side by side */
-  display: flex;
-  align-items: center;
-  border-radius: 1rem;
+  padding: 2rem;
+  box-sizing: border-box;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* The video should expand to fill the remaining space after the ingredient strip */
-.hero__video {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+/* Decorative images. Each image uses a different source via CSS */
+.hero .image {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 0;
+  /* White border to separate the images from the page background */
+  outline: 6px solid var(--background-color);
 }
 
-/* Ensure images within hero__media (like the ingredient strip) don't stretch unexpectedly */
-.hero__media img {
-  display: block;
+/* Individual positions and images for each decorative element */
+.hero .image1 {
+  top: 5%;
+  left: 5%;
+  background-image: url('images/saffron_drip.png');
 }
 
-/* Content column */
-.hero__content {
-  display: flex;
-  flex-direction: column;
-  /* Align the text group to the top and the CTA group to the bottom */
-  justify-content: space-between;
-  padding: 1rem;
-  height: 100%;
+.hero .image2 {
+  top: 8%;
+  right: 6%;
+  background-image: url('images/bottle_persian.png');
 }
 
-.brand {
-  font-family: var(--font-brand);
-  /* Dramatically increase the brand size to be the most prominent element */
-  font-size: 5rem;
-  font-weight: 400;
-  color: var(--color-accent-dark);
-  margin-bottom: 0.5rem;
+.hero .image3 {
+  bottom: 12%;
+  left: 12%;
+  background-image: url('images/bottle_layered.png');
 }
 
-
-.subtitle {
-  font-family: var(--font-heading);
-  /* Increase subtitle size, but keep it smaller than the headline */
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--color-text);
-  margin-bottom: 1rem;
-  white-space: nowrap;
+.hero .image4 {
+  bottom: 8%;
+  right: 12%;
+  background-image: url('images/couple_jar.png');
 }
 
-.headline {
-  font-family: var(--font-heading);
-  /* Make the headline the second largest element after the brand */
-  font-size: 3rem;
+/* Brand name styling */
+.hero .brand {
+  font-family: var(--primary-font);
+  font-size: clamp(4rem, 10vw, 9rem);
   font-weight: 700;
-  margin-bottom: 1.2rem;
-  line-height: 1.2;
-  /* Use the darker accent on the headline; the button will use the lighter accent */
-  color: var(--color-accent-dark);
-}
-
-.cta-button {
-  display: inline-block;
-  /* Use the lighter accent for the button (swap with headline colour) */
-  background: var(--color-accent);
-  color: #fff;
-  /* Make the button narrower and keep text centred */
-  /* Increase button size to stand out more */
-  padding: 1rem 2rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  border-radius: 9999px;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: background 0.3s ease;
-  margin-bottom: 0.4rem;
-  width: fit-content;
+  margin: 0;
+  z-index: 1;
 }
 
-.cta-button:hover,
-.cta-button:focus {
-  background: var(--color-primary);
+/* Subtitle styles */
+.hero .subtitle {
+  margin: 0.5rem 0;
+  font-family: var(--secondary-font);
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: #555555;
+  z-index: 1;
 }
 
-.limited {
-  font-size: 0.85rem;
-  color: var(--color-text);
-  opacity: 0.75;
+.hero .subtitle.subtitle2 {
+  font-size: 1rem;
+  color: #777777;
 }
 
-.limited .highlight {
-  color: var(--color-accent-dark);
-  font-weight: 700;
+/* Call‑to‑action button */
+.hero .cta {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.9rem 2.2rem;
+  border-radius: 40px;
+  font-family: var(--primary-font);
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1;
 }
 
-/* Layout for text and call-to-action groups inside the hero content */
-.hero__text {
+.hero .cta:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-3px);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .hero .image {
+    width: 140px;
+    height: 140px;
+  }
+  .hero .image1 {
+    top: 4%;
+    left: -4%;
+  }
+  .hero .image2 {
+    top: 4%;
+    right: -4%;
+  }
+  .hero .image3 {
+    bottom: 10%;
+    left: -2%;
+  }
+  .hero .image4 {
+    bottom: 4%;
+    right: -2%;
+  }
+  .hero .subtitle {
+    font-size: 1rem;
+  }
+  .hero .subtitle.subtitle2 {
+    font-size: 0.875rem;
+  }
+  .hero .cta {
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+  }
+}
+
+/* Styles for the simple waitlist page */
+.waitlist-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.waitlist-container h2 {
+  font-family: var(--primary-font);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.waitlist-container p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #666666;
+}
+
+.waitlist-container form {
   display: flex;
   flex-direction: column;
-}
-
-.hero__cta {
-  display: flex;
-  flex-direction: column;
-  /* Center the button and limited text within their group */
-  align-items: center;
-  /* Do not shift the CTA group; align it with the left edge of the text column */
-  margin-left: 0;
-}
-
-.hero__cta .cta-button {
-  margin-bottom: 0.3rem;
-}
-
-.hero__cta .limited {
-  text-align: left;
-}
-
-/* Decorative icons */
-/* Decorative image column */
-.hero__decor {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 1rem;
 }
 
-/* Ingredient strip column next to the video */
-.decor-image {
-  position: static;
-  width: 5rem;
-  height: auto;
-  /* Sit flush against the video without extra spacing */
-  margin-right: 0;
-  /* Let the background subtly show through */
-  opacity: 0.9;
-  /* Hide the decorative column by default; it will be shown on small screens */
-  display: none;
-}
-
-/* Mission section card */
-.mission-section {
-  max-width: 900px;
-  margin: 5rem auto;
-  padding: 2rem;
-  /* Use a light pastel pink background instead of white to subtly stand out */
-  background: #f8e6eb;
-  border-radius: 1rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
-  position: relative;
-  top: -3rem; /* overlap slightly with the hero section */
-}
-
-.mission-title {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 2.2rem;
-  /* Use a lighter pink/red hue for the mission heading */
-  color: #e78a9a;
-  margin-bottom: 1rem;
-}
-
-.mission-text {
-  color: var(--color-text);
-  line-height: 1.6;
+.waitlist-container input,
+.waitlist-container button {
+  padding: 0.9rem 1rem;
+  border-radius: 30px;
+  border: 1px solid #cccccc;
   font-size: 1rem;
+  font-family: var(--secondary-font);
 }
 
-/* Footer */
-.site-footer {
-  margin-top: auto;
-  padding: 1rem 0;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--color-text);
-  opacity: 0.8;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .hero {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-}
-
-@media (max-width: 768px) {
-  /* On small screens, show the decorative column and center the CTA */
-  .decor-image {
-    display: block;
-  }
-  /* Center the CTA group horizontally on mobile. Using auto margins ensures the
-     group itself is centred within its parent, while align-items centres
-     its contents. */
-  .hero__cta {
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    text-align: center;
-  }
-  .hero__content {
-  /* Align the button and limited text with the left edge of the text for better alignment */
-  /* Align contents vertically but allow CTA to centre itself via auto margins */
-  align-items: flex-start;
-    padding: 1rem 0;
-  }
-  .brand {
-    /* Slightly reduce brand size on tablets while keeping it dominant */
-    font-size: 3.4rem;
-  }
-  .subtitle {
-    /* Adjust subtitle size for tablets */
-    font-size: 1.4rem;
-  }
-  .headline {
-    /* Adjust headline size for tablets */
-    font-size: 2.2rem;
-  }
-  .cta-button {
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
-  }
-  .limited {
-    font-size: 0.75rem;
-  }
-  .waitlist-section {
-    margin: 3rem 1rem;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .topbar {
-    font-size: 0.7rem;
-    padding: 0.3rem 0;
-  }
-  .topbar__content {
-    gap: 0.2rem;
-  }
-  .hero {
-    padding: 2rem 1.5rem;
-  }
-  .brand {
-    /* Scale down the brand for small screens but maintain hierarchy */
-    font-size: 2.8rem;
-  }
-  .subtitle {
-    font-size: 1.3rem;
-  }
-  .headline {
-    font-size: 1.8rem;
-  }
-  .waitlist-section {
-    margin-top: 2.5rem;
-  }
-}
-
-/* ==========================================================================
-   Waitlist page styles
-
-   The waitlist form uses the same colour palette as the rest of the site. The
-   container card adopts a subtle drop shadow and rounded corners to stand out
-   while remaining harmonious with the background. Form elements are
-   consistently spaced and sized for a polished feel.
-   ========================================================================== */
-
-.waitlist {
-  max-width: 700px;
-  margin: 5rem auto;
-  padding: 3rem 2rem;
-  /* Semi-transparent panel over the floral background to improve readability */
-  background: rgba(253, 244, 239, 0.9);
-  border-radius: 1rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  text-align: left;
-}
-
-.waitlist h1 {
-  font-family: var(--font-heading);
-  font-size: 2.6rem;
-  color: var(--color-accent-dark);
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.waitlist p {
-  font-family: var(--font-body);
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.form-group {
-  margin-bottom: 1.2rem;
-}
-
-.form-group label {
-  display: block;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid #e5d8d3;
-  border-radius: 0.5rem;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--color-text);
-  background: #fff;
-}
-
-.form-group textarea {
-  height: 7rem;
-  resize: vertical;
-}
-
-.status-message {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  color: var(--color-primary);
-}
-
-/* Waitlist form enhancements */
-/* Highlight required asterisk */
-.required {
-  color: var(--color-accent);
-  margin-left: 0.1rem;
-}
-
-    /* Style fieldset groups on the waitlist form */
-fieldset.form-group {
+.waitlist-container button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
   border: none;
-  margin: 1.2rem 0;
-  padding: 0;
-}
-
-fieldset.form-group legend {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-    /*
-      Remove grid layout from labels inside fieldset option groups.
-
-      The original rule targeted all <label> elements inside a fieldset
-      and applied a two‑column grid layout, which interfered with the
-      custom .option wrappers used for radio/checkbox inputs.  By
-      removing this declaration, labels inside .option wrappers will
-      inherit the normal block styling and flex alignment defined by
-      the .option class itself.
-    */
-    /* fieldset.form-group label { ... } rule removed intentionally */
-
-    /* Override label styling within option wrappers to ensure labels
-       align properly with their associated inputs.  This rule is more
-       specific than the generic fieldset styles that were removed
-       above, so it safely overrides any remaining inherited styles. */
-    fieldset.form-group .option label {
-      display: block;
-      margin: 0;
-      font-family: var(--font-body);
-      font-weight: 400;
-      line-height: 1.4;
-    }
-
-/* Align checkboxes and radio buttons with their labels */
-fieldset.form-group input[type='checkbox'],
-fieldset.form-group input[type='radio'] {
-  /* Add a slight top margin to vertically align the control with multi‑line
-     label text */
-  margin-right: 0.6rem;
-  margin-top: 0.2rem;
-  transform: scale(1.2);
-  accent-color: var(--color-accent-dark);
-}
-
-/* Apply the floral background image on the waitlist page */
-    .waitlist-page {
-      /* Use the floral artwork as the full‑bleed page background for the
-         waitlist page. Ensure it fills the viewport without leaving
-         side gaps and does not repeat. */
-      background-image: url('waitlist-bg.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      position: relative;
-      min-height: 100vh;
-      /* Remove default body margin on pages using this class to ensure the
-         background fills the entire viewport without gaps on the sides. */
-      margin: 0;
-    }
-
-    /*
-      Add a subtle blush overlay over the background image on the waitlist
-      page. This creates a frosted glass/plexiglass effect that softens
-      the vivid artwork without reducing contrast for form text.  The
-      overlay is fixed and does not interfere with scrolling.  Pointer
-      events are disabled so the overlay does not block interactions.
-    */
-    .waitlist-page::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      /* Increase the opacity of the blush overlay to better fade the vibrant
-         background image and create a stronger plexiglass effect. A higher
-         alpha value makes the image appear more subdued behind the form. */
-  /* Increase the blush overlay opacity slightly to further fade the floral background 
-     and enhance the plexiglass effect on the waitlist page. */
-  background-color: rgba(253, 244, 239, 0.8);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-/*
-  Option rows within waitlist fieldsets (radio & checkbox groups)
-
-  Use a flexbox layout so the control (radio/checkbox) sits next to its
-  label text. Align items to flex-start to keep multi‑line labels
-  aligned with the top of the control. A small gap separates the control
-  and the text. These classes are applied to <div class="option"> wrappers
-  in waitlist.html.
-*/
-.option {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-  font-family: var(--font-body);
-  font-weight: 400;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.option input[type='radio'],
-.option input[type='checkbox'] {
-  margin-top: 0.2rem;
-  accent-color: var(--color-accent-dark);
-  transform: scale(1.2);
+.waitlist-container button:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.waitlist-container .back-link {
+  margin-top: 2rem;
+  display: inline-block;
+  color: #555555;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.waitlist-container .back-link:hover {
+  text-decoration: underline;
 }
