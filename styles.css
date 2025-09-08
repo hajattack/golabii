@@ -65,72 +65,68 @@ body {
 }
 
 /* Individual positions and images for each decorative element */
+/* Position image1 closer to the centre while still cropping a small portion off the left edge */
 .hero .image1 {
-  /* Position this image slightly off the top‑left corner so it peeks into the viewport */
-  top: -5%;
-  left: -5%;
-  /* Use the new floral beverage artwork provided by the client */
+  top: -2%;
+  left: -10%;
   background-image: url('10c423d293c03bdfa0113836f0656d49.jpg');
 }
 
+/* Position image2 near the top‑right but bring it further into view */
 .hero .image2 {
-  /* Push this image further out of frame on the top‑right */
-  top: -10%;
-  right: -5%;
-  /* Use the supplied image with turquoise and pink hues */
+  top: 2%;
+  right: -8%;
   background-image: url('735975a91879e15b33e481a2ddf467c1.jpg');
 }
 
+/* Position image3 closer to the bottom‑left without hiding it completely */
 .hero .image3 {
-  /* Position near the bottom‑left, slightly off the page */
-  bottom: -10%;
-  left: -5%;
-  /* Swap in another floral beverage photo */
+  bottom: 5%;
+  left: -10%;
   background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');
 }
 
+/* Position image4 near the bottom‑right while cropping only a small portion */
 .hero .image4 {
-  /* Bottom‑right element peeks into the page */
-  bottom: -5%;
-  right: -5%;
-  /* Use the final provided bottle image */
+  bottom: 2%;
+  right: -8%;
   background-image: url('f5d6b2dbf5c32b493a94e11c24acda4c.jpg');
 }
 
 /* Additional decorative images for a chaotic yet harmonious layout */
+/* Position image5 mid‑left but fully within the viewport */
 .hero .image5 {
-  /* Mid‑left, partially off the page */
-  top: 25%;
-  left: -15%;
-  width: 180px;
-  height: 180px;
+  top: 30%;
+  left: 5%;
+  width: 200px;
+  height: 200px;
   background-image: url('hejhaa_in_the_same_style_and_reference_I_want_you_to_edit_thi_af6a4e56-47a7-488d-a5d8-61e0887edf79_1.png');
 }
 
+/* Position image6 mid‑right but keep most of it visible */
 .hero .image6 {
-  /* Mid‑right, spilling out of frame */
-  top: 30%;
-  right: -20%;
-  width: 220px;
-  height: 220px;
+  top: 35%;
+  right: 5%;
+  width: 240px;
+  height: 240px;
   background-image: url('735975a91879e15b33e481a2ddf467c1.jpg');
 }
 
+/* Position image7 towards the bottom‑centre area */
 .hero .image7 {
-  /* Near bottom‑left, extending beyond the viewport */
-  bottom: -20%;
-  left: 30%;
-  width: 200px;
-  height: 200px;
+  bottom: 10%;
+  left: 25%;
+  width: 220px;
+  height: 220px;
   background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');
 }
 
+/* Position image8 in the lower‑right quadrant with moderate cropping */
 .hero .image8 {
-  /* Lower‑right quadrant, partly cropped */
   bottom: 15%;
-  right: -10%;
-  width: 160px;
-  height: 160px;
+  right: 20%;
+  width: 180px;
+  height: 180px;
   background-image: url('10c423d293c03bdfa0113836f0656d49.jpg');
 }
 
@@ -183,49 +179,50 @@ body {
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .hero .image {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
   }
+  /* Slightly pull in the corner images on small screens */
   .hero .image1 {
-    /* Pull images slightly in from the edges on small screens */
-    top: -2%;
-    left: -2%;
+    top: 0;
+    left: -6%;
   }
   .hero .image2 {
-    top: -2%;
-    right: -2%;
+    top: 0;
+    right: -4%;
   }
   .hero .image3 {
-    bottom: -2%;
-    left: -2%;
+    bottom: 4%;
+    left: -6%;
   }
   .hero .image4 {
-    bottom: -2%;
-    right: -2%;
+    bottom: 0;
+    right: -4%;
   }
+  /* Central images scaled down and repositioned */
   .hero .image5 {
-    top: 20%;
-    left: -20%;
-    width: 100px;
-    height: 100px;
+    top: 25%;
+    left: 5%;
+    width: 80px;
+    height: 80px;
   }
   .hero .image6 {
-    top: 25%;
-    right: -25%;
-    width: 120px;
-    height: 120px;
-  }
-  .hero .image7 {
-    bottom: -15%;
-    left: 20%;
-    width: 120px;
-    height: 120px;
-  }
-  .hero .image8 {
-    bottom: 10%;
-    right: -15%;
+    top: 35%;
+    right: 5%;
     width: 100px;
     height: 100px;
+  }
+  .hero .image7 {
+    bottom: 10%;
+    left: 20%;
+    width: 100px;
+    height: 100px;
+  }
+  .hero .image8 {
+    bottom: 12%;
+    right: 18%;
+    width: 80px;
+    height: 80px;
   }
   .hero .subtitle {
     font-size: 1rem;
