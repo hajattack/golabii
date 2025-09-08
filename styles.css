@@ -66,28 +66,35 @@ body {
 
 /* Individual positions and images for each decorative element */
 .hero .image1 {
-  top: 5%;
-  left: 5%;
-  /* Update path now that images live in the repository root */
-  background-image: url('saffron_drip.png');
+  /* Position this image slightly off the top‑left corner so it peeks into the viewport */
+  top: -5%;
+  left: -5%;
+  /* Use the new floral beverage artwork provided by the client */
+  background-image: url('10c423d293c03bdfa0113836f0656d49.jpg');
 }
 
 .hero .image2 {
-  top: 8%;
-  right: 6%;
-  background-image: url('bottle_persian.png');
+  /* Push this image further out of frame on the top‑right */
+  top: -10%;
+  right: -5%;
+  /* Use the supplied image with turquoise and pink hues */
+  background-image: url('735975a91879e15b33e481a2ddf467c1.jpg');
 }
 
 .hero .image3 {
-  bottom: 12%;
-  left: 12%;
-  background-image: url('bottle_layered.png');
+  /* Position near the bottom‑left, slightly off the page */
+  bottom: -10%;
+  left: -5%;
+  /* Swap in another floral beverage photo */
+  background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');
 }
 
 .hero .image4 {
-  bottom: 8%;
-  right: 12%;
-  background-image: url('couple_jar.png');
+  /* Bottom‑right element peeks into the page */
+  bottom: -5%;
+  right: -5%;
+  /* Use the final provided bottle image */
+  background-image: url('f5d6b2dbf5c32b493a94e11c24acda4c.jpg');
 }
 
 /* Brand name styling */
@@ -115,7 +122,7 @@ body {
   color: #777777;
 }
 
-/* Call-to-action button */
+/* Call‑to‑action button */
 .hero .cta {
   display: inline-block;
   margin-top: 2rem;
@@ -143,19 +150,20 @@ body {
     height: 140px;
   }
   .hero .image1 {
-    top: 4%;
-    left: -4%;
+    /* Pull images slightly in from the edges on small screens */
+    top: -2%;
+    left: -2%;
   }
   .hero .image2 {
-    top: 4%;
-    right: -4%;
+    top: -2%;
+    right: -2%;
   }
   .hero .image3 {
-    bottom: 10%;
+    bottom: -2%;
     left: -2%;
   }
   .hero .image4 {
-    bottom: 4%;
+    bottom: -2%;
     right: -2%;
   }
   .hero .subtitle {
@@ -176,6 +184,22 @@ body {
   margin: 0 auto;
   padding: 5rem 2rem;
   text-align: center;
+}
+
+/* Animated pastel background keyframes
+   This keyframe animation slowly shifts the body background between
+   complementary pastel yellows. It adds a gentle, chic ambience to the page
+   without distracting from the main content. */
+@keyframes pastelBackground {
+  0% {
+    background-color: #FFF9E0;
+  }
+  50% {
+    background-color: #FFF3CC;
+  }
+  100% {
+    background-color: #FFFDEB;
+  }
 }
 
 .waitlist-container h2 {
@@ -228,20 +252,4 @@ body {
 
 .waitlist-container .back-link:hover {
   text-decoration: underline;
-}
-
-/* Animated pastel background keyframes
-   This keyframe animation slowly shifts the body background between
-   complementary pastel yellows. It adds a gentle, chic ambience to the page
-   without distracting from the main content. */
-@keyframes pastelBackground {
-  0% {
-    background-color: #FFF9E0;
-  }
-  50% {
-    background-color: #FFF3CC;
-  }
-  100% {
-    background-color: #FFFDEB;
-  }
 }
