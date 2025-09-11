@@ -5,8 +5,9 @@
 :root {
   --primary-font: 'Quicksand', sans-serif;
   --secondary-font: 'Nunito', sans-serif;
-  --bg-start: #FFF4C1;
-  --bg-end: #FFE1A1;
+  /* Update gradient colours: bottom red and top yellow */
+  --bg-start: #FF5A5A; /* red at the bottom */
+  --bg-end: #FFE27A; /* yellow at the top */
   --text-color: #2B2B2B;
   --button-bg: #1e1e1e;
   --button-text: #ffffff;
@@ -19,7 +20,8 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  /* Use a vertical gradient from bottom red to top yellow */
+  background: linear-gradient(to top, var(--bg-start) 0%, var(--bg-end) 100%);
   font-family: var(--secondary-font);
   color: var(--text-color);
   overflow-x: hidden;
@@ -43,10 +45,12 @@ html, body {
 .hero .brand {
   font-family: var(--primary-font);
   font-size: clamp(4rem, 10vw, 9rem);
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  /* Pastel red for a softer yet bold brand name */
+  font-weight: 800;
+  /* Slightly reduced letter spacing for elegance */
+  letter-spacing: 0.03em;
   margin: 0;
-  color: #FA00F3;
+  color: #FF6B6B;
   z-index: 1;
 }
 
@@ -108,9 +112,13 @@ html, body {
 
 /* Mid images */
 .hero .image5 { top: 26%; left: 7%; width: 220px; height: 220px; background-image: url('hejhaa_in_the_same_style_and_reference_I_want_you_to_edit_thi_af6a4e56-47a7-488d-a5d8-61e0887edf79_1.png'); }
-.hero .image6 { top: 32%; right: 8%; width: 240px; height: 240px; background-image: url('735975a91879e15b33e481a2ddf467c1.jpg'); }
-.hero .image7 { bottom: 14%; left: 24%; width: 220px; height: 220px; background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg'); }
-.hero .image8 { bottom: 18%; right: 22%; width: 180px; height: 180px; background-image: url('10c423d293c03bdfa0113836f0656d49.jpg'); }
+.hero .image6 { top: 32%; right: 8%; width: 240px; height: 240px;
+  /* Use a unique image for each decorative element to avoid duplication */
+  background-image: url('hejhaa_prompt_Macro_photograph_of_saffron_elixir_slowly_dripp_b31f227e-9f29-4342-b54b-7ac7a6ab2053_1-2.png'); }
+.hero .image7 { bottom: 14%; left: 24%; width: 220px; height: 220px;
+  background-image: url('hejhaa_a_chic_drink_bottle_that_is_filled_with_a_yellow_liqui_b80349f6-f7dc-4908-8a05-281dee8f8612_0.png'); }
+.hero .image8 { bottom: 18%; right: 22%; width: 180px; height: 180px;
+  background-image: url('hejhaa_httpss.mj.runrhdsZK6pzQM_httpss.mj.runf9i_zpBEw2s_imag_46b52651-a978-49c8-bb04-b281ad3ee1e6_2.png'); }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
