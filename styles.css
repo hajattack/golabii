@@ -2,8 +2,8 @@
   Core styles for the Golabii redesign.
 
   This stylesheet defines a clean, modern layout with a heavy focus on
-  typography and whitespace. Six decorative images are positioned
-  around the hero to evoke the floral elixir brand. Responsive rules
+  typography and whitespace. Four decorative images are positioned
+  around the hero to frame the floral elixir brand. Responsive rules
   adjust type sizes and image placement on smaller screens.
 */
 
@@ -11,8 +11,8 @@
 :root {
   --primary-font: "Quicksand", sans-serif;
   --secondary-font: "Nunito", sans-serif;
-  /* Use a soft pastel yellow as the base background colour */
-  --background-color: #fff9e0;
+  /* Use a soft pastel pink as the base background colour */
+  --background-color: #ffe6e6;
   --text-color: #1e1e1e;
   --accent-color: #d88a32; /* warm saffron tone */
   --button-bg: #1e1e1e;
@@ -112,33 +112,18 @@ body {
   background-image: url("735975a91879e15b33e481a2ddf467c1.jpg");
 }
 
-/* Side image right‑center */
+/* Corner image bottom‑right */
 .hero .image3 {
-  top: 50%;
+  bottom: -40px;
   right: -40px;
-  transform: translateY(-50%);
   background-image: url("e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg");
 }
 
-/* Side image left‑center */
+/* Corner image bottom‑left */
 .hero .image4 {
-  top: 50%;
+  bottom: -40px;
   left: -40px;
-  transform: translateY(-50%);
   background-image: url("f5d6b2dbf5c32b493a94e11c24acda4c.jpg");
-}
-
-/* Bottom images sitting near the corners */
-.hero .image5 {
-  bottom: -40px;
-  right: 80px;
-  background-image: url("saffron_drip.png");
-}
-
-.hero .image6 {
-  bottom: -40px;
-  left: 80px;
-  background-image: url("saffron_infusion.png");
 }
 
 /* Brand name styling */
@@ -218,22 +203,12 @@ body {
     right: -20px;
   }
   .hero .image3 {
+    bottom: -20px;
     right: -20px;
-    top: 50%;
-    transform: translateY(-50%);
   }
   .hero .image4 {
+    bottom: -20px;
     left: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .hero .image5 {
-    bottom: -20px;
-    right: 40px;
-  }
-  .hero .image6 {
-    bottom: -20px;
-    left: 40px;
   }
   .hero .subtitle {
     top: 1rem;
@@ -262,43 +237,43 @@ body {
    Custom overrides for updated branding
 
    The following rules adjust the overall page background and hero brand
-   typography. A static yellow–orange gradient replaces the animated pastel
-   background to create a soothing, warm atmosphere. The hero title colour
-   is updated to a vibrant magenta to align with new brand guidelines. These
+   typography. A static red–pink gradient replaces the animated pastel
+   background to create a warm, romantic atmosphere. The hero title colour
+   is updated to a gentle pastel red to align with new brand guidelines. These
    overrides live at the bottom of the stylesheet to take precedence over
    earlier declarations.
 */
 
-/* Apply a soft yellow‑orange gradient to the entire page background. The
-   gradient starts with a pale buttery yellow and transitions into a light
-   apricot orange. Disabling the animation ensures the gradient remains
-   steady rather than shifting colours. */
+/* Apply a soft red‑to‑pink gradient to the entire page background. The
+   gradient starts with a pastel red and transitions into a light pink.
+   Disabling the animation ensures the gradient remains steady rather than
+   shifting colours. */
 html,
 body {
-  background: linear-gradient(135deg, #fff4c1 0%, #ffe1a1 100%);
+  background: linear-gradient(135deg, #ff7f7f 0%, #ffb6c1 100%);
   animation: none;
 }
 
-/* Update the hero brand colour to a bright magenta. This colour is
+/* Update the hero brand colour to a soft pastel red. This colour is
    specified without relying on CSS variables so it overrides any inherited
    text colour. */
 .hero .brand {
-  color: #fa00f3;
+  color: #ff7f7f;
 }
 
 /* Animated pastel background keyframes
    This keyframe animation slowly shifts the body background between
-   complementary pastel yellows. It adds a gentle, chic ambience to the page
-   without distracting from the main content. */
+   complementary pastel pinks. It is retained for potential future use even
+   though the current gradient is static. */
 @keyframes pastelBackground {
   0% {
-    background-color: #fff9e0;
+    background-color: #ffe6e6;
   }
   50% {
-    background-color: #fff3cc;
+    background-color: #ffd1dc;
   }
   100% {
-    background-color: #fffdeb;
+    background-color: #ffecec;
   }
 }
 
