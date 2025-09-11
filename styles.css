@@ -2,17 +2,17 @@
   Core styles for the Golabii redesign.
 
   This stylesheet defines a clean, modern layout with a heavy focus on
-  typography and whitespace. Four decorative images are positioned
+  typography and whitespace. Six decorative images are positioned
   around the hero to evoke the floral elixir brand. Responsive rules
   adjust type sizes and image placement on smaller screens.
 */
 
 /* Root variables for easy theming */
 :root {
-  --primary-font: 'Quicksand', sans-serif;
-  --secondary-font: 'Nunito', sans-serif;
+  --primary-font: "Quicksand", sans-serif;
+  --secondary-font: "Nunito", sans-serif;
   /* Use a soft pastel yellow as the base background colour */
-  --background-color: #FFF9E0;
+  --background-color: #fff9e0;
   --text-color: #1e1e1e;
   --accent-color: #d88a32; /* warm saffron tone */
   --button-bg: #1e1e1e;
@@ -36,6 +36,39 @@ body {
   animation: pastelBackground 20s ease-in-out infinite alternate;
 }
 
+/* Apple-style translucent top menu */
+.top-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.top-menu .menu-button {
+  background: none;
+  border: none;
+  font-family: var(--secondary-font);
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.top-menu .menu-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 /* Hero section occupies the full viewport height */
 .hero {
   position: relative;
@@ -45,7 +78,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
+  padding: 6rem 2rem 2rem;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -65,69 +98,47 @@ body {
 }
 
 /* Individual positions and images for each decorative element */
-/* Position image1 closer to the centre while still cropping a small portion off the left edge */
+/* Corner image top‑left */
 .hero .image1 {
-  top: -2%;
-  left: -10%;
-  background-image: url('10c423d293c03bdfa0113836f0656d49.jpg');
+  top: -40px;
+  left: -40px;
+  background-image: url("10c423d293c03bdfa0113836f0656d49.jpg");
 }
 
-/* Position image2 near the top‑right but bring it further into view */
+/* Corner image top‑right */
 .hero .image2 {
-  top: 2%;
-  right: -8%;
-  background-image: url('735975a91879e15b33e481a2ddf467c1.jpg');
+  top: -40px;
+  right: -40px;
+  background-image: url("735975a91879e15b33e481a2ddf467c1.jpg");
 }
 
-/* Position image3 closer to the bottom‑left without hiding it completely */
+/* Side image right‑center */
 .hero .image3 {
-  bottom: 5%;
-  left: -10%;
-  background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  background-image: url("e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg");
 }
 
-/* Position image4 near the bottom‑right while cropping only a small portion */
+/* Side image left‑center */
 .hero .image4 {
-  bottom: 2%;
-  right: -8%;
-  background-image: url('f5d6b2dbf5c32b493a94e11c24acda4c.jpg');
+  top: 50%;
+  left: -40px;
+  transform: translateY(-50%);
+  background-image: url("f5d6b2dbf5c32b493a94e11c24acda4c.jpg");
 }
 
-/* Additional decorative images for a chaotic yet harmonious layout */
-/* Position image5 mid‑left but fully within the viewport */
+/* Bottom images sitting near the corners */
 .hero .image5 {
-  top: 30%;
-  left: 5%;
-  width: 200px;
-  height: 200px;
-  background-image: url('hejhaa_in_the_same_style_and_reference_I_want_you_to_edit_thi_af6a4e56-47a7-488d-a5d8-61e0887edf79_1.png');
+  bottom: -40px;
+  right: 80px;
+  background-image: url("saffron_drip.png");
 }
 
-/* Position image6 mid‑right but keep most of it visible */
 .hero .image6 {
-  top: 35%;
-  right: 5%;
-  width: 240px;
-  height: 240px;
-  background-image: url('735975a91879e15b33e481a2ddf467c1.jpg');
-}
-
-/* Position image7 towards the bottom‑centre area */
-.hero .image7 {
-  bottom: 10%;
-  left: 25%;
-  width: 220px;
-  height: 220px;
-  background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');
-}
-
-/* Position image8 in the lower‑right quadrant with moderate cropping */
-.hero .image8 {
-  bottom: 15%;
-  right: 20%;
-  width: 180px;
-  height: 180px;
-  background-image: url('10c423d293c03bdfa0113836f0656d49.jpg');
+  bottom: -40px;
+  left: 80px;
+  background-image: url("saffron_infusion.png");
 }
 
 /* Brand name styling */
@@ -141,8 +152,13 @@ body {
 }
 
 /* Subtitle styles */
+
 .hero .subtitle {
-  margin: 0.5rem 0;
+  margin: 0;
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--secondary-font);
   font-weight: 400;
   font-size: 1.25rem;
@@ -151,14 +167,22 @@ body {
 }
 
 .hero .subtitle.subtitle2 {
+  top: auto;
+  bottom: 4rem;
   font-size: 1rem;
   color: #777777;
+  transform: translateX(-50%);
 }
 
 /* Call‑to‑action button */
+
 .hero .cta {
   display: inline-block;
-  margin-top: 2rem;
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0;
   padding: 0.9rem 2.2rem;
   border-radius: 40px;
   font-family: var(--primary-font);
@@ -167,7 +191,9 @@ body {
   text-decoration: none;
   background-color: var(--button-bg);
   color: var(--button-text);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   z-index: 1;
 }
 
@@ -182,55 +208,43 @@ body {
     width: 120px;
     height: 120px;
   }
-  /* Slightly pull in the corner images on small screens */
+  /* Adjust corner image offsets on small screens */
   .hero .image1 {
-    top: 0;
-    left: -6%;
+    top: -20px;
+    left: -20px;
   }
   .hero .image2 {
-    top: 0;
-    right: -4%;
+    top: -20px;
+    right: -20px;
   }
   .hero .image3 {
-    bottom: 4%;
-    left: -6%;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
   .hero .image4 {
-    bottom: 0;
-    right: -4%;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
-  /* Central images scaled down and repositioned */
   .hero .image5 {
-    top: 25%;
-    left: 5%;
-    width: 80px;
-    height: 80px;
+    bottom: -20px;
+    right: 40px;
   }
   .hero .image6 {
-    top: 35%;
-    right: 5%;
-    width: 100px;
-    height: 100px;
-  }
-  .hero .image7 {
-    bottom: 10%;
-    left: 20%;
-    width: 100px;
-    height: 100px;
-  }
-  .hero .image8 {
-    bottom: 12%;
-    right: 18%;
-    width: 80px;
-    height: 80px;
+    bottom: -20px;
+    left: 40px;
   }
   .hero .subtitle {
+    top: 1rem;
     font-size: 1rem;
   }
   .hero .subtitle.subtitle2 {
+    bottom: 3.5rem;
     font-size: 0.875rem;
   }
   .hero .cta {
+    bottom: 1rem;
     padding: 0.8rem 1.8rem;
     font-size: 1rem;
   }
@@ -261,7 +275,7 @@ body {
    steady rather than shifting colours. */
 html,
 body {
-  background: linear-gradient(135deg, #FFF4C1 0%, #FFE1A1 100%);
+  background: linear-gradient(135deg, #fff4c1 0%, #ffe1a1 100%);
   animation: none;
 }
 
@@ -269,7 +283,7 @@ body {
    specified without relying on CSS variables so it overrides any inherited
    text colour. */
 .hero .brand {
-  color: #FA00F3;
+  color: #fa00f3;
 }
 
 /* Animated pastel background keyframes
@@ -278,13 +292,13 @@ body {
    without distracting from the main content. */
 @keyframes pastelBackground {
   0% {
-    background-color: #FFF9E0;
+    background-color: #fff9e0;
   }
   50% {
-    background-color: #FFF3CC;
+    background-color: #fff3cc;
   }
   100% {
-    background-color: #FFFDEB;
+    background-color: #fffdeb;
   }
 }
 
@@ -320,7 +334,9 @@ body {
   color: var(--button-text);
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .waitlist-container button:hover {
