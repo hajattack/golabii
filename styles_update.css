@@ -1,0 +1,190 @@
+/* Golabii redesign - custom CSS */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@300;400;600&display=swap');
+
+/* Root variables */
+:root {
+  --primary-font: 'Quicksand', sans-serif;
+  --secondary-font: 'Nunito', sans-serif;
+  --bg-start: #FFF4C1;
+  --bg-end: #FFE1A1;
+  --text-color: #2B2B2B;
+  --button-bg: #1e1e1e;
+  --button-text: #ffffff;
+  --button-hover-bg: #444444;
+}
+
+/* Base layout */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  font-family: var(--secondary-font);
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+/* Hero section */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Brand title */
+.hero .brand {
+  font-family: var(--primary-font);
+  font-size: clamp(4rem, 10vw, 9rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: #FA00F3;
+  z-index: 1;
+}
+
+/* Subtitles */
+.hero .subtitle {
+  margin: 0.5rem 0;
+  font-family: var(--secondary-font);
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: #555555;
+  z-index: 1;
+}
+
+.hero .subtitle.subtitle2 {
+  font-size: 1rem;
+  color: #777777;
+}
+
+/* CTA button */
+.hero .cta {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.9rem 2.2rem;
+  border-radius: 40px;
+  font-family: var(--primary-font);
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+}
+
+.hero .cta:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-3px);
+}
+
+/* Decorative images */
+.hero .image {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  outline: 6px solid rgba(255,255,255,0.55);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Corner images */
+.hero .image1 { top: -6%; left: -8%; background-image: url('10c423d293c03bdfa0113836f0656d49.jpg'); }
+.hero .image2 { top: -2%; right: -6%; background-image: url('735975a91879e15b33e481a2ddf467c1.jpg'); }
+.hero .image3 { bottom: -4%; left: -8%; background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg'); }
+.hero .image4 { bottom: -2%; right: -6%; background-image: url('f5d6b2dbf5c32b493a94e11c24acda4c.jpg'); }
+
+/* Mid images */
+.hero .image5 { top: 26%; left: 7%; width: 220px; height: 220px; background-image: url('hejhaa_in_the_same_style_and_reference_I_want_you_to_edit_thi_af6a4e56-47a7-488d-a5d8-61e0887edf79_1.png'); }
+.hero .image6 { top: 32%; right: 8%; width: 240px; height: 240px; background-image: url('735975a91879e15b33e481a2ddf467c1.jpg'); }
+.hero .image7 { bottom: 14%; left: 24%; width: 220px; height: 220px; background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg'); }
+.hero .image8 { bottom: 18%; right: 22%; width: 180px; height: 180px; background-image: url('10c423d293c03bdfa0113836f0656d49.jpg'); }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero .image {
+    width: 110px;
+    height: 110px;
+    outline-width: 4px;
+  }
+  .hero .image1 { top: -2%; left: -4%; }
+  .hero .image2 { top: -1%; right: -3%; }
+  .hero .image3 { bottom: 0; left: -4%; }
+  .hero .image4 { bottom: -1%; right: -3%; }
+  .hero .image5 { top: 22%; left: 4%; width: 90px; height: 90px; }
+  .hero .image6 { top: 34%; right: 5%; width: 110px; height: 110px; }
+  .hero .image7 { bottom: 10%; left: 18%; width: 110px; height: 110px; }
+  .hero .image8 { bottom: 12%; right: 16%; width: 90px; height: 90px; }
+}
+
+/* Waitlist page styles */
+.waitlist-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.waitlist-container h2 {
+  font-family: var(--primary-font);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.waitlist-container p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #666666;
+}
+
+.waitlist-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.waitlist-container input,
+.waitlist-container button {
+  padding: 0.9rem 1rem;
+  border-radius: 30px;
+  border: 1px solid #cccccc;
+  font-size: 1rem;
+  font-family: var(--secondary-font);
+}
+
+.waitlist-container button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.waitlist-container button:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.waitlist-container .back-link {
+  margin-top: 2rem;
+  display: inline-block;
+  color: #555555;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.waitlist-container .back-link:hover {
+  text-decoration: underline;
+}
