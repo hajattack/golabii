@@ -21,27 +21,29 @@
       rel="stylesheet"
     />
     <!-- Link to the updated stylesheet with cache-busting query -->
-    <!-- Cache-bust updated stylesheet version -->
-    <link rel="stylesheet" href="styles_update.css?v=20250911c" />
+    <!-- Updated version to load the latest styles for the new design -->
+    <link rel="stylesheet" href="styles_update.css?v=20250912a" />
   </head>
   <body>
     <main class="hero">
-      <!-- Decorative images around the hero. Positioning handled in CSS -->
-      <div class="image image1"></div>
-      <div class="image image2"></div>
-      <div class="image image3"></div>
-      <div class="image image4"></div>
-      <!-- Additional decorative elements for a more eclectic layout -->
-      <div class="image image5"></div>
-      <div class="image image6"></div>
-      <div class="image image7"></div>
-      <div class="image image8"></div>
-
       <!-- Central brand and messaging -->
       <h1 class="brand">Golabii</h1>
-      <p class="subtitle">100% profits to charity &amp; community</p>
-      <p class="subtitle subtitle2">Coming soon to Kickstarter &amp; Indiegogo</p>
+      <p class="subhead">All net profits to charity and prizes</p>
       <a href="waitlist.html" class="cta">Join the Waitlist</a>
+      <p class="coming-soon">Coming soon to Kickstarter &amp; Indiegogo</p>
+
+      <!-- Edge-frame gallery: images arranged around an imaginary box
+           protecting the central content. Each div uses CSS custom
+           properties to set size, position and rotation. Update the
+           --src property to reference the appropriate image filename
+           available in the repository. -->
+      <div class="edge-gallery">
+        <div class="edge-img i1" style="--w:18vmin; --h:24vmin; --x:6%;  --y:6%;  --r:6deg;  --src:url('Gemini_Generated_Image_4di9ru4di9ru4di9.png');"></div>
+        <div class="edge-img i2" style="--w:22vmin; --h:28vmin; --x:74%; --y:5%;  --r:-4deg; --src:url('unnamed copy.png');"></div>
+        <div class="edge-img i3" style="--w:20vmin; --h:24vmin; --x:4%;  --y:68%; --r:-6deg; --src:url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');"></div>
+        <div class="edge-img i4" style="--w:20vmin; --h:22vmin; --x:74%; --y:68%; --r:5deg;  --src:url('Generated Image September 07, 2025 - 12_07AM.jpeg');"></div>
+        <div class="edge-img i5" style="--w:18vmin; --h:22vmin; --x:88%; --y:28%; --r:8deg;  --src:url('unnamed.png');"></div>
+      </div>
     </main>
   </body>
 </html>
