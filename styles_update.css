@@ -5,13 +5,19 @@
 :root {
   --primary-font: 'Quicksand', sans-serif;
   --secondary-font: 'Nunito', sans-serif;
-  /* Update gradient colours: bottom red and top yellow */
-  --bg-start: #FF5A5A; /* red at the bottom */
-  --bg-end: #FFE27A; /* yellow at the top */
+  /* Theme colours */
+  --brand-red: #400000; /* dark bold colour for the Golabii brand name */
+  --pink-gold: #F2B6A5; /* unused legacy variable kept for compatibility */
+  /* Background artwork image: abstract orange-yellow gradient */
+  --bg-art: url('abstract-orange-yellow-gradient-color-background-with-blank-space-graphic-design-element_120819-2229.jpg');
   --text-color: #2B2B2B;
   --button-bg: #1e1e1e;
   --button-text: #ffffff;
   --button-hover-bg: #444444;
+
+  /* Colours for supporting text lines */
+  --subhead-color: #DA8338;    /* richer pinkish-gold tone for the main subhead */
+  --coming-color: #C87330;     /* secondary supporting colour for the coming‑soon line */
 }
 
 /* Base layout */
@@ -20,8 +26,10 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  /* Use a vertical gradient from bottom red to top yellow */
-  background: linear-gradient(to top, var(--bg-start) 0%, var(--bg-end) 100%);
+  /* Use the supplied background artwork with a subtle white overlay to ensure legibility */
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)),
+    var(--bg-art) center / cover fixed no-repeat;
   font-family: var(--secondary-font);
   color: var(--text-color);
   overflow-x: hidden;
@@ -45,13 +53,14 @@ html, body {
 .hero .brand {
   font-family: var(--primary-font);
   font-size: clamp(4rem, 10vw, 9rem);
-  /* Pastel red for a softer yet bold brand name */
-  font-weight: 800;
-  /* Slightly reduced letter spacing for elegance */
-  letter-spacing: 0.03em;
+  /* Saffron blood red for a stronger brand presence */
+  font-weight: 900;
+  /* Slightly tighter letter spacing for elegance */
+  letter-spacing: 0.02em;
   margin: 0;
-  color: #FF6B6B;
+  color: var(--brand-red);
   z-index: 1;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 /* Subtitles */
@@ -67,6 +76,31 @@ html, body {
 .hero .subtitle.subtitle2 {
   font-size: 1rem;
   color: #777777;
+}
+
+/* Subhead and coming-soon styles
+   The supporting lines are about 30% smaller than the main brand title. They
+   scale responsively using clamp and each uses its own colour defined
+   in root variables. */
+.hero .subhead {
+  margin: 0.5rem 0;
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  /* 70% of brand size: 2.8rem–7vw–6.5rem */
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  color: var(--subhead-color);
+  z-index: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.hero .coming-soon {
+  margin: 0.5rem 0;
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  color: var(--coming-color);
+  z-index: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /* CTA button */
@@ -90,51 +124,50 @@ html, body {
   transform: translateY(-3px);
 }
 
-/* Decorative images */
-.hero .image {
+
+/* Edge-frame gallery: positions decorative images around an imaginary box
+   surrounding the hero content. Each edge image uses CSS variables
+   defined inline in the HTML (via --x, --y, --w, --h, --r, --src). */
+.edge-gallery {
   position: absolute;
-  width: 200px;
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 1rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  outline: 6px solid rgba(255,255,255,0.55);
-  z-index: 0;
+  inset: 0;
   pointer-events: none;
 }
 
-/* Corner images */
-.hero .image1 { top: -6%; left: -8%; background-image: url('10c423d293c03bdfa0113836f0656d49.jpg'); }
-.hero .image2 { top: -2%; right: -6%; background-image: url('735975a91879e15b33e481a2ddf467c1.jpg'); }
-.hero .image3 { bottom: -4%; left: -8%; background-image: url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg'); }
-.hero .image4 { bottom: -2%; right: -6%; background-image: url('f5d6b2dbf5c32b493a94e11c24acda4c.jpg'); }
+.edge-img {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  background: var(--src) center / cover no-repeat;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
+  transform: rotate(var(--r));
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: -2px;
+  filter: saturate(1.02);
+}
 
-/* Mid images */
-.hero .image5 { top: 26%; left: 7%; width: 220px; height: 220px; background-image: url('hejhaa_in_the_same_style_and_reference_I_want_you_to_edit_thi_af6a4e56-47a7-488d-a5d8-61e0887edf79_1.png'); }
-.hero .image6 { top: 32%; right: 8%; width: 240px; height: 240px;
-  /* Use a unique image for each decorative element to avoid duplication */
-  background-image: url('hejhaa_prompt_Macro_photograph_of_saffron_elixir_slowly_dripp_b31f227e-9f29-4342-b54b-7ac7a6ab2053_1-2.png'); }
-.hero .image7 { bottom: 14%; left: 24%; width: 220px; height: 220px;
-  background-image: url('hejhaa_a_chic_drink_bottle_that_is_filled_with_a_yellow_liqui_b80349f6-f7dc-4908-8a05-281dee8f8612_0.png'); }
-.hero .image8 { bottom: 18%; right: 22%; width: 180px; height: 180px;
-  background-image: url('hejhaa_httpss.mj.runrhdsZK6pzQM_httpss.mj.runf9i_zpBEw2s_imag_46b52651-a978-49c8-bb04-b281ad3ee1e6_2.png'); }
+/* Responsive positioning tweaks: adjust positions on narrower screens
+   to ensure the edge images remain visible and maintain a clear
+   central area for the text. */
+@media (max-width: 900px) {
+  .edge-img { opacity: 0.9; }
+  .edge-img.i1 { --x: 4%;  --y: 4%; }
+  .edge-img.i2 { --x: 66%; --y: 5%; }
+  .edge-img.i3 { --x: 5%;  --y: 72%; }
+  .edge-img.i4 { --x: 64%; --y: 72%; }
+  .edge-img.i5 { --x: 80%; --y: 26%; }
+}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .hero .image {
-    width: 110px;
-    height: 110px;
-    outline-width: 4px;
-  }
-  .hero .image1 { top: -2%; left: -4%; }
-  .hero .image2 { top: -1%; right: -3%; }
-  .hero .image3 { bottom: 0; left: -4%; }
-  .hero .image4 { bottom: -1%; right: -3%; }
-  .hero .image5 { top: 22%; left: 4%; width: 90px; height: 90px; }
-  .hero .image6 { top: 34%; right: 5%; width: 110px; height: 110px; }
-  .hero .image7 { bottom: 10%; left: 18%; width: 110px; height: 110px; }
-  .hero .image8 { bottom: 12%; right: 16%; width: 90px; height: 90px; }
+/* Safe zone: an invisible inset area ensuring the hero content isn’t
+   overlapped by the edge images even if variables are misconfigured. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: clamp(8vmin, 18vmin, 22vmin);
+  pointer-events: none;
 }
 
 /* Waitlist page styles */
@@ -196,3 +229,4 @@ html, body {
 .waitlist-container .back-link:hover {
   text-decoration: underline;
 }
+
