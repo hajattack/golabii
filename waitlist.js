@@ -11,20 +11,21 @@
 
 // URL of the deployed Google Apps Script web app that saves form submissions
 // to a Google Sheet. This should be the endpoint of the Apps Script deployment.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbG5ItFb29DF0LBCe2wSCp_b7aM2jXx06qV6_FjD5eWa8-f3JzhM3fTu2V9kuyDOO4/exec';
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbG5ItFb29DF0LBCe2wSCp_b7aM2jXx06qV6_FjD5eWa8-f3JzhM3fTu2V9kuyDOO4/exec";
 
 // Helper to select elements
 function $(selector) {
   return document.querySelector(selector);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = $('#waitlist-form');
-  const statusMessage = $('.status-message');
+document.addEventListener("DOMContentLoaded", () => {
+  const form = $("#waitlist-form");
+  const statusMessage = $(".status-message");
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
-    statusMessage.textContent = '';
+    statusMessage.textContent = "";
 
     const formData = new FormData(form);
     // Build a plain object from the FormData for JSON encoding.
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Convert multi-select values (checkboxes) into comma-separated strings.
     if (Array.isArray(data.important)) {
-      data.important = data.important.join(', ');
+      data.important = data.important.join(", ");
     }
 
     // Bot check: if honeypot has content, abort silently
@@ -54,23 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // POST to Apps Script
     fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
       .then((json) => {
         if (json.ok) {
-          statusMessage.textContent = "Thank you! You've been added to our waitlist.";
+          statusMessage.textContent =
+            "Thank you! You've been added to our waitlist.";
           form.reset();
         } else {
-          statusMessage.textContent = 'Oops! There was a problem. Please try again later.';
+          statusMessage.textContent =
+            "Oops! There was a problem. Please try again later.";
         }
       })
       .catch(() => {
-        statusMessage.textContent = 'Something went wrong. Please try again later.';
+        statusMessage.textContent =
+          "Something went wrong. Please try again later.";
       });
   });
 });
