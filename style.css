@@ -2,10 +2,12 @@
   --bg:#fdeff4;          /* chic light pink pastel */
   --ink:#0e0e0e;
   --muted:#6b6b6b;
-  --accent:#e24b5a;      /* red for the single CTA */
+  --accent:#e24b5a;      /* red for call to action */
   --card:#ffffff;
-  /* Deep saffron red for the wordmark */
-  --wordmark:#c84b31;
+  /* Dark burgundy/maroon for the wordmark and brand */
+  --wordmark:#7a0e17;
+  /* Soft yellow tint for the nav bar */
+  --nav-tint: rgba(255,237,180,.55);
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -15,68 +17,85 @@ img{display:block;max-width:100%;height:auto}
 button{font:inherit}
 
 /* NAV */
-.nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:14px 22px;background:rgba(255,255,255,.65);backdrop-filter:saturate(180%) blur(8px);
-  border-bottom:1px solid rgba(0,0,0,.06)}
-.nav .brand{font-weight:700;letter-spacing:.4px}
+.nav{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 22px;background:var(--nav-tint);backdrop-filter:saturate(180%) blur(8px);
+  border-bottom:1px solid rgba(0,0,0,.06)
+}
+/* Brand uses the same maroon as the main wordmark */
+.nav .brand{
+  font-weight:700;letter-spacing:.4px;
+  color:var(--wordmark);
+}
 .nav nav{display:flex;gap:18px;align-items:center}
 .nav .pill{padding:8px 12px;border:1px solid rgba(0,0,0,.15);border-radius:999px}
 .burger{display:none;background:transparent;border:0;font-size:20px}
 
-/* HERO LAYOUT */
+/* HERO LAYOUT - new grid with corner cards and high title */
 .hero{
-  position:relative;
   display:grid;
-  grid-template-columns: 1fr minmax(480px, 760px) 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-columns: 1fr minmax(520px, 860px) 1fr;
+  grid-template-rows: minmax(200px, 35vh) auto 1fr;
   grid-template-areas:
-    "tl   center   tr"
-    "ml   center   mr"
-    "bl   center   br";
+    "tl title tr"
+    ".  cta   ."
+    "bl bottom br";
   gap:28px 28px;
   align-items:center;
   justify-items:center;
-  min-height:88svh;
-  padding:8svh 20px 12svh;
+  min-height:92svh;
+  padding:6svh 20px 8svh;
 }
+
+/* Title group sits high between the top images */
+.title-group{grid-area:title;align-self:end;text-align:center}
 .wordmark{
-  grid-area:center;
-  font-size:clamp(48px,12vw,170px);
-  letter-spacing:.08em;margin:0;text-align:center;
-  /* Apply deep saffron red color to the Golabii wordmark */
   color:var(--wordmark);
+  font-size:clamp(58px,14vw,200px);
+  letter-spacing:.08em;margin:0;text-align:center;
 }
-.subtitle{grid-area:center;margin-top:calc(clamp(48px,12vw,170px) + 10px);
-  max-width:780px;text-align:center;color:var(--muted)}
-.cta{grid-area:center;display:flex;gap:12px;justify-content:center;margin-top:10px}
+
+/* Call-to-action and tagline */
+.cta-group{grid-area:cta;text-align:center}
 .cta-primary{
-  background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;
-  border:1px solid rgba(0,0,0,.15);box-shadow:0 6px 14px rgba(226,75,90,.18);
+  background:var(--accent);color:#fff;border:1px solid rgba(0,0,0,.15);
+  border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
 }
-.cta-primary:focus-visible{outline:3px solid rgba(226,75,90,.35);outline-offset:2px}
+.cta-large{
+  font-size:clamp(28px,3vw,48px);
+  padding:30px 44px;
+  border-radius:20px;
+}
+.tagline{margin:.7rem 0 0;color:var(--muted);font-size:clamp(14px,1.5vw,18px)}
 
-/* Scattered cards grid */
-.cards-grid{
-  position:absolute; inset:0; display:grid; pointer-events:none;
-  grid-template-columns: 1fr minmax(480px, 760px) 1fr;
-  grid-template-rows: auto auto auto;
-  grid-template-areas:
-    "tl   .   tr"
-    "ml   .   mr"
-    "bl   .   .";
-  align-items:center; justify-items:center; gap:28px 28px;
+/* Bottom third message */
+.bottom-notice{grid-area:bottom;text-align:center}
+.bottom-notice .coming{
+  font-size:clamp(20px,2.5vw,28px);
+  letter-spacing:.04em;
+  margin:0 0 .2rem;
+  color:var(--ink);
 }
-.card{background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.12); pointer-events:auto}
-.card img{width:min(22vw,280px);min-width:180px;aspect-ratio:1/1;object-fit:cover}
-.card-tl{grid-area:tl; transform:rotate(-1.5deg)}
-.card-tr{grid-area:tr; transform:rotate(1.2deg)}
-.card-ml{grid-area:ml; transform:rotate(-0.6deg)}
-.card-mr{grid-area:mr; transform:rotate(0.9deg)}
-.card-bl{grid-area:bl; transform:rotate(-1.1deg)}
+.bottom-notice .flavors{
+  color:var(--muted);
+  font-size:clamp(14px,1.2vw,16px);
+  margin:0;
+}
+
+/* Four corner images */
+.card{
+  background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+.card img{
+  width:min(22vw,280px);min-width:180px;aspect-ratio:1/1;
+  object-fit:cover;
+}
+.card-tl{grid-area:tl;transform:rotate(-1.5deg)}
+.card-tr{grid-area:tr;transform:rotate(1.2deg)}
+.card-bl{grid-area:bl;transform:rotate(-0.8deg)}
+.card-br{grid-area:br;transform:rotate(0.8deg)}
 .card:hover{transform:translateY(-2px) scale(1.01);transition:transform .2s ease}
-
-.scroll{position:absolute;bottom:18px;left:50%;translate:-50% 0;color:var(--muted);font-size:12px}
 
 /* OTHER SECTIONS (unchanged) */
 .split{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:64px 20px;max-width:1100px;margin:0 auto}
@@ -97,12 +116,18 @@ button{font:inherit}
 @media (max-width:900px){
   .nav nav{display:none}
   .burger{display:block}
-  .hero{grid-template-columns:1fr;grid-template-rows:auto auto auto;grid-template-areas:
-    "center" "center" "center";gap:14px}
-  .cards-grid{
-    position:static;grid-template-columns:repeat(2,1fr);grid-template-rows:auto;
-    grid-template-areas:none;gap:14px;margin-top:10px
+  .hero{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto auto auto auto;
+    grid-template-areas:
+      "tl tr"
+      "title title"
+      "cta cta"
+      "bl br"
+      "bottom bottom";
+    gap:14px;
   }
+  /* On small screens, images fill available width */
   .card img{width:100%;min-width:0}
   .split{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
