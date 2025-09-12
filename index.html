@@ -1,50 +1,44 @@
-<!--
-  Redesign of the Golabii landing page
 
-  This page is a fresh take on the original golabii.com waitlist site.
-  It uses a minimal hero layout inspired by the provided inspiration
-  screenshot. The hero features a large brand name and supporting
-  taglines centred on the page with decorative product imagery
-  positioned around the edges. A prominent call‑to‑action button
-  encourages visitors to join the waitlist. All fonts are loaded
-  from Google Fonts and are free to use commercially.
--->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Golabii | Floral Elixir</title>
-    <!-- Google fonts: soft, slightly playful yet professional -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Link to the updated stylesheet with cache-busting query -->
-    <!-- Cache-bust updated stylesheet version -->
-    <!-- Updated version to load the latest styles for the new design -->
-    <link rel="stylesheet" href="styles_update.css?v=20250912b" />
-  </head>
-  <body>
-    <main class="hero">
-      <!-- Central brand and messaging -->
-      <h1 class="brand">Golabii</h1>
-      <p class="subhead">All net profits to charity and prizes</p>
-      <a href="waitlist.html" class="cta">Join the Waitlist</a>
-      <p class="coming-soon">Coming soon to Kickstarter &amp; Indiegogo</p>
-
-      <!-- Edge-frame gallery: images arranged around an imaginary box
-           protecting the central content. Each div uses CSS custom
-           properties to set size, position and rotation. Update the
-           --src property to reference the appropriate image filename
-           available in the repository. -->
-      <div class="edge-gallery">
-        <div class="edge-img i1" style="--w:18vmin; --h:24vmin; --x:6%;  --y:6%;  --r:6deg;  --src:url('Gemini_Generated_Image_4di9ru4di9ru4di9.png');"></div>
-        <div class="edge-img i2" style="--w:22vmin; --h:28vmin; --x:74%; --y:5%;  --r:-4deg; --src:url('unnamed copy.png');"></div>
-        <div class="edge-img i3" style="--w:20vmin; --h:24vmin; --x:4%;  --y:68%; --r:-6deg; --src:url('e3ffb9e1dfb0dde09c0f2ca43ae2fa4b.jpg');"></div>
-        <div class="edge-img i4" style="--w:20vmin; --h:22vmin; --x:74%; --y:68%; --r:5deg;  --src:url('Generated Image September 07, 2025 - 12_07AM.jpeg');"></div>
-        <div class="edge-img i5" style="--w:18vmin; --h:22vmin; --x:88%; --y:28%; --r:8deg;  --src:url('unnamed.png');"></div>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milord | Creative Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo">Milord</div>
+        <nav>
+            <ul>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#journal">Journal</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-icon" id="menuIcon">&#9776;</div>
+    </header>
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-title">
+                <span class="dot"></span>
+                <h1>MILORD</h1>
+            </div>
+            <div class="image-grid">
+                <div class="img-container top-left"><img src="images/cocktail.png" alt="Cocktail"></div>
+                <div class="img-container top-right"><img src="images/tapestry.jpg" alt="Tapestry"></div>
+                <div class="img-container bottom-left"><img src="images/painting.png" alt="Painting"></div>
+                <div class="img-container bottom-right"><img src="images/garden.png" alt="Garden"></div>
+                <div class="img-container bottom-middle"><img src="images/infusion.jpeg" alt="Infusion"></div>
+            </div>
+            <p class="scroll-indicator">Scroll</p>
+        </section>
     </main>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
