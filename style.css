@@ -4,6 +4,8 @@
   --muted:#6b6b6b;
   --accent:#e24b5a;      /* red for the single CTA */
   --card:#ffffff;
+  /* Deep saffron red for the wordmark */
+  --wordmark:#c84b31;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -41,6 +43,8 @@ button{font:inherit}
   grid-area:center;
   font-size:clamp(48px,12vw,170px);
   letter-spacing:.08em;margin:0;text-align:center;
+  /* Apply deep saffron red color to the Golabii wordmark */
+  color:var(--wordmark);
 }
 .subtitle{grid-area:center;margin-top:calc(clamp(48px,12vw,170px) + 10px);
   max-width:780px;text-align:center;color:var(--muted)}
