@@ -1,44 +1,97 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Milord | Creative Studio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Golabii — Saffron Floral Beverage</title>
+  <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23f7d34e'/></svg>">
+  <link rel="preload" as="image" href="painting.png">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>
-        <div class="logo">Milord</div>
-        <nav>
-            <ul>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#journal">Journal</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="menu-icon" id="menuIcon">&#9776;</div>
-    </header>
-    <main>
-        <section class="hero" id="home">
-            <div class="hero-title">
-                <span class="dot"></span>
-                <h1>MILORD</h1>
-            </div>
-            <div class="image-grid">
-                <div class="img-container top-left"><img src="images/cocktail.png" alt="Cocktail"></div>
-                <div class="img-container top-right"><img src="images/tapestry.jpg" alt="Tapestry"></div>
-                <div class="img-container bottom-left"><img src="images/painting.png" alt="Painting"></div>
-                <div class="img-container bottom-right"><img src="images/garden.png" alt="Garden"></div>
-                <div class="img-container bottom-middle"><img src="images/infusion.jpeg" alt="Infusion"></div>
-            </div>
-            <p class="scroll-indicator">Scroll</p>
-        </section>
-    </main>
-    <script src="script.js"></script>
+  <header class="nav">
+    <a class="brand" href="#top">Golabii</a>
+    <nav>
+      <a href="#product">Product</a>
+      <a href="#story">Story</a>
+      <a href="#journal">Journal</a>
+      <a href="#contact" class="pill">Join waitlist</a>
+    </nav>
+    <button class="burger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main id="top" class="hero">
+    <div class="cards">
+      <figure class="card tl"><img src="cocktail.png" alt="Saffron cocktail with rose garnish"></figure>
+      <figure class="card tr"><img src="tapestry.jpg" alt="Persian floral tapestry"></figure>
+      <figure class="card bl"><img src="painting.png" alt="Bottles with saffron by a golden shoreline"></figure>
+      <figure class="card br"><img src="garden.png" alt="Garden of flowers and a pond"></figure>
+      <figure class="card mid"><img src="infusion.jpeg" alt="Saffron flower infusion bottle"></figure>
+    </div>
+
+    <h1 class="wordmark">GOLABII</h1>
+    <p class="subtitle">Saffron. Rose. Cardamom. 100% of profits to relief and community causes.</p>
+    <div class="cta">
+      <a href="#contact" class="cta-primary">Join the waitlist</a>
+      <a href="#product" class="cta-secondary">Learn more</a>
+    </div>
+    <div class="scroll">Scroll</div>
+  </main>
+
+  <section id="product" class="split">
+    <div class="copy">
+      <h2>The drink</h2>
+      <p>Small-batch saffron beverage layered with rose hydrosol and cardamom. Balanced sweetness, bright acidity, and a long saffron finish.</p>
+      <ul>
+        <li>Real saffron, micro-batched</li>
+        <li>Botanical hydrosols, no artificial flavors</li>
+        <li>Chilled ready-to-drink or mixable</li>
+      </ul>
+      <a href="#contact" class="link">Get early access →</a>
+    </div>
+    <figure class="visual"><img src="cocktail.png" alt="Serve chilled or over ice"></figure>
+  </section>
+
+  <section id="story" class="panel">
+    <h2>Why Golabii</h2>
+    <p>Inspired by Persian flavors and hospitality, we designed a luxurious, everyday ritual that funds real help. Golabii channels sales into transparent donations for Gaza, Iran, and Kurdistan initiatives.</p>
+  </section>
+
+  <section id="journal" class="grid">
+    <article>
+      <h3>Craft</h3>
+      <p>From saffron sourcing to hydrosol balance, we document the build—the wins and the mistakes—so the community owns the process.</p>
+    </article>
+    <article>
+      <h3>Design</h3>
+      <p>Modular bottle concepts, upcyclable bricks, and a brand system that feels old-world and future-proof at the same time.</p>
+    </article>
+    <article>
+      <h3>Impact</h3>
+      <p>Donation receipts and monthly summaries. No hand-wavy charity math.</p>
+    </article>
+  </section>
+
+  <section id="contact" class="panel">
+    <h2>Join the waitlist</h2>
+    <form class="waitlist" action="https://formspree.io/f/xyzzz" method="POST">
+      <label>Email <input name="email" type="email" required placeholder="you@domain.com" /></label>
+      <label>City <input name="city" type="text" placeholder="Portland, OR" /></label>
+      <button type="submit" class="cta-primary">Notify me</button>
+    </form>
+    <p class="fine">By joining, you agree to receive a couple of launch emails. No spam. Ever.</p>
+  </section>
+
+  <footer class="foot">
+    <div>© Golabii • Small batch • Non-profit mission</div>
+    <div class="foot-links">
+      <a href="#journal">Journal</a>
+      <a href="#contact">Contact</a>
+      <a href="#" aria-disabled="true" class="muted">Press kit (soon)</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
