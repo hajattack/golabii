@@ -1,59 +1,105 @@
 :root{
-  --bg:#ffffff; --ink:#0e0e0e; --muted:#6b6b6b;
-  --accent:#f0c93a; /* saffron */
-  --rose:#e24b5a;   /* rose */
-  --card: #ffffff;
-  --ring: 2px solid rgba(0,0,0,.12);
+  --bg:#fdeff4;          /* chic light pink pastel */
+  --ink:#0e0e0e;
+  --muted:#6b6b6b;
+  --accent:#e24b5a;      /* red for the single CTA */
+  --card:#ffffff;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 button{font:inherit}
 
-.nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:rgba(255,255,255,.65);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid rgba(0,0,0,.06)}
+/* NAV */
+.nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 22px;background:rgba(255,255,255,.65);backdrop-filter:saturate(180%) blur(8px);
+  border-bottom:1px solid rgba(0,0,0,.06)}
 .nav .brand{font-weight:700;letter-spacing:.4px}
 .nav nav{display:flex;gap:18px;align-items:center}
 .nav .pill{padding:8px 12px;border:1px solid rgba(0,0,0,.15);border-radius:999px}
 .burger{display:none;background:transparent;border:0;font-size:20px}
 
-.hero{position:relative;min-height:88svh;display:grid;place-items:center;padding:8svh 20px 12svh}
-.wordmark{font-size:clamp(48px,12vw,180px);letter-spacing:.08em;margin:0;text-align:center}
-.subtitle{margin:10px auto 18px;max-width:780px;text-align:center;color:var(--muted)}
-.cta{display:flex;gap:12px;justify-content:center}
-.cta-primary{background:var(--accent);padding:10px 16px;border-radius:10px;border:1px solid rgba(0,0,0,.2)}
-.cta-secondary{padding:10px 16px;border-radius:10px;border:1px solid rgba(0,0,0,.14)}
+/* HERO LAYOUT */
+.hero{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1fr minmax(480px, 760px) 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "tl   center   tr"
+    "ml   center   mr"
+    "bl   center   br";
+  gap:28px 28px;
+  align-items:center;
+  justify-items:center;
+  min-height:88svh;
+  padding:8svh 20px 12svh;
+}
+.wordmark{
+  grid-area:center;
+  font-size:clamp(48px,12vw,170px);
+  letter-spacing:.08em;margin:0;text-align:center;
+}
+.subtitle{grid-area:center;margin-top:calc(clamp(48px,12vw,170px) + 10px);
+  max-width:780px;text-align:center;color:var(--muted)}
+.cta{grid-area:center;display:flex;gap:12px;justify-content:center;margin-top:10px}
+.cta-primary{
+  background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;
+  border:1px solid rgba(0,0,0,.15);box-shadow:0 6px 14px rgba(226,75,90,.18);
+}
+.cta-primary:focus-visible{outline:3px solid rgba(226,75,90,.35);outline-offset:2px}
+
+/* Scattered cards grid */
+.cards-grid{
+  position:absolute; inset:0; display:grid; pointer-events:none;
+  grid-template-columns: 1fr minmax(480px, 760px) 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "tl   .   tr"
+    "ml   .   mr"
+    "bl   .   .";
+  align-items:center; justify-items:center; gap:28px 28px;
+}
+.card{background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.12); pointer-events:auto}
+.card img{width:min(22vw,280px);min-width:180px;aspect-ratio:1/1;object-fit:cover}
+.card-tl{grid-area:tl; transform:rotate(-1.5deg)}
+.card-tr{grid-area:tr; transform:rotate(1.2deg)}
+.card-ml{grid-area:ml; transform:rotate(-0.6deg)}
+.card-mr{grid-area:mr; transform:rotate(0.9deg)}
+.card-bl{grid-area:bl; transform:rotate(-1.1deg)}
+.card:hover{transform:translateY(-2px) scale(1.01);transition:transform .2s ease}
+
 .scroll{position:absolute;bottom:18px;left:50%;translate:-50% 0;color:var(--muted);font-size:12px}
 
-.cards{position:absolute;inset:0;pointer-events:none}
-.card{position:absolute;box-shadow:0 10px 30px rgba(0,0,0,.12);border-radius:16px;overflow:hidden;background:var(--card);border:1px solid rgba(0,0,0,.06)}
-.card img{width:22vw;min-width:180px;aspect-ratio:1/1;object-fit:cover}
-.card.tl{top:8%;left:6%}
-.card.tr{top:7%;right:6%}
-.card.bl{bottom:12%;left:10%}
-.card.br{bottom:10%;right:10%}
-.card.mid{top:50%;left:9%;translate:0 -50%}
-.card:hover{transform:translateY(-2px);transition:transform .2s ease}
-
+/* OTHER SECTIONS (unchanged) */
 .split{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:64px 20px;max-width:1100px;margin:0 auto}
 .split .visual{justify-self:center}
 .panel{padding:72px 20px;max-width:900px;margin:0 auto}
 .panel h2{margin:0 0 12px}
 .grid{padding:64px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
 .grid article{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:18px 16px;background:#fff}
-.link{border-bottom:1px solid currentColor}
 
 .waitlist{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:16px 0}
 .waitlist input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,.15)}
-.waitlist button{background:var(--accent);border:1px solid rgba(0,0,0,.2);border-radius:10px;padding:10px 16px}
+.waitlist button{background:var(--accent);color:#fff;border:1px solid rgba(0,0,0,.2);border-radius:10px;padding:10px 16px}
 
 .foot{display:flex;justify-content:space-between;gap:12px;padding:22px;border-top:1px solid rgba(0,0,0,.08);color:var(--muted)}
 .foot .muted{opacity:.6;pointer-events:none}
 
+/* MOBILE */
 @media (max-width:900px){
-  .cards .card img{width:34vw}
-  .split{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr}
   .nav nav{display:none}
   .burger{display:block}
+  .hero{grid-template-columns:1fr;grid-template-rows:auto auto auto;grid-template-areas:
+    "center" "center" "center";gap:14px}
+  .cards-grid{
+    position:static;grid-template-columns:repeat(2,1fr);grid-template-rows:auto;
+    grid-template-areas:none;gap:14px;margin-top:10px
+  }
+  .card img{width:100%;min-width:0}
+  .split{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
 }
