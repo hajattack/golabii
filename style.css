@@ -8,6 +8,8 @@
   --wordmark:#7a0e17;
   /* Soft yellow tint for the nav bar */
   --nav-tint: rgba(255,237,180,.55);
+      /* Golden liquid yellow used for the campaign profits tagline */
+      --gold:#d4a017;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -51,7 +53,8 @@ button{font:inherit}
 .title-group{grid-area:title;align-self:end;text-align:center}
 .wordmark{
   color:var(--wordmark);
-  font-size:clamp(58px,14vw,200px);
+  /* Reduce the wordmark size by 25% for a more balanced hero */
+  font-size:clamp(44px,10.5vw,150px);
   letter-spacing:.08em;margin:0;text-align:center;
 }
 
@@ -62,11 +65,17 @@ button{font:inherit}
   border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
 }
 .cta-large{
-  font-size:clamp(28px,3vw,48px);
-  padding:30px 44px;
-  border-radius:20px;
+  /* Scale the primary hero button down by ~25% */
+  font-size:clamp(21px,2.25vw,36px);
+  padding:22px 33px;
+  border-radius:15px;
 }
-.tagline{margin:.7rem 0 0;color:var(--muted);font-size:clamp(14px,1.5vw,18px)}
+.tagline{
+  /* Increase tagline size by 50% and use a golden color */
+  margin:.8rem 0 0;
+  color:var(--gold);
+  font-size:clamp(21px,2.25vw,27px);
+}
 
 /* Bottom third message */
 .bottom-notice{grid-area:bottom;text-align:center}
@@ -74,12 +83,21 @@ button{font:inherit}
   font-size:clamp(20px,2.5vw,28px);
   letter-spacing:.04em;
   margin:0 0 .2rem;
-  color:var(--ink);
+  /* Use the accent color (a pink‑red) for the coming soon message */
+  color:var(--accent);
 }
 .bottom-notice .flavors{
   color:var(--muted);
   font-size:clamp(14px,1.2vw,16px);
   margin:0;
+}
+
+/* Subtitle beneath the wordmark listing the flavours */
+.subtitle-flavors{
+  margin:.5rem 0 0;
+  /* Increase size to act as subtitle to the main wordmark */
+  font-size:clamp(22px,3vw,32px);
+  color:var(--muted);
 }
 
 /* Four corner images */
