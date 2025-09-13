@@ -10,6 +10,8 @@
   --nav-tint: rgba(255,237,180,.55);
       /* Golden liquid yellow used for the campaign profits tagline */
       --gold:#d4a017;
+      /* Pink‑red tone specifically for the "coming soon" notice */
+      --coming-pink:#e05674;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -53,8 +55,8 @@ button{font:inherit}
 .title-group{grid-area:title;align-self:end;text-align:center}
 .wordmark{
   color:var(--wordmark);
-  /* Reduce the wordmark size by 25% for a more balanced hero */
-  font-size:clamp(44px,10.5vw,150px);
+  /* Further reduce the wordmark size by 25% to refine the visual hierarchy */
+  font-size:clamp(34px,8vw,120px);
   letter-spacing:.08em;margin:0;text-align:center;
 }
 
@@ -65,16 +67,17 @@ button{font:inherit}
   border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
 }
 .cta-large{
-  /* Scale the primary hero button down by ~25% */
-  font-size:clamp(21px,2.25vw,36px);
-  padding:22px 33px;
+  /* Scale the primary hero button down by another ~25% */
+  font-size:clamp(16px,1.7vw,27px);
+  /* Adjust padding to maintain proportion */
+  padding:18px 27px;
   border-radius:15px;
 }
 .tagline{
-  /* Increase tagline size by 50% and use a golden color */
-  margin:.8rem 0 0;
+  /* Make the campaign tagline even more prominent: 50% larger than baseline and gold hue */
+  margin:1rem 0 0;
   color:var(--gold);
-  font-size:clamp(21px,2.25vw,27px);
+  font-size:clamp(28px,3.5vw,40px);
 }
 
 /* Bottom third message */
@@ -83,8 +86,8 @@ button{font:inherit}
   font-size:clamp(20px,2.5vw,28px);
   letter-spacing:.04em;
   margin:0 0 .2rem;
-  /* Use the accent color (a pink‑red) for the coming soon message */
-  color:var(--accent);
+  /* Use a distinct pink‑red tone for the coming soon message */
+  color:var(--coming-pink);
 }
 .bottom-notice .flavors{
   color:var(--muted);
@@ -95,8 +98,8 @@ button{font:inherit}
 /* Subtitle beneath the wordmark listing the flavours */
 .subtitle-flavors{
   margin:.5rem 0 0;
-  /* Increase size to act as subtitle to the main wordmark */
-  font-size:clamp(22px,3vw,32px);
+  /* Increase size further so the flavour list acts as a prominent subtitle beneath the wordmark */
+  font-size:clamp(26px,3.5vw,38px);
   color:var(--muted);
 }
 
