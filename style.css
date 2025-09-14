@@ -1,13 +1,13 @@
 :root{
-  --bg:#fdeff4;          /* chic light pink pastel */
+  --bg:#ffffff;          /* white background */
   --ink:#0e0e0e;
   --muted:#6b6b6b;
   --accent:#e24b5a;      /* red for call to action */
   --card:#ffffff;
   /* Dark burgundy/maroon for the wordmark and brand */
   --wordmark:#7a0e17;
-  /* Soft yellow tint for the nav bar */
-  --nav-tint: rgba(255,237,180,.55);
+  /* Pastel red tint for the nav bar (semi‑transparent matte glass) */
+  --nav-tint: rgba(255,205,210,.55);
       /* Golden liquid yellow used for the campaign profits tagline */
       --gold:#d4a017;
       /* Pink‑red tone specifically for the "coming soon" notice */
@@ -32,27 +32,34 @@ button{font:inherit}
   color:var(--wordmark);
 }
 .nav nav{display:flex;gap:18px;align-items:center}
-.nav .pill{padding:8px 12px;border:1px solid rgba(0,0,0,.15);border-radius:999px}
+.nav .pill{
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--gold);
+  border:1px solid var(--gold);
+  color:var(--ink);
+}
 .burger{display:none;background:transparent;border:0;font-size:20px}
 
 /* HERO LAYOUT - new grid with corner cards and high title */
 .hero{
-  display:grid;
-  grid-template-columns: 1fr minmax(520px, 860px) 1fr;
-  grid-template-rows: minmax(200px, 35vh) auto 1fr;
-  grid-template-areas:
-    "tl title tr"
-    ".  cta   ."
-    "bl bottom br";
-  gap:28px 28px;
-  align-items:center;
-  justify-items:center;
-  min-height:92svh;
-  padding:6svh 20px 8svh;
+  /* Use a simple single-column grid for hero content and allow absolute/fixed positioned cards to float behind it */
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  justify-items: center;
+  align-items: center;
+  min-height: 92svh;
+  padding: 6svh 20px 8svh;
 }
 
 /* Title group sits high between the top images */
-.title-group{grid-area:title;align-self:end;text-align:center}
+.title-group{
+  text-align:center;
+  position: relative;
+  z-index: 5;
+}
 .wordmark{
   color:var(--wordmark);
   /* Further reduce the wordmark size by 25% to refine the visual hierarchy */
@@ -61,7 +68,11 @@ button{font:inherit}
 }
 
 /* Call-to-action and tagline */
-.cta-group{grid-area:cta;text-align:center}
+.cta-group{
+  text-align:center;
+  position: relative;
+  z-index: 5;
+}
 .cta-primary{
   background:var(--accent);color:#fff;border:1px solid rgba(0,0,0,.15);
   border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
@@ -81,7 +92,11 @@ button{font:inherit}
 }
 
 /* Bottom third message */
-.bottom-notice{grid-area:bottom;text-align:center}
+.bottom-notice{
+  text-align:center;
+  position: relative;
+  z-index: 5;
+}
 .bottom-notice .coming{
   font-size:clamp(20px,2.5vw,28px);
   letter-spacing:.04em;
@@ -104,19 +119,30 @@ button{font:inherit}
 }
 
 /* Four corner images */
+/* Floating image cards: fixed-position elements that roam around the viewport */
 .card{
-  background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  width: min(22vw, 240px);
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
 }
 .card img{
-  width:min(22vw,280px);min-width:180px;aspect-ratio:1/1;
-  object-fit:cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.card-tl{grid-area:tl;transform:rotate(-1.5deg)}
-.card-tr{grid-area:tr;transform:rotate(1.2deg)}
-.card-bl{grid-area:bl;transform:rotate(-0.8deg)}
-.card-br{grid-area:br;transform:rotate(0.8deg)}
-.card:hover{transform:translateY(-2px) scale(1.01);transition:transform .2s ease}
+/* Add subtle rotation to each card for variety */
+.card-tl{ transform: rotate(-1.5deg); }
+.card-tr{ transform: rotate(1.2deg); }
+.card-bl{ transform: rotate(-0.8deg); }
+.card-br{ transform: rotate(0.8deg); }
+/* Disable hover lift on floating cards */
+.card:hover{ transform: inherit; }
 
 /* OTHER SECTIONS (unchanged) */
 .split{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:64px 20px;max-width:1100px;margin:0 auto}
@@ -138,15 +164,9 @@ button{font:inherit}
   .nav nav{display:none}
   .burger{display:block}
   .hero{
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:auto auto auto auto auto;
-    grid-template-areas:
-      "tl tr"
-      "title title"
-      "cta cta"
-      "bl br"
-      "bottom bottom";
-    gap:14px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 14px;
   }
   /* On small screens, images fill available width */
   .card img{width:100%;min-width:0}
