@@ -14,15 +14,19 @@ window.addEventListener('load', () => {
   cards.forEach(card => {
     // Disable pointer interactions for floating cards
     card.style.pointerEvents = 'none';
-    // Initialize position and velocity
+    // Determine card dimensions
     const rect = card.getBoundingClientRect();
     let w = rect.width || card.offsetWidth;
     let h = rect.height || card.offsetHeight;
+    // Compute the vertical boundary (hero section height)
+    const hero = document.querySelector('.hero');
+    const heroHeight = hero ? hero.offsetHeight : window.innerHeight * 0.5;
+    // Initialize position within hero bounds
     let x = Math.random() * (window.innerWidth - w);
-    let y = Math.random() * (window.innerHeight - h);
-    // Velocity between 0.15 and 0.4 pixels per millisecond (converted in rAF)
-    let vx = (Math.random() * 0.25 + 0.15) * (Math.random() < 0.5 ? -1 : 1);
-    let vy = (Math.random() * 0.25 + 0.15) * (Math.random() < 0.5 ? -1 : 1);
+    let y = Math.random() * (heroHeight - h);
+    // Slow velocity: between 0.05 and 0.15 pixels per millisecond
+    let vx = (Math.random() * 0.10 + 0.05) * (Math.random() < 0.5 ? -1 : 1);
+    let vy = (Math.random() * 0.10 + 0.05) * (Math.random() < 0.5 ? -1 : 1);
     // Apply initial transform
     card.style.transform = `translate(${x}px, ${y}px)`;
     function animateCard() {
@@ -36,12 +40,12 @@ window.addEventListener('load', () => {
         x = window.innerWidth - w;
         vx *= -1;
       }
-      // Bounce on vertical edges
+      // Bounce within the hero's vertical bounds
       if (y <= 0) {
         y = 0;
         vy *= -1;
-      } else if (y + h >= window.innerHeight) {
-        y = window.innerHeight - h;
+      } else if (y + h >= heroHeight) {
+        y = heroHeight - h;
         vy *= -1;
       }
       card.style.transform = `translate(${x}px, ${y}px)`;

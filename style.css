@@ -7,11 +7,16 @@
   /* Dark burgundy/maroon for the wordmark and brand */
   --wordmark:#7a0e17;
   /* Pastel red tint for the nav bar (semi‑transparent matte glass) */
-  --nav-tint: rgba(255,205,210,.55);
-      /* Golden liquid yellow used for the campaign profits tagline */
-      --gold:#d4a017;
-      /* Pink‑red tone specifically for the "coming soon" notice */
-      --coming-pink:#e05674;
+  /* Header background colour (deep burgundy) */
+  --nav-bg:#4A0706;
+  /* Metallic gold used for navigation text */
+  --nav-color:#d4af37;
+  /* Golden liquid yellow used for the waitlist buttons */
+  --gold:#d4a017;
+  /* Pink‑red tone specifically for the "coming soon" notice */
+  --coming-pink:#e05674;
+  /* Light pink hue for tagline/subtext */
+  --tagline-pink:#e5a6c2;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -23,7 +28,7 @@ button{font:inherit}
 /* NAV */
 .nav{
   position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:14px 22px;background:var(--nav-tint);backdrop-filter:saturate(180%) blur(8px);
+  padding:14px 22px;background:var(--nav-bg);backdrop-filter:saturate(180%) blur(8px);
   border-bottom:1px solid rgba(0,0,0,.06)
 }
 /* Brand uses the same maroon as the main wordmark */
@@ -31,7 +36,13 @@ button{font:inherit}
   font-weight:700;letter-spacing:.4px;
   color:var(--wordmark);
 }
-.nav nav{display:flex;gap:18px;align-items:center}
+.nav nav{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  /* Apply metallic gold colour to nav links */
+  color:var(--nav-color);
+}
 .nav .pill{
   padding:8px 12px;
   border-radius:999px;
@@ -78,17 +89,18 @@ button{font:inherit}
   border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
 }
 .cta-large{
-  /* Scale the primary hero button down by another ~25% */
-  font-size:clamp(16px,1.7vw,27px);
-  /* Adjust padding to maintain proportion */
-  padding:18px 27px;
-  border-radius:15px;
+  /* Scale the primary hero button up by roughly 40% to stand out */
+  font-size:clamp(22px,2.4vw,38px);
+  /* Increase padding proportionally for the larger button */
+  padding:25px 40px;
+  border-radius:18px;
 }
 .tagline{
-  /* Make the campaign tagline even more prominent: 50% larger than baseline and gold hue */
-  margin:1rem 0 0;
-  color:var(--gold);
-  font-size:clamp(28px,3.5vw,40px);
+  /* Style the campaign profits tagline as subtext directly beneath the wordmark */
+  margin:0.8rem 0 0;
+  color:var(--tagline-pink);
+  /* Set the tagline size relative to the wordmark so it reads like a subtitle */
+  font-size:clamp(20px,3vw,32px);
 }
 
 /* Bottom third message */
@@ -103,6 +115,8 @@ button{font:inherit}
   margin:0 0 .2rem;
   /* Use a distinct pink‑red tone for the coming soon message */
   color:var(--coming-pink);
+  /* Emphasise the "coming soon" message with bold weight */
+  font-weight:700;
 }
 .bottom-notice .flavors{
   color:var(--muted);
