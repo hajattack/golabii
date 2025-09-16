@@ -15,9 +15,11 @@
   <header class="nav">
     <a class="brand" href="#top">Golabii</a>
     <nav>
-      <a href="#product">Product</a>
-      <a href="#story">Story</a>
-      <a href="#journal">Journal</a>
+      <a href="#what-is">What is Golabii</a>
+      <a href="#mission">Our mission</a>
+      <a href="#goals">Our goals</a>
+      <a href="#contact">Contact</a>
+      <!-- Nav join button remains as a pill but styled like a button and elongated -->
       <a href="#contact" class="pill">Join waitlist</a>
     </nav>
     <button class="burger" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -25,10 +27,29 @@
 
   <main id="top" class="hero">
     <!-- Static image links positioned at the bottom of the hero. Clicking them jumps to their respective sections. -->
+    <!-- Hero links: each image contains a top and bottom label. Clicking an image scrolls to the associated section. -->
     <div class="hero-links">
-      <a href="#product" class="hero-link"><img src="infusion2.jpeg" alt="Saffron infusion jar"></a>
-      <a href="#story" class="hero-link"><img src="tapestry2.jpg" alt="Floral tapestry and market"></a>
-      <a href="#journal" class="hero-link"><img src="cocktail2.jpeg" alt="Cocktail with saffron and rose"></a>
+      <a href="#what-is" class="hero-link">
+        <div class="hero-img-container">
+          <span class="hero-label top">Ingredients</span>
+          <img src="infusion2.jpeg" alt="Saffron infusion jar" />
+          <span class="hero-label bottom">What is it</span>
+        </div>
+      </a>
+      <a href="#mission" class="hero-link">
+        <div class="hero-img-container">
+          <span class="hero-label top">Our mission</span>
+          <img src="tapestry2.jpg" alt="Floral tapestry and market" />
+          <span class="hero-label bottom">Who we do it for</span>
+        </div>
+      </a>
+      <a href="#goals" class="hero-link">
+        <div class="hero-img-container">
+          <span class="hero-label top">Our goals</span>
+          <img src="cocktail2.jpeg" alt="Cocktail with saffron and rose" />
+          <span class="hero-label bottom">How we're going to do it</span>
+        </div>
+      </a>
     </div>
 
         <!-- Title sits high in the hero -->
@@ -49,39 +70,51 @@
     </div>
   </main>
 
-  <section id="product" class="split">
+  <section id="what-is" class="split">
     <div class="copy">
-      <h2>The drink</h2>
-      <p>Small-batch saffron beverage layered with rose hydrosol and cardamom. Balanced sweetness, bright acidity, and a long saffron finish.</p>
+      <h2>What is Golabii</h2>
+      <p>Golabii is a saffron-forward beverage blending rose hydrosol, cardamom and other botanicals. Balanced sweetness, bright acidity, and a long saffron finish make it both refreshing and indulgent.</p>
       <ul>
-        <li>Real saffron, micro-batched</li>
+        <li>Saffron, rose, cardamom and botanicals</li>
         <li>Botanical hydrosols, no artificial flavors</li>
-        <li>Chilled ready-to-drink or mixable</li>
+        <li>Refreshing served chilled or mixable</li>
       </ul>
       <a href="#contact" class="link">Get early access →</a>
     </div>
-    <figure class="visual"><img src="cocktail.png" alt="Serve chilled or over ice"></figure>
+    <!-- Use the infusion image for the 'What is Golabii' section -->
+    <figure class="visual"><img src="infusion2.jpeg" alt="Infusion jar illustrating ingredients and process"></figure>
   </section>
 
-  <section id="story" class="panel">
-    <h2>Why Golabii</h2>
-    <p>Inspired by Persian flavors and hospitality, we designed a luxurious, everyday ritual that funds real help. Golabii channels sales into transparent donations for Gaza, Iran, and Kurdistan initiatives.</p>
+  <!-- Mission section: describes our purpose and community focus -->
+  <section id="mission" class="split">
+    <div class="copy">
+      <h2>Our mission</h2>
+      <p>We are building a saffron‑forward beverage that supports communities in need. By celebrating Persian flavors and hospitality, we hope to create a ritual that gives back.</p>
+      <ul>
+        <li>Support farmers and artisans through fair partnerships</li>
+        <li>Foster cultural connection and storytelling</li>
+        <li>Directly fund relief and rebuilding initiatives</li>
+      </ul>
+      <a href="#contact" class="link">Learn more →</a>
+    </div>
+    <figure class="visual"><img src="tapestry2.jpg" alt="Our mission focuses on community and culture" /></figure>
   </section>
 
-  <section id="journal" class="grid">
-    <article>
-      <h3>Craft</h3>
-      <p>From saffron sourcing to hydrosol balance, we document the build—the wins and the mistakes—so the community owns the process.</p>
-    </article>
-    <article>
-      <h3>Design</h3>
-      <p>Modular bottle concepts, upcyclable bricks, and a brand system that feels old-world and future-proof at the same time.</p>
-    </article>
-    <article>
-      <h3>Impact</h3>
-      <p>Donation receipts and monthly summaries. No hand-wavy charity math.</p>
-    </article>
+  <!-- Goals section: lays out our roadmap and aspirations -->
+  <section id="goals" class="split">
+    <div class="copy">
+      <h2>Our goals</h2>
+      <p>From scaling production sustainably to growing an engaged community, our goals reflect our commitment to craft and impact.</p>
+      <ul>
+        <li>Establish small‑batch production facilities</li>
+        <li>Invite supporters to join our journey</li>
+        <li>Partner with local farms and makers</li>
+      </ul>
+      <a href="#contact" class="link">Discover our goals →</a>
+    </div>
+    <figure class="visual"><img src="cocktail2.jpeg" alt="Goals: craft, community and scale" /></figure>
   </section>
+
 
   <section id="contact" class="panel">
     <h2>Join the waitlist</h2>
@@ -94,9 +127,10 @@
   </section>
 
   <footer class="foot">
-    <div>© Golabii • Small batch • Non-profit mission</div>
+    <div>© Golabii • Small batch • Non‑profit mission</div>
     <div class="foot-links">
-      <a href="#journal">Journal</a>
+      <a href="#mission">Mission</a>
+      <a href="#goals">Goals</a>
       <a href="#contact">Contact</a>
       <a href="#" aria-disabled="true" class="muted">Press kit (soon)</a>
     </div>

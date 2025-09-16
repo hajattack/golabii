@@ -6,11 +6,12 @@
   --card:#ffffff;
   /* Dark burgundy/maroon for the wordmark and brand */
   --wordmark:#7a0e17;
-  /* Semi-transparent burgundy for the nav bar (Apple mirror style).  
-     The base colour (#4A0706) is kept but with a lower alpha channel for a more transparent, glassy effect. */
-  --nav-bg: rgba(74, 7, 6, 0.45);
-  /* Pastel yellow colour used for navigation and brand text */
-  --nav-color:#f5e8a6;
+  /* Semi-transparent pastel red inspired by our original deep burgundy.  
+     This colour lightens the header while keeping a hint of the original hue,  
+     and the alpha channel adds a frosted glass feel. */
+  --nav-bg: rgba(122, 14, 20, 0.5);
+  /* Shiny gold yellow used for navigation and brand text */
+  --nav-color:#f6d155;
   /* Golden liquid yellow used for the waitlist buttons */
   --gold:#d4a017;
   /* Pink‑red tone specifically for the "coming soon" notice */
@@ -62,9 +63,11 @@ button{font:inherit}
   font-family:'Montserrat', sans-serif;
   text-decoration:none;
 }
-}
+
 .nav .pill{
-  padding:8px 12px;
+  /* Elongate and emphasise the navigation join button */
+  /* Lengthen the join button in the nav for a more elongated appearance */
+  padding:8px 28px;
   border-radius:999px;
   background:var(--gold);
   border:1px solid var(--gold);
@@ -82,7 +85,8 @@ button{font:inherit}
   justify-items: center;
   align-items: center;
   min-height: 92svh;
-  padding: 6svh 20px 8svh;
+  /* Reduce top padding slightly to move content upward and give more room for the bottom images */
+  padding: 5svh 20px 8svh;
 }
 
 /* Title group sits high between the top images */
@@ -113,13 +117,15 @@ button{font:inherit}
 .cta-large{
   /* Scale the primary hero button up by roughly 40% to stand out */
   font-size:clamp(22px,2.4vw,38px);
-  /* Increase padding proportionally for the larger button */
-  padding:25px 40px;
+  /* Reduce height by about 10% and increase width by about 10% to make the button wider and slightly shorter */
+  padding:20px 48px;
   border-radius:18px;
 }
 .tagline{
   /* Style the campaign profits tagline as subtext directly beneath the wordmark */
-  margin:0.8rem 0 0;
+  /* Reduce the gap between the wordmark and tagline so the subtext feels connected */
+  /* Bring the tagline closer to the wordmark by halving the top margin */
+  margin:0.2rem 0 0;
   color:var(--tagline-pink);
   /* Set the tagline size relative to the wordmark so it reads like a subtitle.  
      It should be noticeably smaller than the main wordmark to act as subtext. */
@@ -131,18 +137,22 @@ button{font:inherit}
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:20px;
+  /* Increase spacing between images to allow them to breathe */
+  /* Increase spacing between images so they span more of the bottom of the hero */
+  gap:36px;
   /* Position the hero links at the bottom of the hero section.
      Use absolute positioning so that the images remain anchored near
      the bottom of the hero but above the bottom message. */
   position:absolute;
-  bottom:2rem;
+  bottom:1.5rem;
   left:0;
   right:0;
   z-index:4;
 }
 .hero-link img{
-  width:min(20vw,200px);
+  /* Increase image size slightly so the trio covers the bottom of the hero more fully */
+  /* Enlarge images slightly to cover more of the bottom of the hero */
+  width:min(24vw,260px);
   height:auto;
   border-radius:16px;
   box-shadow:0 4px 16px rgba(0,0,0,.15);
@@ -152,11 +162,38 @@ button{font:inherit}
   transform:translateY(-4px);
 }
 
+/* Hero image container and overlay labels */
+.hero-img-container{
+  position:relative;
+  display:inline-block;
+  overflow:hidden;
+}
+.hero-label{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,0.85);
+  color:var(--wordmark);
+  padding:2px 6px;
+  border-radius:6px;
+  font-size:clamp(12px,1.4vw,14px);
+  font-family:'Montserrat', sans-serif;
+  font-weight:600;
+  pointer-events:none;
+  white-space:nowrap;
+}
+.hero-label.top{ top:0.4rem; }
+.hero-label.bottom{ bottom:0.4rem; }
+
 /* Bottom third message */
 .bottom-notice{
   text-align:center;
   position: relative;
   z-index: 5;
+  /* Slight gap above the bottom notice to separate it from the CTA group.  
+     Keep it similar to the tagline spacing so the pieces feel cohesive. */
+  /* Bring the 'coming soon' notice closer to the CTA */
+  margin-top:0.2rem;
 }
 .bottom-notice .coming{
   font-size:clamp(20px,2.5vw,28px);
