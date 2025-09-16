@@ -6,11 +6,11 @@
   --card:#ffffff;
   /* Dark burgundy/maroon for the wordmark and brand */
   --wordmark:#7a0e17;
-  /* Pastel red tint for the nav bar (semi‑transparent matte glass) */
-  /* Header background colour (deep burgundy) */
-  --nav-bg:#4A0706;
-  /* Metallic gold used for navigation text */
-  --nav-color:#d4af37;
+  /* Semi-transparent burgundy for the nav bar (Apple mirror style).  
+     The base colour (#4A0706) is kept but with a lower alpha channel for a more transparent, glassy effect. */
+  --nav-bg: rgba(74, 7, 6, 0.45);
+  /* Pastel yellow colour used for navigation and brand text */
+  --nav-color:#f5e8a6;
   /* Golden liquid yellow used for the waitlist buttons */
   --gold:#d4a017;
   /* Pink‑red tone specifically for the "coming soon" notice */
@@ -28,20 +28,40 @@ button{font:inherit}
 /* NAV */
 .nav{
   position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:14px 22px;background:var(--nav-bg);backdrop-filter:saturate(180%) blur(8px);
-  border-bottom:1px solid rgba(0,0,0,.06)
+  padding:14px 22px;
+  background:var(--nav-bg);
+  /* Apply a blurred, saturated backdrop for the semi‑transparent nav bar */
+  backdrop-filter:saturate(180%) blur(10px);
+  -webkit-backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  /* Use Montserrat for all header text */
+  font-family:'Montserrat', sans-serif;
 }
 /* Brand uses the same maroon as the main wordmark */
 .nav .brand{
-  font-weight:700;letter-spacing:.4px;
-  color:var(--wordmark);
+  font-weight:700;
+  letter-spacing:.4px;
+  /* Use Montserrat for the brand in the header */
+  font-family:'Montserrat', sans-serif;
+  /* Brand name uses pastel yellow from the nav palette */
+  color:var(--nav-color);
 }
 .nav nav{
   display:flex;
   gap:18px;
   align-items:center;
-  /* Apply metallic gold colour to nav links */
+  /* Apply the pastel yellow colour to all navigation links.  
+     Each anchor inherits this colour explicitly so the default link colour isn't used. */
   color:var(--nav-color);
+  font-family:'Montserrat', sans-serif;
+}
+
+/* Style the navigation links individually to ensure colour inheritance */
+.nav nav a{
+  color:var(--nav-color);
+  font-family:'Montserrat', sans-serif;
+  text-decoration:none;
+}
 }
 .nav .pill{
   padding:8px 12px;
@@ -73,7 +93,9 @@ button{font:inherit}
 }
 .wordmark{
   color:var(--wordmark);
-  /* Further reduce the wordmark size by 25% to refine the visual hierarchy */
+  /* Use Fredoka font for the main Golabii wordmark */
+  font-family:'Fredoka', sans-serif;
+  /* Maintain refined wordmark size */
   font-size:clamp(34px,8vw,120px);
   letter-spacing:.08em;margin:0;text-align:center;
 }
@@ -99,8 +121,35 @@ button{font:inherit}
   /* Style the campaign profits tagline as subtext directly beneath the wordmark */
   margin:0.8rem 0 0;
   color:var(--tagline-pink);
-  /* Set the tagline size relative to the wordmark so it reads like a subtitle */
-  font-size:clamp(20px,3vw,32px);
+  /* Set the tagline size relative to the wordmark so it reads like a subtitle.  
+     It should be noticeably smaller than the main wordmark to act as subtext. */
+  font-size:clamp(18px,2.5vw,28px);
+}
+
+/* Container for the static hero links */
+.hero-links{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  /* Position the hero links at the bottom of the hero section.
+     Use absolute positioning so that the images remain anchored near
+     the bottom of the hero but above the bottom message. */
+  position:absolute;
+  bottom:2rem;
+  left:0;
+  right:0;
+  z-index:4;
+}
+.hero-link img{
+  width:min(20vw,200px);
+  height:auto;
+  border-radius:16px;
+  box-shadow:0 4px 16px rgba(0,0,0,.15);
+  transition:transform .2s ease;
+}
+.hero-link img:hover{
+  transform:translateY(-4px);
 }
 
 /* Bottom third message */
@@ -132,31 +181,7 @@ button{font:inherit}
   color:var(--muted);
 }
 
-/* Four corner images */
-/* Floating image cards: fixed-position elements that roam around the viewport */
-.card{
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  width: min(22vw, 240px);
-  overflow: hidden;
-  background: var(--card);
-  border: 1px solid rgba(0,0,0,.06);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
-}
-.card img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* Add subtle rotation to each card for variety */
-.card-tl{ transform: rotate(-1.5deg); }
-.card-tr{ transform: rotate(1.2deg); }
-.card-bl{ transform: rotate(-0.8deg); }
-.card-br{ transform: rotate(0.8deg); }
-/* Disable hover lift on floating cards */
-.card:hover{ transform: inherit; }
+/* Previously floating card styles are removed because images are now statically positioned at the bottom of the hero. */
 
 /* OTHER SECTIONS (unchanged) */
 .split{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:64px 20px;max-width:1100px;margin:0 auto}

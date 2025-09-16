@@ -7,6 +7,8 @@
   <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23f7d34e'/></svg>">
   <link rel="preload" as="image" href="painting.png">
+  <!-- Load custom fonts from Google Fonts: Montserrat for header and Fredoka for hero wordmark -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,13 +24,14 @@
   </header>
 
   <main id="top" class="hero">
-    <!-- Corner images (remove garden image, only four corners) -->
-    <figure class="card card-tl"><img src="cocktail.png" alt=""></figure>
-    <figure class="card card-tr"><img src="tapestry.jpg" alt=""></figure>
-    <figure class="card card-bl"><img src="painting.png" alt=""></figure>
-    <figure class="card card-br"><img src="infusion.jpeg" alt=""></figure>
+    <!-- Static image links positioned at the bottom of the hero. Clicking them jumps to their respective sections. -->
+    <div class="hero-links">
+      <a href="#product" class="hero-link"><img src="infusion2.jpeg" alt="Saffron infusion jar"></a>
+      <a href="#story" class="hero-link"><img src="tapestry2.jpg" alt="Floral tapestry and market"></a>
+      <a href="#journal" class="hero-link"><img src="cocktail2.jpeg" alt="Cocktail with saffron and rose"></a>
+    </div>
 
-        <!-- Title sits high between the two top images -->
+        <!-- Title sits high in the hero -->
         <div class="title-group">
       <h1 class="wordmark">GOLABII</h1>
       <!-- Tagline acts as subtext to the wordmark -->
