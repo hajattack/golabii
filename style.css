@@ -6,12 +6,11 @@
   --card:#ffffff;
   /* Dark burgundy/maroon for the wordmark and brand */
   --wordmark:#7a0e17;
-  /* Semi-transparent pastel red inspired by our original deep burgundy.  
-     This colour lightens the header while keeping a hint of the original hue,  
-     and the alpha channel adds a frosted glass feel. */
-  --nav-bg: rgba(122, 14, 20, 0.5);
-  /* Shiny gold yellow used for navigation and brand text */
-  --nav-color:#f6d155;
+  /* Chic, translucent red inspired by the deep burgundy brand colour.  
+     A slightly softer hue with an alpha channel provides an Apple‑style glass effect. */
+  --nav-bg: rgba(98, 10, 15, 0.45);
+  /* Metallic gold yellow for navigation and brand text */
+  --nav-color:#d4af37;
   /* Golden liquid yellow used for the waitlist buttons */
   --gold:#d4a017;
   /* Pink‑red tone specifically for the "coming soon" notice */
@@ -66,8 +65,8 @@ button{font:inherit}
 
 .nav .pill{
   /* Elongate and emphasise the navigation join button */
-  /* Lengthen the join button in the nav for a more elongated appearance */
-  padding:8px 28px;
+  /* Make the nav join button wider to emphasise the call to action */
+  padding:8px 36px;
   border-radius:999px;
   background:var(--gold);
   border:1px solid var(--gold);
@@ -85,8 +84,8 @@ button{font:inherit}
   justify-items: center;
   align-items: center;
   min-height: 92svh;
-  /* Reduce top padding slightly to move content upward and give more room for the bottom images */
-  padding: 5svh 20px 8svh;
+  /* Move content further upward and allocate more space for the images at the bottom */
+  padding: 4svh 20px 10svh;
 }
 
 /* Title group sits high between the top images */
@@ -117,15 +116,14 @@ button{font:inherit}
 .cta-large{
   /* Scale the primary hero button up by roughly 40% to stand out */
   font-size:clamp(22px,2.4vw,38px);
-  /* Reduce height by about 10% and increase width by about 10% to make the button wider and slightly shorter */
-  padding:20px 48px;
+  /* Make the button slightly wider and a bit shorter for better proportion */
+  padding:18px 52px;
   border-radius:18px;
 }
 .tagline{
   /* Style the campaign profits tagline as subtext directly beneath the wordmark */
-  /* Reduce the gap between the wordmark and tagline so the subtext feels connected */
-  /* Bring the tagline closer to the wordmark by halving the top margin */
-  margin:0.2rem 0 0;
+  /* Bring the tagline even closer to the wordmark by reducing the top margin further */
+  margin:0.1rem 0 0;
   color:var(--tagline-pink);
   /* Set the tagline size relative to the wordmark so it reads like a subtitle.  
      It should be noticeably smaller than the main wordmark to act as subtext. */
@@ -139,7 +137,8 @@ button{font:inherit}
   align-items:center;
   /* Increase spacing between images to allow them to breathe */
   /* Increase spacing between images so they span more of the bottom of the hero */
-  gap:36px;
+  /* Increase the gap to allow more breathing room between the bottom images */
+  gap:40px;
   /* Position the hero links at the bottom of the hero section.
      Use absolute positioning so that the images remain anchored near
      the bottom of the hero but above the bottom message. */
@@ -152,7 +151,8 @@ button{font:inherit}
 .hero-link img{
   /* Increase image size slightly so the trio covers the bottom of the hero more fully */
   /* Enlarge images slightly to cover more of the bottom of the hero */
-  width:min(24vw,260px);
+  /* Increase image width slightly so the three hero images span the bottom more fully */
+  width:min(26vw,280px);
   height:auto;
   border-radius:16px;
   box-shadow:0 4px 16px rgba(0,0,0,.15);
