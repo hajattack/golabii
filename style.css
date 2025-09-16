@@ -113,6 +113,8 @@ button{font:inherit}
   text-align:center;
   position: relative;
   z-index: 5;
+  /* Add vertical spacing so the CTA does not collide with the tagline above */
+  margin-top:0.6rem;
 }
 .cta-primary{
   background:var(--accent);color:#fff;border:1px solid rgba(0,0,0,.15);
@@ -128,7 +130,8 @@ button{font:inherit}
 .tagline{
   /* Style the campaign profits tagline as subtext directly beneath the wordmark */
   /* Bring the tagline even closer to the wordmark by reducing the top margin further */
-  margin:0.1rem 0 0;
+  /* Position the tagline close to the wordmark but leave enough space for readability */
+  margin:0.3rem 0 0;
   color:var(--tagline-pink);
   /* Set the tagline size relative to the wordmark so it reads like a subtitle.  
      It should be noticeably smaller than the main wordmark to act as subtext. */
@@ -193,8 +196,8 @@ button{font:inherit}
   z-index: 5;
   /* Slight gap above the bottom notice to separate it from the CTA group.  
      Keep it similar to the tagline spacing so the pieces feel cohesive. */
-  /* Bring the 'coming soon' notice closer to the CTA */
-  margin-top:0.2rem;
+  /* Add space between the CTA and the 'coming soon' notice */
+  margin-top:0.8rem;
 }
 .bottom-notice .coming{
   font-size:clamp(20px,2.5vw,28px);
@@ -249,4 +252,14 @@ button{font:inherit}
   .card img{width:100%;min-width:0}
   .split{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
+
+  /* Adjust hero links on small screens: stack images and reduce gaps so they remain within view */
+  .hero-links{
+    gap:20px;
+    margin-top:1rem;
+  }
+  .hero-link img{
+    /* Allow the images to take more horizontal space on small screens */
+    width:min(90vw, 260px);
+  }
 }
