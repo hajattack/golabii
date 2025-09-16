@@ -21,6 +21,11 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);
   font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+
+/* Enable smooth scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
+html{
+  scroll-behavior: smooth;
+}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 button{font:inherit}
@@ -135,18 +140,14 @@ button{font:inherit}
   display:flex;
   justify-content:center;
   align-items:center;
-  /* Increase spacing between images to allow them to breathe */
-  /* Increase spacing between images so they span more of the bottom of the hero */
-  /* Increase the gap to allow more breathing room between the bottom images */
+  /* Increase spacing between images and allow them to wrap on narrow screens */
   gap:40px;
-  /* Position the hero links at the bottom of the hero section.
-     Use absolute positioning so that the images remain anchored near
-     the bottom of the hero but above the bottom message. */
-  position:absolute;
-  bottom:1.5rem;
-  left:0;
-  right:0;
-  z-index:4;
+  flex-wrap:wrap;
+  /* Place the hero links below the bottom notice using normal document flow rather than absolute positioning.
+     This prevents them from overlaying other elements, especially on narrow screens. */
+  margin-top:1.5rem;
+  position: relative;
+  z-index: 4;
 }
 .hero-link img{
   /* Increase image size slightly so the trio covers the bottom of the hero more fully */
