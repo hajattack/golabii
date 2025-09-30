@@ -2,25 +2,32 @@
   --bg:#ffffff;          /* white background */
   --ink:#0e0e0e;
   --muted:#6b6b6b;
-  --accent:#e24b5a;      /* red for call to action */
+  /* Optional accent colour (unused now) */
+  --accent:#e24b5a;
   --card:#ffffff;
-  /* Dark burgundy/maroon for the wordmark and brand */
+  /* Primary brand colour for the wordmark and certain accents */
   --wordmark:#7a0e17;
-  /* Chic, translucent red inspired by the deep burgundy brand colour.  
-     A slightly softer hue with an alpha channel provides an Apple‑style glass effect. */
-  --nav-bg: rgba(98, 10, 15, 0.45);
-  /* Metallic gold yellow for navigation and brand text */
-  --nav-color:#d4af37;
-  /* Golden liquid yellow used for the waitlist buttons */
-  --gold:#d4a017;
+  /* Ruby red for the header with translucency to achieve a glassy effect.  Use a slightly more saturated
+     red with increased opacity for a chic, gloss‑like finish inspired by the old burgundy tone. */
+  --nav-bg: rgba(155, 17, 30, 0.65);
+  /* Crayola yellow for header text */
+  --nav-color:#fce883;
+  /* Gradient colours for call‑to‑action buttons (magenta to orange) */
+  --cta-gradient-start:#d94bff;
+  --cta-gradient-end:#ff8243;
   /* Pink‑red tone specifically for the "coming soon" notice */
   --coming-pink:#e05674;
   /* Light pink hue for tagline/subtext */
   --tagline-pink:#e5a6c2;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);
-  font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  /* Use Playfair Display for all site typography */
+  font:16px/1.5 'Playfair Display', serif;
+}
 
 /* Enable smooth scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
 html{
@@ -39,15 +46,15 @@ button{font:inherit}
   backdrop-filter:saturate(180%) blur(10px);
   -webkit-backdrop-filter:saturate(180%) blur(10px);
   border-bottom:1px solid rgba(0,0,0,.06);
-  /* Use Montserrat for all header text */
-  font-family:'Montserrat', sans-serif;
+  /* Use Playfair Display for all header text */
+  font-family:'Playfair Display', serif;
 }
 /* Brand uses the same maroon as the main wordmark */
 .nav .brand{
   font-weight:700;
   letter-spacing:.4px;
-  /* Use Montserrat for the brand in the header */
-  font-family:'Montserrat', sans-serif;
+  /* Use Playfair Display for the brand in the header */
+  font-family:'Playfair Display', serif;
   /* Brand name uses pastel yellow from the nav palette */
   color:var(--nav-color);
 }
@@ -58,24 +65,26 @@ button{font:inherit}
   /* Apply the pastel yellow colour to all navigation links.  
      Each anchor inherits this colour explicitly so the default link colour isn't used. */
   color:var(--nav-color);
-  font-family:'Montserrat', sans-serif;
+  font-family:'Playfair Display', serif;
 }
 
 /* Style the navigation links individually to ensure colour inheritance */
 .nav nav a{
   color:var(--nav-color);
-  font-family:'Montserrat', sans-serif;
+  font-family:'Playfair Display', serif;
   text-decoration:none;
 }
 
 .nav .pill{
   /* Elongate and emphasise the navigation join button */
-  /* Make the nav join button wider to emphasise the call to action */
-  padding:8px 36px;
+  /* Make the nav join button more elongated by increasing its horizontal padding */
+  padding:8px 52px;
   border-radius:999px;
-  background:var(--gold);
-  border:1px solid var(--gold);
-  color:var(--ink);
+  /* Apply a magenta‑orange gradient consistent with the hero button */
+  background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
+  border:none;
+  /* Use a light font colour for contrast against the gradient */
+  color:#ffffff;
 }
 .burger{display:none;background:transparent;border:0;font-size:20px}
 
@@ -101,8 +110,8 @@ button{font:inherit}
 }
 .wordmark{
   color:var(--wordmark);
-  /* Use Fredoka font for the main Golabii wordmark */
-  font-family:'Fredoka', sans-serif;
+  /* Use Playfair Display font for the main Golabii wordmark */
+  font-family:'Playfair Display', serif;
   /* Maintain refined wordmark size */
   font-size:clamp(34px,8vw,120px);
   letter-spacing:.08em;margin:0;text-align:center;
@@ -117,21 +126,30 @@ button{font:inherit}
   margin-top:0.6rem;
 }
 .cta-primary{
-  background:var(--accent);color:#fff;border:1px solid rgba(0,0,0,.15);
-  border-radius:14px;padding:12px 18px;box-shadow:0 8px 18px rgba(226,75,90,.18);
+  /* Use the gradient for all primary call‑to‑action buttons */
+  background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:12px 18px;
+  /* Soften the shadow to complement the gradient */
+  box-shadow:0 6px 14px rgba(0,0,0,.15);
 }
 .cta-large{
   /* Scale the primary hero button up by roughly 40% to stand out */
   font-size:clamp(22px,2.4vw,38px);
-  /* Make the button slightly wider and a bit shorter for better proportion */
-  padding:18px 52px;
+  /* Adjust the button dimensions: reduce height by roughly 10% and increase width by roughly 10%
+     to create a more elongated appearance. */
+  padding:16px 58px;
   border-radius:18px;
 }
 .tagline{
   /* Style the campaign profits tagline as subtext directly beneath the wordmark */
   /* Bring the tagline even closer to the wordmark by reducing the top margin further */
   /* Position the tagline close to the wordmark but leave enough space for readability */
-  margin:0.3rem 0 0;
+  /* Bring the tagline closer to the wordmark for a tighter relationship */
+  /* Bring the tagline even closer to the wordmark by halving the vertical margin */
+  margin:0.1rem 0 0;
   color:var(--tagline-pink);
   /* Set the tagline size relative to the wordmark so it reads like a subtitle.  
      It should be noticeably smaller than the main wordmark to act as subtext. */
@@ -142,29 +160,52 @@ button{font:inherit}
 .hero-links{
   display:flex;
   justify-content:center;
-  align-items:center;
-  /* Increase spacing between images and allow them to wrap on narrow screens */
-  gap:40px;
+  /* Align items to the top so stacked images on the right start at the same baseline */
+  align-items:flex-start;
+  /* Space out the columns for a balanced layout */
+  /* Increase the gap between image columns to give the trio of images room to breathe across the bottom of the hero */
+  gap:48px;
   flex-wrap:wrap;
   /* Place the hero links below the bottom notice using normal document flow rather than absolute positioning.
      This prevents them from overlaying other elements, especially on narrow screens. */
   margin-top:1.5rem;
-  position: relative;
-  z-index: 4;
+  position:relative;
+  z-index:4;
 }
+
+/* Define columns for the hero images: the left column holds the second image,
+   while the right column stacks the first and third images. */
+.hero-left,
+ .hero-right{
+  display:flex;
+  flex-direction:column;
+  /* Increase the vertical spacing between stacked images on the right to match the horizontal gap */
+  gap:48px;
+  align-items:center;
+}
+
+/* Ensure uniform sizing for all hero images */
 .hero-link img{
-  /* Increase image size slightly so the trio covers the bottom of the hero more fully */
-  /* Enlarge images slightly to cover more of the bottom of the hero */
-  /* Increase image width slightly so the three hero images span the bottom more fully */
-  width:min(26vw,280px);
+  /* Ensure all hero images share consistent dimensions for a clean, harmonious layout.  Use a fixed aspect
+     ratio so portraits and still‑life photographs render at the same height. */
+  width:min(26vw,260px);
+  aspect-ratio:0.75;
   height:auto;
+  object-fit:cover;
   border-radius:16px;
   box-shadow:0 4px 16px rgba(0,0,0,.15);
   transition:transform .2s ease;
 }
+
 .hero-link img:hover{
   transform:translateY(-4px);
 }
+
+/* Adjust overlay label font to use Playfair Display */
+.hero-label{
+  font-family:'Playfair Display', serif;
+}
+/* removed duplicate hero image size declarations (see above for final sizing) */
 
 /* Hero image container and overlay labels */
 .hero-img-container{
@@ -172,20 +213,7 @@ button{font:inherit}
   display:inline-block;
   overflow:hidden;
 }
-.hero-label{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(255,255,255,0.85);
-  color:var(--wordmark);
-  padding:2px 6px;
-  border-radius:6px;
-  font-size:clamp(12px,1.4vw,14px);
-  font-family:'Montserrat', sans-serif;
-  font-weight:600;
-  pointer-events:none;
-  white-space:nowrap;
-}
+/* legacy hero-label declaration overwritten above; font-family updated to Playfair */
 .hero-label.top{ top:0.4rem; }
 .hero-label.bottom{ bottom:0.4rem; }
 
@@ -197,7 +225,8 @@ button{font:inherit}
   /* Slight gap above the bottom notice to separate it from the CTA group.  
      Keep it similar to the tagline spacing so the pieces feel cohesive. */
   /* Add space between the CTA and the 'coming soon' notice */
-  margin-top:0.8rem;
+  /* Move the bottom notice closer to the call‑to‑action to match the proximity of the tagline to the wordmark */
+  margin-top:0.4rem;
 }
 .bottom-notice .coming{
   font-size:clamp(20px,2.5vw,28px);
@@ -253,13 +282,37 @@ button{font:inherit}
   .split{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
 
-  /* Adjust hero links on small screens: stack images and reduce gaps so they remain within view */
+  /* Adjust hero links on small screens: stack the left and right columns and allow images to fill width */
   .hero-links{
+    flex-direction:column;
     gap:20px;
     margin-top:1rem;
+    align-items:center;
+  }
+  .hero-left, .hero-right{
+    flex-direction:column;
+    align-items:center;
   }
   .hero-link img{
-    /* Allow the images to take more horizontal space on small screens */
+    /* Allow the images to take nearly full width on small screens */
     width:min(90vw, 260px);
   }
+}
+
+/* Contact section with a single large call‑to‑action button */
+.join-only{
+  text-align:center;
+  padding:80px 20px;
+}
+.big-join{
+  display:inline-block;
+  margin-top:1.2rem;
+  /* Use the same magenta‑to‑orange gradient as other CTA buttons */
+  background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
+  color:#fff;
+  padding:22px 60px;
+  font-size:clamp(22px,2.5vw,36px);
+  border-radius:20px;
+  text-decoration:none;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
 }

@@ -7,8 +7,8 @@
   <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23f7d34e'/></svg>">
   <link rel="preload" as="image" href="painting.png">
-  <!-- Load custom fonts from Google Fonts: Montserrat for header and Fredoka for hero wordmark -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Load Playfair Display font from Google Fonts for all typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -47,28 +47,35 @@
     </div>
 
     <!-- Static image links. Placed after the bottom notice so they never overlay text.  -->
+    <!-- Arrange the three scroll‑down images such that the second image sits on the left and the first and third images stack on the right.  -->
     <div class="hero-links">
-      <a href="#what-is" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Ingredients</span>
-          <img src="infusion2.jpeg" alt="Saffron infusion jar" />
-          <span class="hero-label bottom">What is it</span>
-        </div>
-      </a>
-      <a href="#mission" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Our mission</span>
-          <img src="tapestry2.jpg" alt="Floral tapestry and market" />
-          <span class="hero-label bottom">Who we do it for</span>
-        </div>
-      </a>
-      <a href="#goals" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Our goals</span>
-          <img src="cocktail2.jpeg" alt="Cocktail with saffron and rose" />
-          <span class="hero-label bottom">How we're going to do it</span>
-        </div>
-      </a>
+      <!-- Left column holds the second (mission) image -->
+      <div class="hero-left">
+        <a href="#mission" class="hero-link">
+          <div class="hero-img-container">
+            <span class="hero-label top">Our mission</span>
+            <img src="tapestry2.jpg" alt="Floral tapestry and market" />
+            <span class="hero-label bottom">Who we do it for</span>
+          </div>
+        </a>
+      </div>
+      <!-- Right column holds the first (what‑is) and third (goals) images stacked -->
+      <div class="hero-right">
+        <a href="#what-is" class="hero-link">
+          <div class="hero-img-container">
+            <span class="hero-label top">Ingredients</span>
+            <img src="infusion2.jpeg" alt="Saffron infusion jar" />
+            <span class="hero-label bottom">What is it</span>
+          </div>
+        </a>
+        <a href="#goals" class="hero-link">
+          <div class="hero-img-container">
+            <span class="hero-label top">Our goals</span>
+            <img src="cocktail2.jpeg" alt="Cocktail with saffron and rose" />
+            <span class="hero-label bottom">How we're going to do it</span>
+          </div>
+        </a>
+      </div>
     </div>
   </main>
 
@@ -118,14 +125,10 @@
   </section>
 
 
-  <section id="contact" class="panel">
+  <!-- Contact section: simplified to a single large button with no form fields -->
+  <section id="contact" class="panel join-only">
     <h2>Join the waitlist</h2>
-    <form class="waitlist" action="https://formspree.io/f/xyzzz" method="POST">
-      <label>Email <input name="email" type="email" required placeholder="you@domain.com" /></label>
-      <label>City <input name="city" type="text" placeholder="Portland, OR" /></label>
-      <button type="submit" class="cta-primary">Notify me</button>
-    </form>
-    <p class="fine">By joining, you agree to receive a couple of launch emails. No spam. Ever.</p>
+    <a href="#top" class="cta-primary big-join">Join waitlist</a>
   </section>
 
   <footer class="foot">
