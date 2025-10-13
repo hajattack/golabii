@@ -288,19 +288,24 @@ button{font:inherit}
   .card img{width:100%;min-width:0}
   .split{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
+/* Adjust hero links on small screens: arrange horizontally with wrapping and center alignment */
 
-  /* Adjust hero links on small screens: stack images vertically and allow them to fill width */
-  .hero-links{
-    flex-direction:;
-    gap:20px;
-    margin-top:1rem;
-    align-items:cen
-      ter;
-  }
+.hero-links{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+
+
   /* Remove specialised column behaviour on small screens */
   .hero-link img{
     /* Allow the images to take nearly full width on small screens */
-    width:min(90vw, 260px);
+        width: min(30vw, 120px);
+
   }
 }
 
