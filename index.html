@@ -13,6 +13,10 @@
       <style>
       .hero {
         position: relative;
+                background-image: url('loading-background.png');
+        background-size: cover;
+        background-position: center;
+
       }
       .hero-bg {
         position: absolute;
@@ -21,13 +25,14 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        z-index: -1;
+        z-index: -1;        display: none;
+
       }
       /* Hide text groups on the hero */
       .title-group, .cta-group, .bottom-notice {
         display: none;
       }
-    </style>
+   </style>
 </head>
 <body>
   <header class="nav">
