@@ -1,4 +1,6 @@
-:root{
+:.nav .pill
+r.nav .pill 
+oot{
 
   --bg:#ffffff;          /* white background */
   --ink:#0e0e0e;
@@ -29,7 +31,9 @@ html,body{
   font:16px/1.5 'Playfair Display', serif;
 }
 
-/* Enable smooth scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
+/* Enable smoot.nav .pill
+h.nav .pill
+ scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
 html{
   scroll-behavior: smooth;
 }
@@ -83,12 +87,10 @@ button{font:inherit}
   padding:8px 52px;
   border-radius:999px;
   /* Apply a magenta‑orange gradient consistent with the hero button */
-  background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
-  border:none;
-  /* Use a light font colour for contrast against the gradient */
-  color:#ffffff;
-}
-.burger{display:none;background:transparent;border:0;font-size:20px}
+background: #e5a6c2;
+  border: 2px solid #d4af37;
+  color: #7a0e17;
+.ber:0;font-size:20px}
 
 /* HERO LAYOUT - new grid with corner cards and high title */
 .hero{
@@ -366,10 +368,11 @@ button{font:inherit}
 .nav .pill {
   background: #9b111e;
   border: 2px solid #d4af37;
-  color: #ffffff;
-  box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255, 255, 255, 0.4);
-}
-.nav .pill:hover {
+  background: #e5a6c2;
+  border: 2px solid #d4af37;
+  color: #7a0e17;
+  box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255,255,255,0.4);
+
   box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
 }
 
@@ -389,5 +392,43 @@ button{font:inherit}
   /* Shrink hero images further so all three can comfortably fit side by side */
   .hero-link img {
     width: min(28vw, 100px);
+  }
+}
+
+/* === Final overrides to satisfy user styling === */
+.nav .pill {
+  background: #e5a6c2 !important;
+  border: 2px solid #d4af37 !important;
+  color: #7a0e17 !important;
+  box-shadow: none !important;
+}
+.nav .pill:hover {
+  background: #dca0b8 !important;
+  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255,255,255,0.6) !important;
+}
+
+/* Center hero labels above images with soft pink color */
+.hero-label.top {
+  position: relative !important;
+  top: -1.2rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: block !important;
+  text-align: center !important;
+  color: #e5a6c2 !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure hero images fit side-by-side on mobile */
+@media (max-width: 900px) {
+  .hero-links {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+  .hero-link img {
+    width: min(30vw, 100px) !important;
   }
 }
