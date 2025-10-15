@@ -94,7 +94,84 @@
 }
  
       }
-   </style>
+   
+  
+          /* === Custom overrides === */
+    .hero {
+      position: relative;
+      background-image: url('loading-background.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      display: none;
+    }
+    /* Hide original hero title, tagline and CTA elements */
+    .title-group, .cta-group, .bottom-notice {
+      display: none;
+    }
+
+    :root {
+      --nav-bg: rgba(90, 0, 5, 0.85);
+      --nav-color: #d4af37;
+      --button-softpink: #e5a6c2;
+      --button-softpink-hover: #dca0b8;
+    }
+    /* Navigation colours and whimsical font */
+    .nav {
+      background: var(--nav-bg);
+    }
+    .nav a,
+    .nav .brand {
+      color: var(--nav-color);
+      font-style: italic;
+    }
+    /* Join waitlist button styled soft pink with gold border and dark red text */
+    .nav .pill {
+      background: var(--button-softpink);
+      border: 2px solid var(--nav-color);
+      color: #7a0e17;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+    }
+    .nav .pill:hover {
+      background: var(--button-softpink-hover);
+      box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Position hero labels above images and center them with soft pink colour */
+    .hero-label.top {
+      position: relative;
+      top: -1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: block;
+      color: #e5a6c2;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Responsive adjustments for hero links on small screens */
+    @media (max-width: 900px) {
+      .hero-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+      }
+      .hero-link img {
+        width: min(30vw, 100px);
+      }
+    }
+</style>
 </head
 <body>
   <header class="nav">
