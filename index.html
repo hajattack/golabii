@@ -32,31 +32,42 @@
       }
       /* Hide text groups on the hero */
       .title-group, .cta-group, .bottom-notice {
+   }
+       display: none;
+}
+
         
             /* Custom nav colours and styling */
     :root {
       --nav-bg: rgba(90, 0, 5, 0.85);
       --nav-color: #d4af37;
+  --button-softpink: #e5a6c2;
+  --button-softpink-hover: #dca0b8;
     }
 
     /* Make header text whimsical with italic styling */
     .nav,
     .nav .brand,
     .nav nav,
+  c
     .nav nav a {
       font-style: italic;
     }
 
-    /* Deep red join button with reflective golden border */
+   /* Soft pink join waitlist button with reflective golden border 
     .nav .pill {
-      background: #9b111e;
-      border: 2px solid #d4af37;
+  background: var(--button-softpink);
+    border: 2px solid var(--nav-color);
       color: #fff;
-      box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255, 255, 255, 0.4);
+       
     }
-    .nav .pill:hover {
-      box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
     }
+.nav .pill:hover {
+  background: var(--button-softpink-hover);
+  box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
+
+}
 
     /* Position hero labels above images and centre them */
     .hero-label.top {
@@ -68,16 +79,23 @@
       width: 100%;
     }
 
-    /* Mobile refinements */
-    @media (max-width: 900px) {
-      .hero-link img {
-        width: min(28vw, 100px);
-      }
-    }
-display: none;
+  /* Mobile refinements */
+@media (max-width: 900px) {
+  .hero-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .hero-link img {
+    width: min(30vw, 100px);
+  }
+}
+ 
       }
    </style>
-</head>
+</head
 <body>
   <header class="nav">
     
@@ -210,4 +228,8 @@ display: none;
 
   <script src="script.js"></script>
 </body>
+    color: #e5a6c2;
+  font-weight: 600;
+  text-align: center;
+
 </html>
