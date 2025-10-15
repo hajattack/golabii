@@ -15,6 +15,8 @@
         position: relative;
                 background-image: url('loading-background.png');
         background-size: cover;
+        
+        
         background-position: center;
 
       }
@@ -30,7 +32,49 @@
       }
       /* Hide text groups on the hero */
       .title-group, .cta-group, .bottom-notice {
-        display: none;
+        
+            /* Custom nav colours and styling */
+    :root {
+      --nav-bg: rgba(90, 0, 5, 0.85);
+      --nav-color: #d4af37;
+    }
+
+    /* Make header text whimsical with italic styling */
+    .nav,
+    .nav .brand,
+    .nav nav,
+    .nav nav a {
+      font-style: italic;
+    }
+
+    /* Deep red join button with reflective golden border */
+    .nav .pill {
+      background: #9b111e;
+      border: 2px solid #d4af37;
+      color: #fff;
+      box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255, 255, 255, 0.4);
+    }
+    .nav .pill:hover {
+      box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Position hero labels above images and centre them */
+    .hero-label.top {
+      top: -1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: #e5a6c2;
+      width: 100%;
+    }
+
+    /* Mobile refinements */
+    @media (max-width: 900px) {
+      .hero-link img {
+        width: min(28vw, 100px);
+      }
+    }
+display: none;
       }
    </style>
 </head>
@@ -131,7 +175,10 @@
 
   <!-- Goals section: outlines how we plan to achieve our vision -->
   <section id="goals" class="split">
-    <div class="copy">
+  
+  
+}
+<div class="copy">
       <h2>Our goals</h2>
       <p>Our goals describe how we'll bring Golabii to life. We plan to grow responsibly, engage our supporters and build a sustainable supply chain rooted in community.</p>
       <ul>
