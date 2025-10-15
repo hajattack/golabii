@@ -347,3 +347,47 @@ button{font:inherit}
 .hero .bottom-notice {
   display: none;
 }
+
+
+/* Custom header colors, fonts, and join button styling */
+:root {
+  /* Darker red for the navigation bar */
+  --nav-bg: rgba(90, 0, 5, 0.85);
+  /* Metallic gold for navigation text */
+  --nav-color: #d4af37;
+}
+
+/* Make header text more whimsical by italicizing the font */
+.nav, .nav .brand, .nav nav, .nav nav a {
+  font-style: italic;
+}
+
+/* Style the join-waitlist pill button with deep red and reflective golden border */
+.nav .pill {
+  background: #9b111e;
+  border: 2px solid #d4af37;
+  color: #ffffff;
+  box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255, 255, 255, 0.4);
+}
+.nav .pill:hover {
+  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+/* Adjust hero label positioning and color */
+.hero-label.top {
+  top: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #e5a6c2;
+  width: 100%;
+  pointer-events: none;
+}
+
+/* Mobile refinements */
+@media (max-width: 900px) {
+  /* Shrink hero images further so all three can comfortably fit side by side */
+  .hero-link img {
+    width: min(28vw, 100px);
+  }
+}
