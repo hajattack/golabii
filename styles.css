@@ -339,3 +339,42 @@ body {
 .waitlist-container .back-link:hover {
   text-decoration: underline;
 }
+
+
+/* Soft pink join waitlist button overrides */
+.nav .pill {
+  background: #e5a6c2 !important;
+  border: 2px solid #d4af37 !important;
+  color: #7a0e17 !important;
+  box-shadow: none !important;
+}
+.nav .pill:hover {
+  background: #dca0b8 !important;
+  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Center hero labels above images with soft pink color */
+.hero-label.top {
+  position: relative !important;
+  top: -1.5rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: block !important;
+  text-align: center !important;
+  color: #e5a6c2 !important;
+  font-weight: 600 !important;
+}
+
+/* Adjust hero link images size and layout for mobile */
+@media (max-width: 900px) {
+  .hero-links {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+  .hero-link img {
+    width: min(30vw, 100px) !important;
+  }
+}
