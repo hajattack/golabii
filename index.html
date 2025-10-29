@@ -10,169 +10,14 @@
   <!-- Load Playfair Display font from Google Fonts for all typography -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-      <style>
-      .hero {
-        position: relative;
-                background-image: url('loading-background.png');
-        background-size: cover;
-        
-        
-        background-position: center;
-
-      }
-      .hero-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: -1;        display: none;
-
-      }
-      /* Hide text groups on the hero */
-      .title-group, .cta-group, .bottom-notice {
-   }
-       display: none;
-}
-
-        
-            /* Custom nav colours and styling */
-    :root {
-      --nav-bg: rgba(90, 0, 5, 0.85);
-      --nav-color: #d4af37;
-  --button-softpink: #e5a6c2;
-  --button-softpink-hover: #dca0b8;
-    }
-
-    /* Make header text whimsical with italic styling */
-    .nav,
-    .nav .brand,
-    .nav nav,
-  c
-    .nav nav a {
-      font-style: italic;
-    }
-
-   /* Soft pink join waitlist button with reflective golden border 
-    .nav .pill {
-  background: var(--button-softpink);
-    border: 2px solid var(--nav-color);
-      color: #fff;
-       
-    }
-    }
-.nav .pill:hover {
-  background: var(--button-softpink-hover);
-  box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
-
-}
-
-    /* Position hero labels above images and centre them */
-    .hero-label.top {
-      top: -1.4rem;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      color: #e5a6c2;
-      width: 100%;
-    }
-
-  /* Mobile refinements */
-@media (max-width: 900px) {
-  .hero-links {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-  .hero-link img {
-    width: min(30vw, 100px);
-  }
-}
- 
-      }
-   
-  
-          /* === Custom overrides === */
+  <style>
     .hero {
-      position: relative;
       background-image: url('loading-background.png');
       background-size: cover;
       background-position: center;
     }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      display: none;
-    }
-    /* Hide original hero title, tagline and CTA elements */
-    .title-group, .cta-group, .bottom-notice {
-      display: none;
-    }
-
-    :root {
-      --nav-bg: rgba(90, 0, 5, 0.85);
-      --nav-color: #d4af37;
-      --button-softpink: #e5a6c2;
-      --button-softpink-hover: #dca0b8;
-    }
-    /* Navigation colours and whimsical font */
-    .nav {
-      background: var(--nav-bg);
-    }
-    .nav a,
-    .nav .brand {
-      color: var(--nav-color);
-      font-style: italic;
-    }
-    /* Join waitlist button styled soft pink with gold border and dark red text */
-    .nav .pill {
-      background: var(--button-softpink);
-      border: 2px solid var(--nav-color);
-      color: #7a0e17;
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-    }
-    .nav .pill:hover {
-      background: var(--button-softpink-hover);
-      box-shadow: 0 0 12px var(--nav-color), inset 0 0 6px rgba(255, 255, 255, 0.6);
-    }
-
-    /* Position hero labels above images and center them with soft pink colour */
-    .hero-label.top {
-      position: relative;
-      top: -1.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: block;
-      color: #e5a6c2;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    /* Responsive adjustments for hero links on small screens */
-    @media (max-width: 900px) {
-      .hero-links {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 12px;
-      }
-      .hero-link img {
-        width: min(30vw, 100px);
-      }
-    }
-</style>
-</head
+  </style>
+</head>
 <body>
   <header class="nav">
     
@@ -190,51 +35,47 @@
   </header>
 
   <main id="top" class="hero">
-    <!-- Title sits high in the hero -->
+    <img src="loading-background.png" alt="Loading background" class="hero-bg" />
+    <div class="hero-content">
+      <div class="title-group">
+        <h1 class="wordmark">GOLABII</h1>
+        <!-- Tagline acts as subtext to the wordmark -->
+        <p class="tagline">All campaign profits going to relief and community causes</p>
+      </div>
 
-        <!-- Title sits high in the hero -->
-        <img src="loading-background.png" alt="Loading background" class="hero-bg" />
-        <div class="title-group">
-      <h1 class="wordmark">GOLABII</h1>
-      <!-- Tagline acts as subtext to the wordmark -->
-      <p class="tagline">All campaign profits going to relief and community causes</p>
-    </div>
+      <!-- Call‑to‑action button -->
+      <div class="cta-group">
+        <a href="#contact" class="cta-primary cta-large">Join waitlist</a>
+      </div>
 
-        <!-- Call‑to‑action button -->
-        <div class="cta-group">
-      <a href="#contact" class="cta-primary cta-large">Join waitlist</a>
-    </div>
-
-    <!-- Bottom third messaging -->
-    <div class="bottom-notice">
-      <p class="coming">coming soon to kick starter</p>
+      <!-- Bottom third messaging -->
+      <div class="bottom-notice">
+        <p class="coming">coming soon to kick starter</p>
+      </div>
     </div>
 
     <!-- Static image links. Placed after the bottom notice so they never overlay text.  -->
     <!-- Display all three scroll‑down images in a single horizontal row for a balanced, uniform layout.  -->
-    <div class="hero-links">
+    <nav class="hero-links" aria-label="Section shortcuts">
       <a href="#what-is" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Ingredients</span>
+        <span class="hero-img-container">
           <img src="infusion2.jpeg" alt="Saffron infusion jar" />
-          <span class="hero-label bottom">What is it</span>
-        </div>
+        </span>
+        <span class="hero-link-text">What is it?</span>
       </a>
       <a href="#mission" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Our mission</span>
+        <span class="hero-img-container">
           <img src="tapestry2.jpg" alt="Floral tapestry and market" />
-          <span class="hero-label bottom">Who we do it for</span>
-        </div>
+        </span>
+        <span class="hero-link-text">Our mission</span>
       </a>
       <a href="#goals" class="hero-link">
-        <div class="hero-img-container">
-          <span class="hero-label top">Our goals</span>
+        <span class="hero-img-container">
           <img src="cocktail2.jpeg" alt="Cocktail with saffron and rose" />
-          <span class="hero-label bottom">How we're going to do it</span>
-        </div>
+        </span>
+        <span class="hero-link-text">Our goals</span>
       </a>
-    </div>
+    </nav>
   </main>
 
   <section id="what-is" class="split">
@@ -270,10 +111,7 @@
 
   <!-- Goals section: outlines how we plan to achieve our vision -->
   <section id="goals" class="split">
-  
-  
-}
-<div class="copy">
+    <div class="copy">
       <h2>Our goals</h2>
       <p>Our goals describe how we'll bring Golabii to life. We plan to grow responsibly, engage our supporters and build a sustainable supply chain rooted in community.</p>
       <ul>
@@ -305,8 +143,4 @@
 
   <script src="script.js"></script>
 </body>
-    color: #e5a6c2;
-  font-weight: 600;
-  text-align: center;
-
 </html>

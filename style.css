@@ -1,6 +1,4 @@
-:.nav .pill
-r.nav .pill 
-oot{
+:root{
 
   --bg:#ffffff;          /* white background */
   --ink:#0e0e0e;
@@ -31,9 +29,7 @@ html,body{
   font:16px/1.5 'Playfair Display', serif;
 }
 
-/* Enable smoot.nav .pill
-h.nav .pill
- scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
+/* Enable smooth scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
 html{
   scroll-behavior: smooth;
 }
@@ -82,36 +78,56 @@ button{font:inherit}
 }
 
 .nav .pill{
-  /* Elongate and emphasise the navigation join button */
-  /* Make the nav join button more elongated by increasing its horizontal padding */
   padding:8px 52px;
   border-radius:999px;
-  /* Apply a magenta‑orange gradient consistent with the hero button */
-background: #e5a6c2;
-  border: 2px solid #d4af37;
-  color: #7a0e17;
-.ber:0;font-size:20px}
+  background:#e5a6c2;
+  border:2px solid #d4af37;
+  color:#7a0e17;
+  font-size:20px;
+  font-weight:600;
+  box-shadow:0 0 12px rgba(212, 175, 55, 0.4), inset 0 0 6px rgba(255,255,255,0.6);
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-/* HERO LAYOUT - new grid with corner cards and high title */
+.nav .pill:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.2), 0 0 16px rgba(212, 175, 55, 0.6);
+}
+
+/* HERO */
 .hero{
-  /* Use a simple single-column grid for hero content and allow absolute/fixed positioned cards to float behind it */
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
-  justify-items: center;
-  align-items: center;
-  min-height: 92svh;
-  /* Move content further upward and allocate more space for the images at the bottom */
-  padding: 4svh 20px 10svh;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  min-height:100svh;
+  padding:clamp(48px,12vh,96px) 20px clamp(160px,26vh,220px);
+  text-align:center;
+}
+
+.hero-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-1;
+  filter:brightness(0.92);
 }
 
 /* Title group sits high between the top images */
-.title-group{
-  text-align:center;
-  position: relative;
-  z-index: 5;
+.hero-content{
+  position:relative;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(1rem,2vh,2.4rem);
+  max-width:clamp(320px,80vw,720px);
 }
+
+.title-group{text-align:center;}
 .wordmark{
   color:var(--wordmark);
   /* Use Playfair Display font for the main Golabii wordmark */
@@ -122,13 +138,7 @@ background: #e5a6c2;
 }
 
 /* Call-to-action and tagline */
-.cta-group{
-  text-align:center;
-  position: relative;
-  z-index: 5;
-  /* Add vertical spacing so the CTA does not collide with the tagline above */
-  margin-top:0.6rem;
-}
+.cta-group{z-index:5;}
 .cta-primary{
   /* Use the gradient for all primary call‑to‑action buttons */
   background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
@@ -167,74 +177,8 @@ background: #e5a6c2;
   font-size:clamp(18px,2.5vw,28px);
 }
 
-/* Container for the static hero links */
-.hero-links{
-  display:flex;
-  /* Arrange all three images in a single horizontal row */
-  flex-direction:row;
-  justify-content:center;
-  /* Keep images aligned along their top edges */
-  align-items:flex-start;
-  /* Provide generous spacing between each image */
-  gap:48px;
-  /* Prevent wrapping on large screens so all three images remain in one row */
-  flex-wrap:nowrap;
-  /* Place the hero links below the bottom notice using normal document flow rather than absolute positioning.
-     This prevents them from overlaying other elements, especially on narrow screens. */
-  margin-top:1.5rem;
-  position:relative;
-  z-index:4;
-}
-
-/* Remove specialised columns since hero-links now displays all images in a single row */
-/* .hero-left and .hero-right definitions are no longer needed */
-
-/* Ensure uniform sizing for all hero images */
-.hero-link img{
-  /* Ensure all hero images share consistent dimensions for a clean, harmonious layout.  Use a fixed aspect
-     ratio so portraits and still‑life photographs render at the same height. */
-  width:min(26vw,260px);
-  aspect-ratio:0.75;
-  height:auto;
-  object-fit:cover;
-  border-radius:16px;
-  box-shadow:0 4px 16px rgba(0,0,0,.15);
-  transition:transform .2s ease;
-}
-
-
-
-.hero-link img:hover{
-  transform:translateY(-4px);
-}
-
-/* Adjust overlay label font to use Playfair Display */
-.hero-label{
-  font-family:'Playfair Display', serif;
-}
-/* removed duplicate hero image size declarations (see above for final sizing) */
-
-/* Hero image container and overlay labels */
-.hero-img-container{
-  position:relative;
-  display:inline-block;
-  overflow:hidden;
-}
-/* legacy hero-label declaration overwritten above; font-family updated to Playfair */
-.hero-label.top{ top:0.4rem; }
-.hero-label.bottom{ bottom:0.4rem; }
-
 /* Bottom third message */
-.bottom-notice{
-  text-align:center;
-  position: relative;
-  z-index: 5;
-  /* Slight gap above the bottom notice to separate it from the CTA group.  
-     Keep it similar to the tagline spacing so the pieces feel cohesive. */
-  /* Add space between the CTA and the 'coming soon' notice */
-  /* Move the bottom notice closer to the call‑to‑action to match the proximity of the tagline to the wordmark */
-  margin-top:0.4rem;
-}
+.bottom-notice{text-align:center;z-index:5;}
 .bottom-notice .coming{
   font-size:clamp(20px,2.5vw,28px);
   letter-spacing:.04em;
@@ -260,9 +204,20 @@ background: #e5a6c2;
 
 /* Previously floating card styles are removed because images are now statically positioned at the bottom of the hero. */
 
-/* OTHER SECTIONS (unchanged) */
-.split{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:64px 20px;max-width:1100px;margin:0 auto}
-.split .visual{justify-self:center}
+/* OTHER SECTIONS */
+.split{
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);
+  gap:clamp(28px,6vw,64px);
+  align-items:center;
+  padding:64px 20px;
+  max-width:1100px;
+  margin:0 auto;
+  text-align:left;
+}
+.split .copy{display:flex;flex-direction:column;gap:clamp(0.75rem,2vh,1.5rem);}
+.split .visual{justify-self:center;}
+.split .visual img{border-radius:20px;box-shadow:0 16px 32px rgba(0,0,0,0.12);}
 .panel{padding:72px 20px;max-width:900px;margin:0 auto}
 .panel h2{margin:0 0 12px}
 .grid{padding:64px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
@@ -281,34 +236,14 @@ background: #e5a6c2;
 @media (max-width:900px){
   .nav nav{display:none}
   .burger{display:block}
-  .hero{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 14px;
+  .split{
+    grid-template-columns:1fr;
+    text-align:center;
+    padding:48px 20px;
   }
-  /* On small screens, images fill available width */
-  .card img{width:100%;min-width:0}
-  .split{grid-template-columns:1fr}
+  .split .copy{align-items:center;}
+  .split .visual img{max-width:min(420px,100%);}
   .grid{grid-template-columns:1fr}
-/* Adjust hero links on small screens: arrange horizontally with wrapping and center alignment */
-
-.hero-links{
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 1rem;
-    align-items: center;
-}
-
-
-
-  /* Remove specialised column behaviour on small screens */
-  .hero-link img{
-    /* Allow the images to take nearly full width on small screens */
-        width: min(30vw, 120px);
-
-  }
 }
 
 /* Contact section with a single large call‑to‑action button */
@@ -319,117 +254,85 @@ background: #e5a6c2;
 .big-join{
   display:inline-block;
   margin-top:1.2rem;
-  /* Use the same magenta‑to‑orange gradient as other CTA buttons */
   background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
   color:#fff;
   padding:22px 60px;
-  font-size:clamp(
-    22px,2.5vw,36px);
+  font-size:clamp(22px,2.5vw,36px);
   border-radius:20px;
   text-decoration:none;
   box-shadow:0 8px 18px rgba(0,0,0,.18);
 }
 .big-join:hover{
-  /* Apply the same glowing hover effect to the big join button */
   box-shadow:0 0 20px var(--cta-gradient-end, #9b111e), 0 12px 24px rgba(0,0,0,.26);
   transform:translateY(-2px);
   transition:box-shadow .3s ease, transform .3s ease;
 }
+
+/* Hero jump buttons */
+.hero-links{
+  position:absolute;
+  bottom:clamp(24px,4vh,48px);
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:clamp(0.75rem,2vw,1.5rem);
+  padding:clamp(0.65rem,1.5vh,1rem) clamp(1rem,2.5vw,2rem);
+  align-items:flex-end;
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-radius:999px;
+  box-shadow:0 18px 38px rgba(0,0,0,0.18);
+  z-index:6;
 }
 
-/* Custom hero background and hide text elements */
-.hero {
-  background-image: url('loading-background.png');
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-}
-.hero .title-group,
-.hero .cta-group,
-.hero .bottom-notice {
-  display: none;
-}
-
-
-/* Custom header colors, fonts, and join button styling */
-:root {
-  /* Darker red for the navigation bar */
-  --nav-bg: rgba(90, 0, 5, 0.85);
-  /* Metallic gold for navigation text */
-  --nav-color: #d4af37;
+.hero-link{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.4rem;
+  color:var(--wordmark);
+  font-weight:600;
+  text-align:center;
+  font-size:clamp(14px,1.2vw,16px);
+  text-decoration:none;
+  transition:transform 0.2s ease, color 0.2s ease;
 }
 
-/* Make header text more whimsical by italicizing the font */
-.nav, .nav .brand, .nav nav, .nav nav a {
-  font-style: italic;
+.hero-link:focus-visible,
+.hero-link:hover{transform:translateY(-4px);color:var(--cta-gradient-end);}
+
+.hero-img-container{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  padding:3px;
+  background:linear-gradient(135deg,var(--cta-gradient-start),var(--cta-gradient-end));
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
 
-/* Style the join-waitlist pill button with deep red and reflective golden border */
-.nav .pill {
-  background: #9b111e;
-  border: 2px solid #d4af37;
-  background: #e5a6c2;
-  border: 2px solid #d4af37;
-  color: #7a0e17;
-  box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255,255,255,0.4);
-
-  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
+.hero-img-container img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,0.85);
 }
 
-/* Adjust hero label positioning and color */
-.hero-label.top {
-  top: -1.4rem;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: #e5a6c2;
-  width: 100%;
-  pointer-events: none;
-}
+.hero-link-text{white-space:nowrap;letter-spacing:0.02em;}
 
-/* Mobile refinements */
-@media (max-width: 900px) {
-  /* Shrink hero images further so all three can comfortably fit side by side */
-  .hero-link img {
-    width: min(28vw, 100px);
+@media (max-width:900px){
+  .hero{padding-bottom:clamp(120px,24vh,180px);}
+  .hero-links{
+    position:static;
+    transform:none;
+    margin-top:clamp(1rem,3vh,2rem);
+    flex-wrap:wrap;
+    justify-content:center;
+    row-gap:0.75rem;
   }
-}
-
-/* === Final overrides to satisfy user styling === */
-.nav .pill {
-  background: #e5a6c2 !important;
-  border: 2px solid #d4af37 !important;
-  color: #7a0e17 !important;
-  box-shadow: none !important;
-}
-.nav .pill:hover {
-  background: #dca0b8 !important;
-  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255,255,255,0.6) !important;
-}
-
-/* Center hero labels above images with soft pink color */
-.hero-label.top {
-  position: relative !important;
-  top: -1.2rem !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  display: block !important;
-  text-align: center !important;
-  color: #e5a6c2 !important;
-
-.
-Soft pink join waitlist
-/* Ensure hero images fit sstyles.css
-ide-by-side on mobile */
-@media (max-width: 900px) {
-  .hero-links {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 12px !important;
-  }
-  .hero-link img {
-    width: min(30vw, 100px) !important;
-  }
+  .hero-img-container{width:56px;height:56px;}
 }
