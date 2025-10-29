@@ -336,3 +336,49 @@ button{font:inherit}
   }
   .hero-img-container{width:56px;height:56px;}
 }
+
+/* Override hero jump buttons to appear as square cards in mid area */
+.hero-links {
+  top: 55%;
+  bottom: auto;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  gap: clamp(1rem, 3vw, 2rem);
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  box-shadow: none;
+  align-items: center;
+}
+
+.hero-img-container {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  padding: 0;
+  background: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.hero-img-container img {
+  border-radius: 8px;
+  border: none;
+}
+
+/* Red sheet overlay above hero image */
+.red-sheet {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(200px, 40vw, 300px);
+  height: clamp(40px, 8vh, 60px);
+  background-color: var(--coming-pink);
+  opacity: 0.9;
+  z-index: 4;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
