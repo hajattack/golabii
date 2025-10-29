@@ -1,6 +1,4 @@
-:.nav .pill
-r.nav .pill 
-oot{
+:root{
 
   --bg:#ffffff;          /* white background */
   --ink:#0e0e0e;
@@ -31,9 +29,7 @@ html,body{
   font:16px/1.5 'Playfair Display', serif;
 }
 
-/* Enable smoot.nav .pill
-h.nav .pill
- scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
+/* Enable smooth scrolling for anchor navigation so that clicking a link animates the scroll rather than jumping */
 html{
   scroll-behavior: smooth;
 }
@@ -82,15 +78,21 @@ button{font:inherit}
 }
 
 .nav .pill{
-  /* Elongate and emphasise the navigation join button */
-  /* Make the nav join button more elongated by increasing its horizontal padding */
   padding:8px 52px;
   border-radius:999px;
-  /* Apply a magenta‑orange gradient consistent with the hero button */
-background: #e5a6c2;
-  border: 2px solid #d4af37;
-  color: #7a0e17;
-.ber:0;font-size:20px}
+  background:#e5a6c2;
+  border:2px solid #d4af37;
+  color:#7a0e17;
+  font-size:20px;
+  font-weight:600;
+  box-shadow:0 0 12px rgba(212, 175, 55, 0.4), inset 0 0 6px rgba(255,255,255,0.6);
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav .pill:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.2), 0 0 16px rgba(212, 175, 55, 0.6);
+}
 
 /* HERO LAYOUT - new grid with corner cards and high title */
 .hero{
@@ -104,6 +106,16 @@ background: #e5a6c2;
   min-height: 92svh;
   /* Move content further upward and allocate more space for the images at the bottom */
   padding: 4svh 20px 10svh;
+}
+
+.hero-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-1;
+  filter:brightness(0.92);
 }
 
 /* Title group sits high between the top images */
@@ -167,62 +179,19 @@ background: #e5a6c2;
   font-size:clamp(18px,2.5vw,28px);
 }
 
-/* Container for the static hero links */
+/* Container for the hero jump links */
 .hero-links{
   display:flex;
-  /* Arrange all three images in a single horizontal row */
-  flex-direction:row;
+  gap:1rem;
+  align-items:center;
   justify-content:center;
-  /* Keep images aligned along their top edges */
-  align-items:flex-start;
-  /* Provide generous spacing between each image */
-  gap:48px;
-  /* Prevent wrapping on large screens so all three images remain in one row */
-  flex-wrap:nowrap;
-  /* Place the hero links below the bottom notice using normal document flow rather than absolute positioning.
-     This prevents them from overlaying other elements, especially on narrow screens. */
-  margin-top:1.5rem;
   position:relative;
-  z-index:4;
+  z-index:5;
 }
 
-/* Remove specialised columns since hero-links now displays all images in a single row */
-/* .hero-left and .hero-right definitions are no longer needed */
-
-/* Ensure uniform sizing for all hero images */
-.hero-link img{
-  /* Ensure all hero images share consistent dimensions for a clean, harmonious layout.  Use a fixed aspect
-     ratio so portraits and still‑life photographs render at the same height. */
-  width:min(26vw,260px);
-  aspect-ratio:0.75;
-  height:auto;
-  object-fit:cover;
-  border-radius:16px;
-  box-shadow:0 4px 16px rgba(0,0,0,.15);
-  transition:transform .2s ease;
+.hero-link{
+  text-decoration:none;
 }
-
-
-
-.hero-link img:hover{
-  transform:translateY(-4px);
-}
-
-/* Adjust overlay label font to use Playfair Display */
-.hero-label{
-  font-family:'Playfair Display', serif;
-}
-/* removed duplicate hero image size declarations (see above for final sizing) */
-
-/* Hero image container and overlay labels */
-.hero-img-container{
-  position:relative;
-  display:inline-block;
-  overflow:hidden;
-}
-/* legacy hero-label declaration overwritten above; font-family updated to Playfair */
-.hero-label.top{ top:0.4rem; }
-.hero-label.bottom{ bottom:0.4rem; }
 
 /* Bottom third message */
 .bottom-notice{
@@ -290,25 +259,6 @@ background: #e5a6c2;
   .card img{width:100%;min-width:0}
   .split{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
-/* Adjust hero links on small screens: arrange horizontally with wrapping and center alignment */
-
-.hero-links{
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 1rem;
-    align-items: center;
-}
-
-
-
-  /* Remove specialised column behaviour on small screens */
-  .hero-link img{
-    /* Allow the images to take nearly full width on small screens */
-        width: min(30vw, 120px);
-
-  }
 }
 
 /* Contact section with a single large call‑to‑action button */
@@ -319,117 +269,96 @@ background: #e5a6c2;
 .big-join{
   display:inline-block;
   margin-top:1.2rem;
-  /* Use the same magenta‑to‑orange gradient as other CTA buttons */
   background:linear-gradient(135deg, var(--cta-gradient-start) 0%, var(--cta-gradient-end) 100%);
   color:#fff;
   padding:22px 60px;
-  font-size:clamp(
-    22px,2.5vw,36px);
+  font-size:clamp(22px,2.5vw,36px);
   border-radius:20px;
   text-decoration:none;
   box-shadow:0 8px 18px rgba(0,0,0,.18);
 }
 .big-join:hover{
-  /* Apply the same glowing hover effect to the big join button */
   box-shadow:0 0 20px var(--cta-gradient-end, #9b111e), 0 12px 24px rgba(0,0,0,.26);
   transform:translateY(-2px);
   transition:box-shadow .3s ease, transform .3s ease;
 }
-}
 
-/* Custom hero background and hide text elements */
+/* Hero jump buttons */
 .hero {
-  background-image: url('loading-background.png');
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-}
-.hero .title-group,
-.hero .cta-group,
-.hero .bottom-notice {
-  display: none;
+  padding-bottom: 12rem;
 }
 
-
-/* Custom header colors, fonts, and join button styling */
-:root {
-  /* Darker red for the navigation bar */
-  --nav-bg: rgba(90, 0, 5, 0.85);
-  /* Metallic gold for navigation text */
-  --nav-color: #d4af37;
-}
-
-/* Make header text more whimsical by italicizing the font */
-.nav, .nav .brand, .nav nav, .nav nav a {
-  font-style: italic;
-}
-
-/* Style the join-waitlist pill button with deep red and reflective golden border */
-.nav .pill {
-  background: #9b111e;
-  border: 2px solid #d4af37;
-  background: #e5a6c2;
-  border: 2px solid #d4af37;
-  color: #7a0e17;
-  box-shadow: 0 0 8px #d4af37, inset 0 0 4px rgba(255,255,255,0.4);
-
-  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255, 255, 255, 0.6);
-}
-
-/* Adjust hero label positioning and color */
-.hero-label.top {
-  top: -1.4rem;
+.hero-links {
+  position: absolute;
+  bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-end;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  margin: 0;
+}
+
+.hero-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--wordmark);
   text-align: center;
-  color: #e5a6c2;
-  width: 100%;
-  pointer-events: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
 }
 
-/* Mobile refinements */
+.hero-link:focus-visible,
+.hero-link:hover {
+  transform: translateY(-4px);
+}
+
+.hero-img-container {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: visible;
+}
+
+.hero-img-container img {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 3px solid var(--nav-color);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hero-link-text {
+  font-size: clamp(14px, 2.6vw, 16px);
+  white-space: nowrap;
+}
+
 @media (max-width: 900px) {
-  /* Shrink hero images further so all three can comfortably fit side by side */
-  .hero-link img {
-    width: min(28vw, 100px);
+  .hero {
+    padding-bottom: 8rem;
   }
-}
 
-/* === Final overrides to satisfy user styling === */
-.nav .pill {
-  background: #e5a6c2 !important;
-  border: 2px solid #d4af37 !important;
-  color: #7a0e17 !important;
-  box-shadow: none !important;
-}
-.nav .pill:hover {
-  background: #dca0b8 !important;
-  box-shadow: 0 0 12px #d4af37, inset 0 0 6px rgba(255,255,255,0.6) !important;
-}
-
-/* Center hero labels above images with soft pink color */
-.hero-label.top {
-  position: relative !important;
-  top: -1.2rem !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  display: block !important;
-  text-align: center !important;
-  color: #e5a6c2 !important;
-
-.
-Soft pink join waitlist
-/* Ensure hero images fit sstyles.css
-ide-by-side on mobile */
-@media (max-width: 900px) {
   .hero-links {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 12px !important;
+    position: static;
+    transform: none;
+    margin-top: 1.5rem;
+    border-radius: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  .hero-link img {
-    width: min(30vw, 100px) !important;
+
+  .hero-img-container img {
+    width: 64px;
+    height: 64px;
   }
 }
