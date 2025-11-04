@@ -382,3 +382,58 @@ button{font:inherit}
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+
+/* Custom overrides: overlay header on hero and use image buttons */
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Hide the Golabii wordmark and tagline */
+.nav .brand,
+.title-group,
+.tagline {
+  display: none;
+}
+
+/* Hide the default nav links and burger button */
+.nav nav:not(.nav-images),
+.burger {
+  display: none;
+}
+
+/* Position and style the nav image buttons */
+.nav-images {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+.nav-images a img {
+  width: clamp(50px, 7vw, 80px);
+  height: clamp(50px, 7vw, 80px);
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--cta-gradient-start);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease;
+}
+
+.nav-images a img:hover {
+  transform: translateY(-3px);
+}
+
+/* Hide hero-links nav (old jump buttons) and red-sheet overlay */
+.hero-links,
+.red-sheet {
+  display: none;
+}
