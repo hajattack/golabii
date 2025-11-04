@@ -419,14 +419,15 @@ button{font:inherit}
 }
 
 .nav-images a img {
-  width: clamp(50px, 7vw, 80px);
-  height: clamp(50px, 7vw, 80px);
+  width: clamp(50px, 6vw, 70px);
+  height: clamp(50px, 6vw, 70px);
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 50%;
   border: 2px solid var(--cta-gradient-start);
   box-shadow: 0 4px 8px rgba(0,0,0,0.25);
   transition: transform 0.2s ease;
 }
+
 
 .nav-images a img:hover {
   transform: translateY(-3px);
