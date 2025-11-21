@@ -3,127 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Golabii — Saffron Floral Beverage</title>
-  <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23f7d34e'/></svg>">
-  <link rel="preload" as="image" href="painting.png">
-  <!-- Load Playfair Display font from Google Fonts for all typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <title>Golabii — Persian Daydream</title>
+  <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. A modern ode to Persian hospitality." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23D4AF37'/></svg>">
+  
+  <!-- Load Google Fonts: Fraunces (Display) & Manrope (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .hero {
-      background-image: url('loading-background.png');
-      background-size: cover;
-      background-position: center;
-    }
-  </style>
 </head>
 <body>
-  <header class="nav">
-    
-   
-      <nav class="nav-images">
-    <a href="#what-is"><img src="infusion2.jpeg" alt="What is it?" /></a>
-    <a href="#mission"><img src="tapestry2.jpg" alt="Our mission" /></a>
-    <a href="#goals"><img src="cocktail2.jpeg" alt="Our goals" /></a>
+  <!-- SVG Filter for Noise Texture -->
+  <svg class="hidden-filter">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0"/>
+    </filter>
+  </svg>
+
+  <!-- Floating Pill Navigation -->
+  <nav class="floating-nav">
+    <a href="#what-is" class="nav-link">Essence</a>
+    <a href="#mission" class="nav-link">Mission</a>
+    <span class="nav-brand">g.</span>
+    <a href="#goals" class="nav-link">Vision</a>
+    <a href="#contact" class="nav-cta">Join List</a>
   </nav>
->
-  
-  </header>
 
-  <main id="top" class="hero">
-    <img src="loading-background.png" alt="Loading background" class="hero-bg" />
-  
-
-    <div class="hero-content">
-      <div class="title-group">
-            
-
-           
-   
-      <div class="cta-group">
-        <a href="#contact" class="cta-primary cta-large">Join waitlist</a>
+  <main id="top">
+    <section class="hero-editorial">
+      <div class="hero-visual">
+        <div class="visual-wrapper parallax-target">
+          <img src="infusion2.jpeg" alt="Golden saffron infusion glowing in a jar" class="hero-img" />
+        </div>
       </div>
-     <span class="hero-img-container">
-          <img src="infusion2.jpeg" alt="Saffron infusion jar" />
-        </span>
-        <span class="hero-link-text">What is it?</span>
-      </a>
-      <a href="#mission" class="hero-link">
-        <span class="hero-img-container">
-          <img src="tapestry2.jpg" alt="Floral tapestry and market" />
-        </span>
-        <span class="hero-link-text">Our mission</span>
-      </a>
-      <a href="#goals" class="hero-link">
-        <span class="hero-img-container">
-          <img src="cocktail2.jpeg" alt="Cocktail with saffron and rose" />
-        </span>
-        <span class="hero-link-text">Our goals</span>
-      </a>
-    </nav>
+      
+      <div class="hero-text">
+        <h1 class="brand-display">
+          <span class="char" style="--i:1">G</span>
+          <span class="char" style="--i:2">o</span>
+          <span class="char" style="--i:3">l</span>
+          <span class="char" style="--i:4">a</span>
+          <span class="char" style="--i:5">b</span>
+          <span class="char" style="--i:6">i</span>
+          <span class="char" style="--i:7">i</span>
+        </h1>
+        <p class="hero-subtitle reveal-text">A saffron-forward floral elixir.<br>Crafted for the curious.</p>
+        <div class="hero-actions reveal-text" style="--d:0.2s">
+          <a href="#contact" class="btn-editorial">Join the Waitlist</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="what-is" class="editorial-section">
+      <div class="content-grid">
+        <div class="text-block reveal-up">
+          <span class="section-label">01 — The Essence</span>
+          <h2>Liquid Gold.</h2>
+          <p>Golabii is a study in balance. We combine whole saffron threads, delicate rose petals, and green cardamom to create a beverage that feels like a memory of a Persian garden.</p>
+          <ul class="detail-list">
+            <li>Whole saffron threads</li>
+            <li>Damask rose water</li>
+            <li>Cardamom essence</li>
+          </ul>
+        </div>
+        <div class="image-block reveal-up" style="--d:0.2s">
+          <img src="saffron_infusion.png" alt="Saffron threads dissolving in water" />
+          <span class="caption">Saffron extraction process</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="mission" class="editorial-section alt-layout">
+      <div class="content-grid">
+        <div class="image-block reveal-up">
+          <img src="tapestry2.jpg" alt="Textured tapestry representing culture" />
+        </div>
+        <div class="text-block reveal-up" style="--d:0.2s">
+          <span class="section-label">02 — The Mission</span>
+          <h2>Rooted in <br>Hospitality.</h2>
+          <p>Our mission is to honour the cultures that inspire our flavours. Golabii is not just a drink; it's a bridge between worlds, supporting the farmers and artisans who keep these traditions alive.</p>
+          <p>We pledge a portion of profits to community relief projects.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="goals" class="editorial-section">
+      <div class="content-grid">
+        <div class="text-block reveal-up">
+          <span class="section-label">03 — The Vision</span>
+          <h2>Growing <br>Slowly.</h2>
+          <p>We believe in micro-batches and massive care. Our goal is to build a sustainable supply chain that values quality over speed, ensuring every bottle tells a story.</p>
+        </div>
+        <div class="image-block reveal-up" style="--d:0.2s">
+          <img src="cocktail2.jpeg" alt="Golabii cocktail serve" />
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="outro-section">
+      <div class="outro-content reveal-up">
+        <h2 class="outro-title">Taste the <br>Uncommon.</h2>
+        <p>Be the first to know when our next micro-batch is ready.</p>
+        <a href="waitlist.html" class="btn-editorial large">Join the Waitlist</a>
+      </div>
+    </section>
   </main>
 
-  <section id="what-is" class="split">
-    <div class="copy">
-      <h2>What is it?</h2>
-      <p>Learn about the ingredients that make Golabii special. We combine saffron, rose, cardamom and other botanicals to create a balanced, floral beverage with a bright finish.</p>
-      <ul>
-        <li>Whole saffron threads and rose petals</li>
-        <li>Botanical hydrosols for natural flavour</li>
-        <li>Serve chilled on its own or mix into cocktails</li>
-
-      </ul>
-      <a href="#contact" class="link">Get early access →</a>
-    </div>
-    <!-- Use the infusion image for the 'What is it' section -->
-    <figure class="visual"><img src="infusion2.jpeg" alt="Infusion jar illustrating ingredients and process"></figure>
-  </section>
-
-  <!-- Mission section: describes our purpose and community focus -->
-  <section id="mission" class="split">
-    <div class="copy">
-      <h2>Our mission</h2>
-      <p>Our mission is to honour the cultures that inspire Golabii. By supporting farmers and artisans and donating profits, we celebrate hospitality and give back to the communities who shape our flavours.</p>
-      <ul>
-        <li>Support growers and makers through fair partnerships</li>
-        <li>Share stories of culture and connection</li>
-        <li>Fund relief and community projects with our profits</li>
-      </ul>
-      <a href="#contact" class="link">Learn more →</a>
-    </div>
-    <figure class="visual"><img src="tapestry2.jpg" alt="Our mission focuses on community and culture" /></figure>
-  </section>
-
-  <!-- Goals section: outlines how we plan to achieve our vision -->
-  <section id="goals" class="split">
-    <div class="copy">
-      <h2>Our goals</h2>
-      <p>Our goals describe how we'll bring Golabii to life. We plan to grow responsibly, engage our supporters and build a sustainable supply chain rooted in community.</p>
-      <ul>
-        <li>Craft micro‑batches with quality and care</li>
-        <li>Grow an engaged community of supporters</li>
-        <li>Collaborate with local farms and makers</li>
-      </ul>
-      <a href="#contact" class="link">Discover our goals →</a>
-    </div>
-    <figure class="visual"><img src="cocktail2.jpeg" alt="Our goals: craft, community and scale" /></figure>
-  </section>
-
-
-  <!-- Contact section: simplified to a single large button with no form fields -->
-  <section id="contact" class="panel join-only">
-    <h2>Join the waitlist</h2>
-    <a href="#top" class="cta-primary big-join">Join waitlist</a>
-  </section>
-
-  <footer class="foot">
-    <div>© Golabii • Small batch • Non‑profit mission</div>
-    <div class="foot-links">
-      <a href="#mission">Mission</a>
-      <a href="#goals">Goals</a>
-      <a href="#contact">Contact</a>
-      <a href="#" aria-disabled="true" class="muted">Press kit (soon)</a>
+  <footer class="site-footer">
+    <div class="footer-content">
+      <span class="footer-brand">Golabii</span>
+      <div class="footer-links">
+        <a href="#what-is">Essence</a>
+        <a href="#mission">Mission</a>
+        <a href="mailto:hello@golabii.com">Contact</a>
+      </div>
+      <span class="copyright">© 2025 Golabii. Small batch.</span>
     </div>
   </footer>
 
