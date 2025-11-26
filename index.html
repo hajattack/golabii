@@ -1,126 +1,184 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Golabii — Persian Daydream</title>
-  <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. A modern ode to Persian hospitality." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23D4AF37'/></svg>">
+  <title>Golabii — Saffron Floral Elixir</title>
+  <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23D4A84B'/></svg>">
   
-  <!-- Load Google Fonts: Fraunces (Display) & Manrope (Body) -->
+  <!-- Fonts: Cormorant Garamond (Display) & DM Sans (Body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- SVG Filter for Noise Texture -->
-  <svg class="hidden-filter">
-    <filter id="noiseFilter">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
-      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0"/>
-    </filter>
-  </svg>
+  <!-- Overscroll Header (hidden, revealed on pull-down) -->
+  <div class="overscroll-header">
+    <img src="waitlist-bg.png" alt="" class="overscroll-bg" />
+  </div>
 
-  <!-- Floating Pill Navigation -->
-  <nav class="floating-nav">
-    <a href="#what-is" class="nav-link">Essence</a>
-    <a href="#mission" class="nav-link">Mission</a>
-    <span class="nav-brand">g.</span>
-    <a href="#goals" class="nav-link">Vision</a>
-    <a href="#contact" class="nav-cta">Join List</a>
+  <!-- Custom Rose Cursor (SVG) -->
+  <div class="rose-cursor"></div>
+
+  <!-- Saffron Drip Header Decoration -->
+  <div class="saffron-drip-header">
+    <img src="hejhaa_prompt_Macro_photograph_of_saffron_elixir_slowly_dripp_b31f227e-9f29-4342-b54b-7ac7a6ab2053_1-2.png" alt="Saffron elixir dripping" />
+  </div>
+
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <a href="#top" class="nav-brand">Golabii</a>
+    <div class="nav-links">
+      <a href="#essence">Essence</a>
+      <a href="#mission">Mission</a>
+      <a href="#vision">Vision</a>
+    </div>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
   </nav>
 
+  <!-- Page Load Overlay -->
+  <div class="page-loader">
+    <div class="loader-content">
+      <span class="loader-brand">Golabii</span>
+    </div>
+  </div>
+
   <main id="top">
-    <section class="hero-editorial">
-      <div class="hero-visual">
-        <div class="visual-wrapper parallax-target">
-          <img src="infusion2.jpeg" alt="Golden saffron infusion glowing in a jar" class="hero-img" />
-        </div>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-bg">
+        <img src="loading-background.png" alt="Persian garden with Golabii" />
+        <div class="hero-overlay"></div>
       </div>
       
-      <div class="hero-text">
-        <h1 class="brand-display">
-          <span class="char" style="--i:1">G</span>
-          <span class="char" style="--i:2">o</span>
-          <span class="char" style="--i:3">l</span>
-          <span class="char" style="--i:4">a</span>
-          <span class="char" style="--i:5">b</span>
-          <span class="char" style="--i:6">i</span>
-          <span class="char" style="--i:7">i</span>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="title-line">
+            <span class="char" style="--i:0">G</span><span class="char" style="--i:1">o</span><span class="char" style="--i:2">l</span><span class="char" style="--i:3">a</span><span class="char" style="--i:4">b</span><span class="char" style="--i:5">i</span><span class="char" style="--i:6">i</span>
+          </span>
         </h1>
-        <p class="hero-subtitle reveal-text">A saffron-forward floral elixir.<br>Crafted for the curious.</p>
-        <div class="hero-actions reveal-text" style="--d:0.2s">
-          <a href="#contact" class="btn-editorial">Join the Waitlist</a>
+        <p class="hero-tagline reveal-blur">A saffron-forward floral elixir</p>
+        <p class="hero-sub reveal-blur" style="--d:0.2s">Crafted for the curious</p>
+        
+        <div class="hero-cta-wrapper reveal-blur" style="--d:0.4s">
+          <button class="btn-gold" id="heroJoinBtn">
+            <span>Join the Waitlist</span>
+            <div class="btn-shimmer"></div>
+          </button>
+          <!-- Rose explosion container -->
+          <div class="rose-explosion" id="roseExplosion"></div>
         </div>
       </div>
+
+      <!-- Floating gold particles -->
+      <div class="particles" id="particles"></div>
     </section>
 
-    <section id="what-is" class="editorial-section">
-      <div class="content-grid">
+    <!-- ESSENCE SECTION -->
+    <section id="essence" class="content-section">
+      <div class="section-inner">
         <div class="text-block reveal-up">
           <span class="section-label">01 — The Essence</span>
           <h2>Liquid Gold.</h2>
           <p>Golabii is a study in balance. We combine whole saffron threads, delicate rose petals, and green cardamom to create a beverage that feels like a memory of a Persian garden.</p>
-          <ul class="detail-list">
-            <li>Whole saffron threads</li>
-            <li>Damask rose water</li>
-            <li>Cardamom essence</li>
+          <ul class="ingredient-list">
+            <li><span class="ingredient-icon">✦</span> Whole saffron threads</li>
+            <li><span class="ingredient-icon">✦</span> Damask rose water</li>
+            <li><span class="ingredient-icon">✦</span> Cardamom essence</li>
           </ul>
         </div>
-        <div class="image-block reveal-up" style="--d:0.2s">
-          <img src="saffron_infusion.png" alt="Saffron threads dissolving in water" />
-          <span class="caption">Saffron extraction process</span>
+        <div class="image-block reveal-up" style="--d:0.15s">
+          <div class="image-frame">
+            <img src="infusion2.jpeg" alt="Saffron flower infusion in glass jar" />
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="mission" class="editorial-section alt-layout">
-      <div class="content-grid">
+    <!-- MISSION SECTION (Swapped layout) -->
+    <section id="mission" class="content-section alt-layout">
+      <div class="section-inner">
         <div class="image-block reveal-up">
-          <img src="tapestry2.jpg" alt="Textured tapestry representing culture" />
+          <div class="image-frame">
+            <img src="tapestry2.jpg" alt="Persian tapestry and cultural heritage" />
+          </div>
         </div>
-        <div class="text-block reveal-up" style="--d:0.2s">
+        <div class="text-block reveal-up" style="--d:0.15s">
           <span class="section-label">02 — The Mission</span>
-          <h2>Rooted in <br>Hospitality.</h2>
+          <h2>Rooted in<br>Hospitality.</h2>
           <p>Our mission is to honour the cultures that inspire our flavours. Golabii is not just a drink; it's a bridge between worlds, supporting the farmers and artisans who keep these traditions alive.</p>
-          <p>We pledge a portion of profits to community relief projects.</p>
+          <p class="highlight-text">We pledge a portion of profits to community relief projects.</p>
         </div>
       </div>
     </section>
 
-    <section id="goals" class="editorial-section">
-      <div class="content-grid">
+    <!-- VISION SECTION -->
+    <section id="vision" class="content-section">
+      <div class="section-inner">
         <div class="text-block reveal-up">
           <span class="section-label">03 — The Vision</span>
-          <h2>Growing <br>Slowly.</h2>
+          <h2>Growing<br>Slowly.</h2>
           <p>We believe in micro-batches and massive care. Our goal is to build a sustainable supply chain that values quality over speed, ensuring every bottle tells a story.</p>
         </div>
-        <div class="image-block reveal-up" style="--d:0.2s">
-          <img src="cocktail2.jpeg" alt="Golabii cocktail serve" />
+        <div class="image-block reveal-up" style="--d:0.15s">
+          <div class="image-frame">
+            <img src="cocktail2.jpeg" alt="Golabii cocktail serve" />
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="outro-section">
-      <div class="outro-content reveal-up">
-        <h2 class="outro-title">Taste the <br>Uncommon.</h2>
-        <p>Be the first to know when our next micro-batch is ready.</p>
-        <a href="waitlist.html" class="btn-editorial large">Join the Waitlist</a>
+    <!-- WAITLIST CTA SECTION -->
+    <section id="waitlist" class="cta-section">
+      <div class="cta-bg">
+        <img src="garden.png" alt="Impressionist garden" class="cta-bg-img" />
+        <div class="cta-overlay"></div>
+      </div>
+      
+      <div class="cta-content">
+        <h2 class="cta-title reveal-up">Taste the<br>Uncommon.</h2>
+        <p class="reveal-up" style="--d:0.1s">Be the first to know when our next micro-batch is ready.</p>
+        
+        <div class="cta-btn-wrapper reveal-up" style="--d:0.2s">
+          <a href="waitlist.html" class="btn-gold large" id="ctaJoinBtn">
+            <span>Join the Waitlist</span>
+            <div class="btn-shimmer"></div>
+          </a>
+          <div class="rose-explosion" id="roseExplosion2"></div>
+        </div>
+      </div>
+
+      <!-- Floating gallery images -->
+      <div class="floating-gallery">
+        <div class="float-img float-1 depth-reveal" data-depth="1">
+          <img src="bottle_persian.png" alt="Golabii bottle on Persian rug" />
+        </div>
+        <div class="float-img float-2 depth-reveal" data-depth="2">
+          <img src="couple_jar.png" alt="Romantic sunset in jar" />
+        </div>
+        <div class="float-img float-3 depth-reveal" data-depth="3">
+          <img src="painting.png" alt="Mediterranean still life" />
+        </div>
+        <div class="float-img float-4 depth-reveal" data-depth="1.5">
+          <img src="saffron_infusion.png" alt="Saffron infusion process" />
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="footer-content">
+    <div class="footer-inner">
       <span class="footer-brand">Golabii</span>
       <div class="footer-links">
-        <a href="#what-is">Essence</a>
+        <a href="#essence">Essence</a>
         <a href="#mission">Mission</a>
         <a href="mailto:hello@golabii.com">Contact</a>
       </div>
-      <span class="copyright">© 2025 Golabii. Small batch.</span>
+      <span class="footer-copy">© 2025 Golabii. Small batch. Non-profit mission.</span>
     </div>
   </footer>
 
