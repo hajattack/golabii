@@ -7,7 +7,7 @@
   <meta name="description" content="Golabii is a saffron-forward floral beverage crafted with rose, cardamom and botanicals. Small-batch. Non-profit mission." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23D4A84B'/></svg>">
   
-  <!-- Fonts: Cormorant Garamond (Display) & DM Sans (Body) -->
+  <!-- Fonts: Cormorant Garamond & DM Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,22 +18,16 @@
   <!-- Custom Rose Cursor -->
   <div class="rose-cursor" id="roseCursor">
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <!-- Stem -->
       <path d="M32 45 L32 60" stroke="#2d5a27" stroke-width="2" fill="none"/>
       <path d="M32 52 Q38 48 42 52" stroke="#2d5a27" stroke-width="1.5" fill="none"/>
-      <!-- Leaves -->
       <ellipse cx="26" cy="54" rx="6" ry="3" fill="#3d7a37" transform="rotate(-30 26 54)"/>
       <ellipse cx="38" cy="56" rx="5" ry="2.5" fill="#3d7a37" transform="rotate(25 38 56)"/>
-      <!-- Outer petals -->
       <path d="M32 18 Q20 22 18 32 Q20 42 32 44 Q44 42 46 32 Q44 22 32 18" fill="#c41e3a"/>
       <path d="M32 16 Q18 20 16 32 Q18 44 32 46" fill="#d4365c" opacity="0.7"/>
       <path d="M32 16 Q46 20 48 32 Q46 44 32 46" fill="#8b1a2d" opacity="0.6"/>
-      <!-- Middle petals -->
       <path d="M32 20 Q24 24 22 32 Q24 40 32 42 Q40 40 42 32 Q40 24 32 20" fill="#e84a6f"/>
       <path d="M32 22 Q26 26 24 32 Q26 38 32 40" fill="#f06b8a" opacity="0.8"/>
-      <!-- Inner petals -->
       <path d="M32 24 Q28 27 26 32 Q28 37 32 38 Q36 37 38 32 Q36 27 32 24" fill="#f8a5b8"/>
-      <!-- Center -->
       <circle cx="32" cy="31" r="4" fill="#ffd700"/>
       <circle cx="31" cy="30" r="1.5" fill="#ffec8b"/>
     </svg>
@@ -46,10 +40,13 @@
     </div>
   </div>
 
-  <!-- Navigation -->
+  <!-- Navigation with Neon Counter -->
   <nav class="main-nav">
-    <a href="#top" class="nav-brand">Golabii</a>
-    <a href="waitlist.html" class="nav-cta">Join Waitlist</a>
+    <div class="neon-counter">
+      <span class="neon-text">Only <strong>734</strong> spots left</span>
+      <div class="neon-glow"></div>
+    </div>
+    <a href="waitlist.html" class="nav-cta-chic">Join Waitlist</a>
   </nav>
 
   <main id="top">
@@ -58,14 +55,6 @@
       <div class="hero-frame">
         <div class="hero-vignette"></div>
         <img src="loading-background.png" alt="Golabii - Persian Garden" class="hero-img" id="heroImg" />
-      </div>
-      
-      <div class="hero-cta-wrapper">
-        <button class="btn-gold" id="heroJoinBtn">
-          <span>Join the Waitlist</span>
-          <div class="btn-shimmer"></div>
-        </button>
-        <div class="rose-explosion" id="roseExplosion"></div>
       </div>
 
       <!-- Card Navigation Strip -->
@@ -78,25 +67,25 @@
         </a>
         <a href="#section-2" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="bottle_persian.png" alt="Our Ingredients" />
+            <img src="cocktail2.jpeg" alt="Our Ingredients" />
           </div>
           <span class="card-label">Ingredients</span>
         </a>
         <a href="#section-3" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="infusion2.jpeg" alt="Our Mission" />
+            <img src="couple_jar.png" alt="Our Mission" />
           </div>
           <span class="card-label">Mission</span>
         </a>
         <a href="#section-4" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="cocktail2.jpeg" alt="Health Benefits" />
+            <img src="bottle_persian.png" alt="Health Benefits" />
           </div>
           <span class="card-label">Health</span>
         </a>
         <a href="#section-5" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="couple_jar.png" alt="Work With Us" />
+            <img src="infusion2.jpeg" alt="Work With Us" />
           </div>
           <span class="card-label">Careers</span>
         </a>
@@ -112,18 +101,19 @@
     <!-- SECTION 1: WHY WE'RE SPECIAL -->
     <section id="section-1" class="content-section">
       <div class="section-inner">
-        <div class="section-image reveal-up">
-          <img src="unnamed.png" alt="Mediterranean still life with saffron and roses" />
+        <div class="section-media reveal-up">
+          <video class="section-video" muted loop playsinline preload="metadata">
+            <source src="11.mp4" type="video/mp4">
+          </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
           <h2 class="section-title">A New Kind of Drink.<br>A New Kind of Company.</h2>
           <h3 class="section-subtitle">Why We're Special</h3>
           <div class="section-body">
-            <p>We work with an ingredient the world treats like treasure: real saffron. The rarest threads, the purest hydrosols, the oldest techniques. But what we're building isn't a "drink brand."</p>
-            <p>It's a different kind of company entirely — one built on generosity, community, and actual impact.</p>
-            <p>Every bottle exists to give back. Every sale moves resources into the hands of the people who need it.</p>
-            <p><strong>This is conscious luxury. This is purpose bottled.</strong></p>
-            <p class="section-note">Harvested by hand. Crafted in micro-batches. Never mass-manufactured.</p>
+            <p>Real saffron. The rarest threads. The purest hydrosols. Ancient techniques meeting modern purpose.</p>
+            <p>Every bottle gives back. Every sale creates impact.</p>
+            <p><strong>Conscious luxury. Purpose bottled.</strong></p>
+            <p class="section-note">Harvested by hand. Crafted in micro-batches.</p>
           </div>
         </div>
       </div>
@@ -133,20 +123,20 @@
     <section id="section-2" class="content-section alt-bg">
       <div class="section-inner reverse">
         <div class="section-text reveal-up">
-          <h2 class="section-title">The Most Refreshing Drink<br>in the World</h2>
+          <h2 class="section-title">The World's Most<br>Refreshing Drink</h2>
           <h3 class="section-subtitle">Our Ingredients</h3>
           <div class="section-body">
-            <p>Golden saffron threads — the kind that glow when the light hits them.</p>
-            <p>Steam-distilled rosewater from ancient Persian methods.</p>
-            <p>Fragrant cardamom syrup slowly extracted over heat.</p>
-            <p>Aromatic chicory, kissed with honey.</p>
-            <p>Everything rare, everything real, everything chosen because it feels like magic in a glass.</p>
-            <p><strong>This isn't flavoring. This is heritage. This is botanical alchemy.</strong></p>
-            <p class="section-note">Crafted like perfume, bottled like art. Zero artificial anything.</p>
+            <p>Golden saffron threads that glow in light.</p>
+            <p>Steam-distilled Persian rosewater.</p>
+            <p>Cardamom syrup. Honey-kissed chicory.</p>
+            <p><strong>Heritage in a glass. Botanical alchemy.</strong></p>
+            <p class="section-note">Zero artificial anything.</p>
           </div>
         </div>
-        <div class="section-image reveal-up" style="--d:0.15s">
-          <img src="bottle_persian.png" alt="Golabii bottle on Persian rug with flowers" />
+        <div class="section-media reveal-up" style="--d:0.15s">
+          <video class="section-video" muted loop playsinline preload="metadata">
+            <source src="2.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </section>
@@ -154,17 +144,18 @@
     <!-- SECTION 3: MISSION -->
     <section id="section-3" class="content-section">
       <div class="section-inner">
-        <div class="section-image reveal-up">
-          <img src="infusion2.jpeg" alt="Saffron flower infusion" />
+        <div class="section-media reveal-up">
+          <video class="section-video" muted loop playsinline preload="metadata">
+            <source src="3.mp4" type="video/mp4">
+          </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
           <h2 class="section-title">Luxury for Everyone</h2>
           <h3 class="section-subtitle">Our Mission</h3>
           <div class="section-body">
-            <p>We believe luxury isn't meant to be gated or exclusive. It should lift people up — not shut them out.</p>
-            <p>That's why our company is built on giving: giving to charity, giving to communities, giving to the people who help make this possible.</p>
-            <p>Our staff is paid fairly. Our profits loop back into the world.</p>
-            <p><strong>We don't just sell a drink. We circulate abundance.</strong></p>
+            <p>Luxury should lift people up — not shut them out.</p>
+            <p>Fair pay. Profits that loop back into the world.</p>
+            <p><strong>We don't sell drinks. We circulate abundance.</strong></p>
             <p class="section-note">The more we grow, the more we give.</p>
           </div>
         </div>
@@ -175,19 +166,19 @@
     <section id="section-4" class="content-section alt-bg">
       <div class="section-inner reverse">
         <div class="section-text reveal-up">
-          <h2 class="section-title">Ancient Ingredients.<br>Modern Benefits.</h2>
+          <h2 class="section-title">Ancient Wisdom.<br>Modern Wellness.</h2>
           <h3 class="section-subtitle">Why It Feels So Good</h3>
           <div class="section-body">
-            <p>Saffron supports mood, calms the mind, and brightens the spirit.</p>
-            <p>Rosewater soothes, hydrates, and restores.</p>
-            <p>Cardamom aids digestion and warms the body.</p>
-            <p>Every sip is a small act of care — a tonic made from the world's most respected botanicals.</p>
-            <p><strong>A wellness ritual disguised as a drink.</strong></p>
-            <p class="section-note">Good for the body. Grounding for the mind. Science-backed. Tradition-approved.</p>
+            <p>Saffron brightens the spirit. Rose restores.</p>
+            <p>Cardamom warms. Every sip is self-care.</p>
+            <p><strong>A wellness ritual in disguise.</strong></p>
+            <p class="section-note">Science-backed. Tradition-approved.</p>
           </div>
         </div>
-        <div class="section-image reveal-up" style="--d:0.15s">
-          <img src="cocktail2.jpeg" alt="Elegant Golabii cocktail with rose" />
+        <div class="section-media reveal-up" style="--d:0.15s">
+          <video class="section-video" muted loop playsinline preload="metadata">
+            <source src="4.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </section>
@@ -195,18 +186,19 @@
     <!-- SECTION 5: HIRING -->
     <section id="section-5" class="content-section">
       <div class="section-inner">
-        <div class="section-image reveal-up">
-          <img src="couple_jar.png" alt="Romantic sunset in a jar" />
+        <div class="section-media reveal-up">
+          <video class="section-video" muted loop playsinline preload="metadata">
+            <source src="social_hejhaa_a_cozy_relaxing_video_of_this_environment_just_existin_e327e7bc-add7-4afa-9b5f-e9ad9cc806d4_3.mp4" type="video/mp4">
+          </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
-          <h2 class="section-title">We're Hiring</h2>
+          <h2 class="section-title">Join the Team</h2>
           <h3 class="section-subtitle">Work With Us</h3>
           <div class="section-body">
-            <p>We're building something meaningful, and we want people who care as deeply as we do.</p>
-            <p>If you're passionate about design, flavor, community impact, or storytelling, we'd love to meet you.</p>
-            <a href="mailto:hello@golabii.com" class="btn-gold inline-btn">
+            <p>Building something meaningful takes people who care deeply.</p>
+            <p>Design. Flavor. Community. Storytelling.</p>
+            <a href="mailto:hello@golabii.com" class="btn-chic inline-btn">
               <span>Get in Touch</span>
-              <div class="btn-shimmer"></div>
             </a>
           </div>
         </div>
@@ -216,20 +208,19 @@
     <!-- SECTION 6: THANK YOU -->
     <section id="section-6" class="content-section thank-you-section">
       <div class="section-inner centered">
-        <div class="section-image reveal-up full-width">
-          <img src="garden.png" alt="Impressionist garden" />
+        <div class="section-media reveal-up full-width">
+          <img src="garden.png" alt="Impressionist garden" class="section-image-static" />
         </div>
         <div class="section-text reveal-up centered-text" style="--d:0.15s">
           <h3 class="section-subtitle large">Thank You For Being Here</h3>
           <div class="section-body">
-            <p>Your presence means something to us.</p>
-            <p>Thank you for reading, supporting, tasting, and believing in what we're creating together.</p>
+            <p>Your presence matters.</p>
+            <p>Thank you for believing in what we're creating.</p>
           </div>
-          <a href="waitlist.html" class="btn-gold large">
+          <a href="waitlist.html" class="btn-chic large">
             <span>Join the Waitlist</span>
-            <div class="btn-shimmer"></div>
           </a>
-          <div class="rose-explosion" id="roseExplosion2"></div>
+          <div class="rose-explosion" id="roseExplosion"></div>
         </div>
       </div>
     </section>
