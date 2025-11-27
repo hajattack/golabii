@@ -1,11 +1,9 @@
 /* ============================================
-   GOLABII — Luxury Chic Design V3
-   Videos, Neon Counter, Polish
+   GOLABII — Luxury Chic Design V3.1
+   Fixed: Nav, Videos, Mobile
    ============================================ */
 
-/* --- CSS Variables --- */
 :root {
-  /* Color Palette */
   --saffron-red: #8B2332;
   --liquid-gold: #D4A84B;
   --warm-cream: #FFFDF9;
@@ -13,22 +11,15 @@
   --near-black: #1A1A1A;
   --blush-pink: #E8C4B8;
   --rich-red: #6B1A2A;
-  --neon-pink: #ff2d6a;
-  --neon-glow: rgba(255, 45, 106, 0.6);
   
-  /* Typography */
   --font-display: 'Cormorant Garamond', serif;
   --font-body: 'DM Sans', sans-serif;
   
-  /* Spacing */
   --section-padding: clamp(50px, 8vh, 100px);
   --container-max: 1100px;
-  
-  /* Animation */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Reset & Base --- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -83,7 +74,7 @@ body:hover .rose-cursor {
   transform: translate(-50%, -50%) scale(1.2);
 }
 
-/* --- Page Loader --- */
+/* --- Page Loader with Progress Bar --- */
 .page-loader {
   position: fixed;
   inset: 0;
@@ -92,6 +83,8 @@ body:hover .rose-cursor {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
@@ -99,6 +92,13 @@ body:hover .rose-cursor {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .loader-brand {
@@ -111,98 +111,91 @@ body:hover .rose-cursor {
   animation: loaderPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes loaderPulse {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.03); }
+.loader-progress {
+  width: 200px;
+  height: 3px;
+  background: rgba(212, 168, 75, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
 }
 
-/* --- Navigation with Neon Counter --- */
+.loader-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--liquid-gold);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- Navigation - Elegant Spots Counter --- */
 .main-nav {
   position: fixed;
-  top: 20px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  padding: 0.5rem 0.6rem 0.5rem 1.2rem;
+  gap: 1rem;
+  padding: 8px 10px 8px 16px;
   background: rgba(255, 253, 249, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 100px;
   border: 1px solid rgba(212, 168, 75, 0.2);
   box-shadow: 0 4px 20px rgba(74, 14, 28, 0.08);
   opacity: 0;
-  animation: fadeInDown 0.8s var(--ease-out-expo) 1.2s forwards;
+  animation: fadeInDown 0.8s var(--ease-out-expo) 2.5s forwards;
 }
 
-/* Neon LED Counter */
-.neon-counter {
-  position: relative;
-  padding: 0.3rem 0.8rem;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #1a0a10 0%, #2d0f18 100%);
-  border: 1px solid rgba(255, 45, 106, 0.3);
+/* Elegant Spots Counter - Animated Number */
+.spots-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
 }
 
-.neon-text {
+.spots-number {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--saffron-red);
+  animation: countPulse 2s ease-in-out infinite;
+}
+
+.spots-label {
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.03em;
-  color: var(--neon-pink);
-  text-shadow: 
-    0 0 5px var(--neon-glow),
-    0 0 10px var(--neon-glow),
-    0 0 20px var(--neon-glow),
-    0 0 40px var(--neon-glow);
-  animation: neonFlicker 3s ease-in-out infinite;
+  color: var(--near-black);
+  opacity: 0.7;
+  text-transform: lowercase;
 }
 
-.neon-text strong {
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.neon-glow {
-  position: absolute;
-  inset: -2px;
-  border-radius: 8px;
-  background: var(--neon-pink);
-  opacity: 0.15;
-  filter: blur(8px);
-  animation: neonPulse 2s ease-in-out infinite;
-  z-index: -1;
-}
-
-@keyframes neonFlicker {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 1; }
-  93% { opacity: 0.8; }
-  94% { opacity: 1; }
-  96% { opacity: 0.9; }
-  97% { opacity: 1; }
-}
-
-@keyframes neonPulse {
-  0%, 100% { opacity: 0.15; transform: scale(1); }
-  50% { opacity: 0.25; transform: scale(1.05); }
+@keyframes countPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 /* Chic Dark Red Button */
 .nav-cta-chic {
   background: var(--saffron-red);
   color: white;
-  padding: 0.55rem 1.4rem;
+  padding: 10px 20px;
   border-radius: 100px;
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   font-style: italic;
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(139, 35, 50, 0.25);
+  white-space: nowrap;
 }
 
 .nav-cta-chic:hover {
@@ -230,7 +223,7 @@ body:hover .rose-cursor {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 90px 24px 50px;
+  padding: 80px 24px 50px;
   background: var(--warm-cream);
 }
 
@@ -264,7 +257,7 @@ body:hover .rose-cursor {
   object-fit: cover;
   transform: scale(1.02);
   filter: grayscale(100%) brightness(0.92);
-  transition: filter 1.8s ease-out, transform 10s ease-out;
+  transition: filter 2s ease-out, transform 12s ease-out;
 }
 
 .hero-img.color-revealed {
@@ -384,18 +377,14 @@ body:hover .rose-cursor {
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 16px 45px rgba(74, 14, 28, 0.1);
+  background: #f0ebe3;
 }
 
 .section-video {
   width: 100%;
   display: block;
   border-radius: 14px;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.section-video.playing {
-  opacity: 1;
+  background: #f0ebe3;
 }
 
 .section-image-static {
@@ -420,7 +409,6 @@ body:hover .rose-cursor {
   align-items: center;
 }
 
-/* Smaller titles (reduced ~15%) */
 .section-title {
   font-family: var(--font-display);
   font-size: clamp(1.7rem, 3.8vw, 2.7rem);
@@ -467,12 +455,11 @@ body:hover .rose-cursor {
   margin-top: 0.3rem;
 }
 
-/* Thank You Section */
 .thank-you-section {
   padding-bottom: calc(var(--section-padding) + 30px);
 }
 
-/* --- Chic Button (Dark Red, No Gradient) --- */
+/* --- Chic Button --- */
 .btn-chic {
   position: relative;
   display: inline-flex;
@@ -640,25 +627,26 @@ body:hover .rose-cursor {
     font-size: 0.6rem;
   }
   
+  /* Fix mobile nav layout */
   .main-nav {
-    padding: 0.4rem 0.5rem 0.4rem 0.8rem;
-    gap: 0.8rem;
+    padding: 6px 8px 6px 12px;
+    gap: 0.6rem;
+    max-width: calc(100% - 32px);
   }
   
-  .neon-text {
+  .spots-number {
+    font-size: 1.1rem;
+  }
+  
+  .spots-label {
     font-size: 0.65rem;
   }
   
-  .neon-text strong {
-    font-size: 0.75rem;
-  }
-  
   .nav-cta-chic {
-    padding: 0.45rem 1rem;
+    padding: 8px 14px;
     font-size: 0.8rem;
   }
   
-  /* Show default cursor on mobile */
   body, a, button {
     cursor: auto;
   }
@@ -681,9 +669,12 @@ body:hover .rose-cursor {
   .content-section {
     scroll-margin-top: 70px;
   }
+  
+  .main-nav {
+    top: 10px;
+  }
 }
 
-/* --- Accessibility: Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -694,9 +685,5 @@ body:hover .rose-cursor {
   .hero-img {
     filter: none;
     transform: scale(1);
-  }
-  
-  .section-video {
-    opacity: 1;
   }
 }

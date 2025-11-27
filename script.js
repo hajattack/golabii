@@ -1,38 +1,82 @@
 /**
- * GOLABII — Luxury Interactions V3
- * Video proximity playback, smooth cursor, scroll reveals
+ * GOLABII — Luxury Interactions V3.1
+ * Fixed: Video loading, loader timing, mobile nav
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
-  // 1. PAGE LOADER & HERO COLOR TRANSITION
+  // 1. PAGE LOADER WITH PROGRESS BAR
   // ==========================================
   const loader = document.getElementById('pageLoader');
+  const loaderBar = document.getElementById('loaderBar');
   const heroImg = document.getElementById('heroImg');
+  const allVideos = document.querySelectorAll('.section-video');
   
-  window.addEventListener('load', () => {
+  let loadProgress = 0;
+  let assetsLoaded = 0;
+  const totalAssets = allVideos.length + 1; // videos + hero image
+  
+  function updateProgress() {
+    assetsLoaded++;
+    loadProgress = Math.min((assetsLoaded / totalAssets) * 100, 100);
+    if (loaderBar) {
+      loaderBar.style.width = loadProgress + '%';
+    }
+  }
+  
+  // Track hero image load
+  if (heroImg) {
+    if (heroImg.complete) {
+      updateProgress();
+    } else {
+      heroImg.addEventListener('load', updateProgress);
+    }
+  }
+  
+  // Track video metadata load
+  allVideos.forEach(video => {
+    if (video.readyState >= 1) {
+      updateProgress();
+    } else {
+      video.addEventListener('loadedmetadata', updateProgress);
+    }
+  });
+  
+  // Minimum loader time + wait for assets
+  function hideLoader() {
+    if (loaderBar) loaderBar.style.width = '100%';
+    
     setTimeout(() => {
       loader.classList.add('loaded');
       
+      // Reveal hero color after loader fades
       setTimeout(() => {
         if (heroImg) {
           heroImg.classList.add('color-revealed');
         }
-      }, 400);
-    }, 600);
-  });
-
-  // Fallback
+      }, 500);
+    }, 300);
+  }
+  
+  // Wait at least 2 seconds, then check if assets are ready
+  setTimeout(() => {
+    if (loadProgress >= 80 || assetsLoaded >= totalAssets - 1) {
+      hideLoader();
+    } else {
+      // Wait a bit more for slow connections
+      setTimeout(hideLoader, 1500);
+    }
+  }, 2000);
+  
+  // Fallback: always hide loader after 5 seconds
   setTimeout(() => {
     loader.classList.add('loaded');
-    if (heroImg) {
-      heroImg.classList.add('color-revealed');
-    }
-  }, 3500);
+    if (heroImg) heroImg.classList.add('color-revealed');
+  }, 5000);
 
   // ==========================================
-  // 2. CUSTOM ROSE CURSOR (Smooth Follow)
+  // 2. CUSTOM ROSE CURSOR
   // ==========================================
   const cursor = document.getElementById('roseCursor');
   
@@ -57,13 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateCursor();
 
-    document.addEventListener('mousedown', () => {
-      cursor.classList.add('clicking');
-    });
-
-    document.addEventListener('mouseup', () => {
-      cursor.classList.remove('clicking');
-    });
+    document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
     
     const interactiveElements = document.querySelectorAll('a, button, .nav-card, .btn-chic');
     interactiveElements.forEach(el => {
@@ -94,51 +133,46 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // 4. VIDEO PROXIMITY PLAYBACK (One at a time)
   // ==========================================
-  const allVideos = document.querySelectorAll('.section-video');
   let currentlyPlaying = null;
 
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const video = entry.target;
       
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
         // Pause any currently playing video
         if (currentlyPlaying && currentlyPlaying !== video) {
           currentlyPlaying.pause();
-          currentlyPlaying.classList.remove('playing');
         }
         
         // Play this video
-        video.play().then(() => {
-          video.classList.add('playing');
-          currentlyPlaying = video;
-        }).catch(err => {
-          // Autoplay might be blocked, show video anyway
-          video.classList.add('playing');
-          console.log('Video autoplay prevented:', err);
-        });
-      } else {
-        // Pause when out of view
-        if (video === currentlyPlaying) {
-          video.pause();
-          video.classList.remove('playing');
-          currentlyPlaying = null;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            currentlyPlaying = video;
+          }).catch(err => {
+            // Autoplay blocked - that's okay, user can see poster
+            console.log('Video autoplay prevented:', err.message);
+          });
         }
+      } else if (!entry.isIntersecting && video === currentlyPlaying) {
+        video.pause();
+        currentlyPlaying = null;
       }
     });
   }, {
-    threshold: [0, 0.5, 1],
-    rootMargin: '-10% 0px -10% 0px'
+    threshold: [0, 0.4, 0.8],
+    rootMargin: '-5% 0px -5% 0px'
   });
 
+  // Initialize videos
   allVideos.forEach(video => {
-    // Preload and set initial state
     video.load();
     videoObserver.observe(video);
   });
 
   // ==========================================
-  // 5. SMOOTH SCROLL FOR CARD NAV & ANCHORS
+  // 5. SMOOTH SCROLL FOR ANCHORS
   // ==========================================
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -153,8 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target) {
         e.preventDefault();
         
-        // Calculate offset for fixed nav
-        const navHeight = document.querySelector('.main-nav')?.offsetHeight || 70;
+        const navHeight = document.querySelector('.main-nav')?.offsetHeight || 60;
         const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
         
         window.scrollTo({
@@ -169,63 +202,50 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6. ROSE EXPLOSION ON BUTTON CLICK
   // ==========================================
   const roseSVGs = [
-    `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#c41e3a"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#e84a6f"/></svg>`,
-    `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#D4A84B"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#f0d78c"/></svg>`,
-    `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#E8C4B8"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#f8ddd5"/></svg>`,
-    `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#8B2332"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#b83a4b"/></svg>`
+    `<svg viewBox="0 0 32 32"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#c41e3a"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#e84a6f"/></svg>`,
+    `<svg viewBox="0 0 32 32"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#D4A84B"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#f0d78c"/></svg>`,
+    `<svg viewBox="0 0 32 32"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#E8C4B8"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#f8ddd5"/></svg>`,
+    `<svg viewBox="0 0 32 32"><path d="M16 6c-2-7-10-8-10-1s8 7 10 11c2-4 10-5 10-11s-8-6-10 1z" fill="#8B2332"/><path d="M16 10c-1.5-5-7-6-7-1s6 5 7 8c1-3 7-4 7-8s-6-4-7 1z" fill="#b83a4b"/></svg>`
   ];
 
   function createRoseExplosion(container) {
-    const roseCount = 24;
-    
-    for (let i = 0; i < roseCount; i++) {
+    for (let i = 0; i < 24; i++) {
       const rose = document.createElement('div');
       rose.className = 'rose-particle';
       
       const roseSVG = roseSVGs[Math.floor(Math.random() * roseSVGs.length)];
       rose.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(roseSVG)}")`;
       
-      const angle = (Math.PI * 2 * i) / roseCount + (Math.random() - 0.5) * 0.6;
+      const angle = (Math.PI * 2 * i) / 24 + (Math.random() - 0.5) * 0.6;
       const distance = 100 + Math.random() * 140;
-      const tx = Math.cos(angle) * distance;
-      const ty = Math.sin(angle) * distance;
-      const rotation = Math.random() * 900 - 450;
       
-      rose.style.setProperty('--tx', tx + 'px');
-      rose.style.setProperty('--ty', ty + 'px');
-      rose.style.setProperty('--r', rotation + 'deg');
+      rose.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+      rose.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+      rose.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
       rose.style.animationDelay = Math.random() * 0.12 + 's';
-      rose.style.width = (18 + Math.random() * 14) + 'px';
-      rose.style.height = rose.style.width;
+      rose.style.width = rose.style.height = (18 + Math.random() * 14) + 'px';
       
       container.appendChild(rose);
-      
       setTimeout(() => rose.remove(), 1600);
     }
   }
 
-  // Thank you section button
   const roseExplosion = document.getElementById('roseExplosion');
   if (roseExplosion) {
-    const parentSection = roseExplosion.closest('.content-section');
-    const ctaBtn = parentSection?.querySelector('.btn-chic');
-    
+    const ctaBtn = roseExplosion.closest('.section-text')?.querySelector('.btn-chic');
     if (ctaBtn) {
       ctaBtn.addEventListener('click', (e) => {
         e.preventDefault();
         createRoseExplosion(roseExplosion);
-        setTimeout(() => {
-          window.location.href = 'waitlist.html';
-        }, 400);
+        setTimeout(() => window.location.href = 'waitlist.html', 400);
       });
     }
   }
 
   // ==========================================
-  // 7. NAV ENHANCEMENT ON SCROLL
+  // 7. NAV SCROLL EFFECT
   // ==========================================
   const nav = document.querySelector('.main-nav');
-  
   if (nav) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 60) {
@@ -239,36 +259,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 8. MOBILE CARD NAV TOUCH SCROLL
+  // 8. ANIMATED SPOTS COUNTER
   // ==========================================
-  const cardStrip = document.querySelector('.card-nav-strip');
-  
-  if (cardStrip && window.innerWidth <= 900) {
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    cardStrip.addEventListener('mousedown', (e) => {
-      isDown = true;
-      startX = e.pageX - cardStrip.offsetLeft;
-      scrollLeft = cardStrip.scrollLeft;
-    });
-
-    cardStrip.addEventListener('mouseleave', () => {
-      isDown = false;
-    });
-
-    cardStrip.addEventListener('mouseup', () => {
-      isDown = false;
-    });
-
-    cardStrip.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - cardStrip.offsetLeft;
-      const walk = (x - startX) * 2;
-      cardStrip.scrollLeft = scrollLeft - walk;
-    });
+  const spotsNumber = document.getElementById('spotsNumber');
+  if (spotsNumber) {
+    // Occasionally decrease the number for effect
+    setInterval(() => {
+      const current = parseInt(spotsNumber.textContent);
+      if (current > 700 && Math.random() > 0.7) {
+        spotsNumber.textContent = current - 1;
+        spotsNumber.style.transform = 'scale(1.15)';
+        setTimeout(() => spotsNumber.style.transform = 'scale(1)', 200);
+      }
+    }, 8000);
   }
 
 });
