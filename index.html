@@ -15,21 +15,67 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Custom Rose Cursor -->
+  <!-- Under Construction Banner -->
+  <div class="construction-banner">
+    Under construction for Managing Innovation class — Carolyn Niehaus
+  </div>
+
+  <!-- Custom Bottle Cursor -->
   <div class="rose-cursor" id="roseCursor">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 45 L32 60" stroke="#2d5a27" stroke-width="2" fill="none"/>
-      <path d="M32 52 Q38 48 42 52" stroke="#2d5a27" stroke-width="1.5" fill="none"/>
-      <ellipse cx="26" cy="54" rx="6" ry="3" fill="#3d7a37" transform="rotate(-30 26 54)"/>
-      <ellipse cx="38" cy="56" rx="5" ry="2.5" fill="#3d7a37" transform="rotate(25 38 56)"/>
-      <path d="M32 18 Q20 22 18 32 Q20 42 32 44 Q44 42 46 32 Q44 22 32 18" fill="#c41e3a"/>
-      <path d="M32 16 Q18 20 16 32 Q18 44 32 46" fill="#d4365c" opacity="0.7"/>
-      <path d="M32 16 Q46 20 48 32 Q46 44 32 46" fill="#8b1a2d" opacity="0.6"/>
-      <path d="M32 20 Q24 24 22 32 Q24 40 32 42 Q40 40 42 32 Q40 24 32 20" fill="#e84a6f"/>
-      <path d="M32 22 Q26 26 24 32 Q26 38 32 40" fill="#f06b8a" opacity="0.8"/>
-      <path d="M32 24 Q28 27 26 32 Q28 37 32 38 Q36 37 38 32 Q36 27 32 24" fill="#f8a5b8"/>
-      <circle cx="32" cy="31" r="4" fill="#ffd700"/>
-      <circle cx="31" cy="30" r="1.5" fill="#ffec8b"/>
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#F4D03F;stop-opacity:0.95" />
+          <stop offset="50%" style="stop-color:#F5C842;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#D4A017;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#FAFBFC;stop-opacity:0.85" />
+          <stop offset="50%" style="stop-color:#E8EEF2;stop-opacity:0.7" />
+          <stop offset="100%" style="stop-color:#F5F7FA;stop-opacity:0.8" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="50" cy="28" rx="13" ry="3.5" fill="#E8EEF2" opacity="0.5"/>
+      <rect x="37" y="28" width="26" height="48" fill="url(#glassGrad)"/>
+      <ellipse cx="50" cy="76" rx="13" ry="3.5" fill="#D4DCE5" opacity="0.6"/>
+      <ellipse cx="50" cy="32" rx="11" ry="2.8" fill="#F4D03F" opacity="0.3"/>
+      <rect x="39" y="32" width="22" height="44" fill="url(#liquidGrad)"/>
+      <ellipse cx="50" cy="76" rx="11" ry="2.8" fill="#C89B15"/>
+      <rect x="38.5" y="30" width="1.5" height="45" fill="#FFFFFF" opacity="0.7"/>
+      <rect x="41" y="32" width="1" height="43" fill="#FFFFFF" opacity="0.4"/>
+      <rect x="58" y="31" width="1.2" height="44" fill="#FFFFFF" opacity="0.5"/>
+      <rect x="60.5" y="33" width="0.8" height="41" fill="#FFFFFF" opacity="0.35"/>
+      <circle cx="40" cy="40" r="1" fill="#FFFFFF" opacity="0.85"/>
+      <circle cx="59" cy="48" r="0.8" fill="#FFFFFF" opacity="0.8"/>
+      <circle cx="41" cy="60" r="0.9" fill="#FFFFFF" opacity="0.75"/>
+      <rect x="46" y="22" width="8" height="6" fill="#F0F3F6" opacity="0.75"/>
+      <ellipse cx="50" cy="22" rx="4" ry="1.8" fill="#E8EEF2" opacity="0.7"/>
+      <ellipse cx="50" cy="22" rx="4.5" ry="2.2" fill="#BFC8D1" opacity="0.4"/>
+      <rect x="45.5" y="19.5" width="9" height="2.5" fill="#A8B4C0" opacity="0.5" rx="0.5"/>
+      <g transform="translate(50, 16)">
+        <ellipse cx="-7" cy="1" rx="3.5" ry="5.5" fill="#8B1A1A" transform="rotate(-35 -7 1)"/>
+        <ellipse cx="7" cy="1" rx="3.5" ry="5.5" fill="#A02020" transform="rotate(35 7 1)"/>
+        <ellipse cx="0" cy="-4" rx="3.8" ry="6" fill="#8B1A1A" transform="rotate(0 0 -4)"/>
+        <ellipse cx="-5.5" cy="-1" rx="3.2" ry="5" fill="#6B0F0F" transform="rotate(-20 -5.5 -1)"/>
+        <ellipse cx="5.5" cy="-1" rx="3.2" ry="5" fill="#8B1A1A" transform="rotate(20 5.5 -1)"/>
+        <ellipse cx="-3.5" cy="-5" rx="3.2" ry="5.2" fill="#6B0F0F" transform="rotate(-45 -3.5 -5)"/>
+        <ellipse cx="3.5" cy="-5" rx="3.2" ry="5.2" fill="#8B1A1A" transform="rotate(45 3.5 -5)"/>
+        <ellipse cx="0" cy="-7" rx="3.5" ry="5.5" fill="#5A0A0A"/>
+        <ellipse cx="-4.5" cy="3" rx="3" ry="4.5" fill="#A02020" transform="rotate(-55 -4.5 3)"/>
+        <ellipse cx="4.5" cy="3" rx="3" ry="4.5" fill="#8B1A1A" transform="rotate(55 4.5 3)"/>
+        <ellipse cx="-2" cy="5" rx="2.8" ry="4.2" fill="#6B0F0F" transform="rotate(-25 -2 5)"/>
+        <ellipse cx="2" cy="5" rx="2.8" ry="4.2" fill="#8B1A1A" transform="rotate(25 2 5)"/>
+        <ellipse cx="0" cy="4.5" rx="3.5" ry="5" fill="#5A0A0A"/>
+        <circle cx="0" cy="0" r="2.2" fill="#E8D4A0"/>
+        <circle cx="0" cy="0" r="1.5" fill="#F4D896"/>
+        <circle cx="-4" cy="-3" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+        <circle cx="3.5" cy="-2" r="0.5" fill="#FFFFFF" opacity="0.8"/>
+        <circle cx="0" cy="-5" r="0.5" fill="#FFFFFF" opacity="0.75"/>
+        <circle cx="-3" cy="2" r="0.5" fill="#FFFFFF" opacity="0.8"/>
+        <circle cx="3.5" cy="3" r="0.5" fill="#FFFFFF" opacity="0.75"/>
+      </g>
+      <circle cx="57" cy="52" r="0.6" fill="#FFFFFF" opacity="0.6"/>
+      <circle cx="43" cy="68" r="0.7" fill="#FFFFFF" opacity="0.65"/>
     </svg>
   </div>
 
@@ -37,13 +83,10 @@
   <div class="page-loader" id="pageLoader">
     <div class="loader-content">
       <span class="loader-brand">Golabii</span>
-      <div class="loader-progress">
-        <div class="loader-bar" id="loaderBar"></div>
-      </div>
     </div>
   </div>
 
-  <!-- Navigation - Elegant Spots Counter -->
+  <!-- Navigation -->
   <nav class="main-nav">
     <div class="spots-counter">
       <span class="spots-number" id="spotsNumber">734</span>
@@ -64,9 +107,9 @@
       <div class="card-nav-strip">
         <a href="#section-1" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="unnamed.png" alt="Why We're Special" />
+            <img src="unnamed.png" alt="Why We're Different" />
           </div>
-          <span class="card-label">Why Special</span>
+          <span class="card-label">Why Different</span>
         </a>
         <a href="#section-2" class="nav-card">
           <div class="card-img-wrapper">
@@ -82,15 +125,15 @@
         </a>
         <a href="#section-4" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="bottle_persian.png" alt="Health Benefits" />
+            <img src="bottle_persian.png" alt="Why Saffron" />
           </div>
-          <span class="card-label">Health</span>
+          <span class="card-label">Why Saffron</span>
         </a>
         <a href="#section-5" class="nav-card">
           <div class="card-img-wrapper">
-            <img src="infusion2.jpeg" alt="Work With Us" />
+            <img src="infusion2.jpeg" alt="Join Us" />
           </div>
-          <span class="card-label">Careers</span>
+          <span class="card-label">Join Us</span>
         </a>
         <a href="#section-6" class="nav-card">
           <div class="card-img-wrapper">
@@ -101,7 +144,7 @@
       </div>
     </section>
 
-    <!-- SECTION 1: WHY WE'RE SPECIAL -->
+    <!-- SECTION 1: WHY WE'RE DIFFERENT -->
     <section id="section-1" class="content-section">
       <div class="section-inner">
         <div class="section-media reveal-up">
@@ -110,13 +153,12 @@
           </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
-          <h2 class="section-title">A New Kind of Drink.<br>A New Kind of Company.</h2>
-          <h3 class="section-subtitle">Why We're Special</h3>
+          <h2 class="section-title">A New Kind of Drink<br>For a New Kind of Company</h2>
+          <h3 class="section-subtitle">Why We're Different in Every Way</h3>
           <div class="section-body">
-            <p>Real saffron. The rarest threads. The purest hydrosols. Ancient techniques meeting modern purpose.</p>
-            <p>Every bottle gives back. Every sale creates impact.</p>
-            <p><strong>Conscious luxury. Purpose bottled.</strong></p>
-            <p class="section-note">Harvested by hand. Crafted in micro-batches.</p>
+            <p>Bored of the same drinks with the same ingredients in different packaging?</p>
+            <p>Real rare ingredients never used before. Made with a mix of ancient and modern techniques.</p>
+            <p><strong>We donate 100% of profits back to the community and to charity.</strong></p>
           </div>
         </div>
       </div>
@@ -129,11 +171,9 @@
           <h2 class="section-title">The World's Most<br>Refreshing Drink</h2>
           <h3 class="section-subtitle">Our Ingredients</h3>
           <div class="section-body">
-            <p>Golden saffron threads that glow in light.</p>
-            <p>Steam-distilled Persian rosewater.</p>
-            <p>Cardamom syrup. Honey-kissed chicory.</p>
-            <p><strong>Heritage in a glass. Botanical alchemy.</strong></p>
-            <p class="section-note">Zero artificial anything.</p>
+            <p>Ruby golden saffron</p>
+            <p>Steam-distilled Persian rose water</p>
+            <p>Hydrosol cardamom & chicory & pussywillow</p>
           </div>
         </div>
         <div class="section-media reveal-up" style="--d:0.15s">
@@ -153,29 +193,26 @@
           </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
-          <h2 class="section-title">Luxury for Everyone</h2>
+          <h2 class="section-title">Luxury Benefits for the People<br>By the People</h2>
           <h3 class="section-subtitle">Our Mission</h3>
           <div class="section-body">
-            <p>Luxury should lift people up — not shut them out.</p>
-            <p>Fair pay. Profits that loop back into the world.</p>
-            <p><strong>We don't sell drinks. We circulate abundance.</strong></p>
-            <p class="section-note">The more we grow, the more we give.</p>
+            <p>No more gatekeeping the best kept secrets.</p>
+            <p>We are going to spoil our customers and staff because everyone deserves luxury.</p>
+            <p><strong>The best ingredients. The best health benefits. The best purpose.</strong></p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: HEALTH BENEFITS -->
+    <!-- SECTION 4: WHY SAFFRON -->
     <section id="section-4" class="content-section alt-bg">
       <div class="section-inner reverse">
         <div class="section-text reveal-up">
-          <h2 class="section-title">Ancient Wisdom.<br>Modern Wellness.</h2>
-          <h3 class="section-subtitle">Why It Feels So Good</h3>
+          <h2 class="section-title">World's Most<br>Precious Gem</h2>
+          <h3 class="section-subtitle">Why Saffron Is the Red Ruby</h3>
           <div class="section-body">
-            <p>Saffron brightens the spirit. Rose restores.</p>
-            <p>Cardamom warms. Every sip is self-care.</p>
-            <p><strong>A wellness ritual in disguise.</strong></p>
-            <p class="section-note">Science-backed. Tradition-approved.</p>
+            <p>Health benefits from nootropics to anti-depression, anti-inflammatory, and increased focus and happiness.</p>
+            <p>You can even get high from it at higher doses.</p>
           </div>
         </div>
         <div class="section-media reveal-up" style="--d:0.15s">
@@ -186,7 +223,7 @@
       </div>
     </section>
 
-    <!-- SECTION 5: HIRING -->
+    <!-- SECTION 5: JOIN US -->
     <section id="section-5" class="content-section">
       <div class="section-inner">
         <div class="section-media reveal-up">
@@ -195,11 +232,12 @@
           </video>
         </div>
         <div class="section-text reveal-up" style="--d:0.15s">
-          <h2 class="section-title">Join the Team</h2>
+          <h2 class="section-title">Join a Fresh<br>Amazing Team</h2>
           <h3 class="section-subtitle">Work With Us</h3>
           <div class="section-body">
-            <p>Building something meaningful takes people who care deeply.</p>
-            <p>Design. Flavor. Community. Storytelling.</p>
+            <p>Interested in joining a fresh amazing team?</p>
+            <p>Our startup is looking for designers and partners.</p>
+            <p><strong>Come be a part of something beautiful with royalty deals & commission.</strong></p>
             <a href="mailto:hello@golabii.com" class="btn-chic inline-btn">
               <span>Get in Touch</span>
             </a>

@@ -1,52 +1,18 @@
 /**
- * GOLABII — Luxury Interactions V3.1
- * Fixed: Video loading, loader timing, mobile nav
+ * GOLABII — Luxury Interactions V3.2
+ * New bottle cursor, simplified loader
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
-  // 1. PAGE LOADER WITH PROGRESS BAR
+  // 1. PAGE LOADER (Simple, no progress bar)
   // ==========================================
   const loader = document.getElementById('pageLoader');
-  const loaderBar = document.getElementById('loaderBar');
   const heroImg = document.getElementById('heroImg');
-  const allVideos = document.querySelectorAll('.section-video');
   
-  let loadProgress = 0;
-  let assetsLoaded = 0;
-  const totalAssets = allVideos.length + 1; // videos + hero image
-  
-  function updateProgress() {
-    assetsLoaded++;
-    loadProgress = Math.min((assetsLoaded / totalAssets) * 100, 100);
-    if (loaderBar) {
-      loaderBar.style.width = loadProgress + '%';
-    }
-  }
-  
-  // Track hero image load
-  if (heroImg) {
-    if (heroImg.complete) {
-      updateProgress();
-    } else {
-      heroImg.addEventListener('load', updateProgress);
-    }
-  }
-  
-  // Track video metadata load
-  allVideos.forEach(video => {
-    if (video.readyState >= 1) {
-      updateProgress();
-    } else {
-      video.addEventListener('loadedmetadata', updateProgress);
-    }
-  });
-  
-  // Minimum loader time + wait for assets
-  function hideLoader() {
-    if (loaderBar) loaderBar.style.width = '100%';
-    
+  // Wait for page to load, then hide loader
+  window.addEventListener('load', () => {
     setTimeout(() => {
       loader.classList.add('loaded');
       
@@ -56,34 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
           heroImg.classList.add('color-revealed');
         }
       }, 500);
-    }, 300);
-  }
+    }, 1800); // Wait 1.8 seconds for assets
+  });
   
-  // Wait at least 2 seconds, then check if assets are ready
-  setTimeout(() => {
-    if (loadProgress >= 80 || assetsLoaded >= totalAssets - 1) {
-      hideLoader();
-    } else {
-      // Wait a bit more for slow connections
-      setTimeout(hideLoader, 1500);
-    }
-  }, 2000);
-  
-  // Fallback: always hide loader after 5 seconds
+  // Fallback: always hide loader after 4 seconds
   setTimeout(() => {
     loader.classList.add('loaded');
     if (heroImg) heroImg.classList.add('color-revealed');
-  }, 5000);
+  }, 4000);
 
   // ==========================================
-  // 2. CUSTOM ROSE CURSOR
+  // 2. CUSTOM BOTTLE CURSOR
   // ==========================================
   const cursor = document.getElementById('roseCursor');
   
   if (cursor && window.innerWidth > 900) {
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
-    const smoothing = 0.15;
+    const smoothing = 0.12;
     
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
@@ -133,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // 4. VIDEO PROXIMITY PLAYBACK (One at a time)
   // ==========================================
+  const allVideos = document.querySelectorAll('.section-video');
   let currentlyPlaying = null;
 
   const videoObserver = new IntersectionObserver((entries) => {
@@ -151,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
           playPromise.then(() => {
             currentlyPlaying = video;
           }).catch(err => {
-            // Autoplay blocked - that's okay, user can see poster
             console.log('Video autoplay prevented:', err.message);
           });
         }
@@ -187,8 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target) {
         e.preventDefault();
         
+        const bannerHeight = 36;
         const navHeight = document.querySelector('.main-nav')?.offsetHeight || 60;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - bannerHeight - navHeight - 20;
         
         window.scrollTo({
           top: targetPosition,
@@ -263,7 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   const spotsNumber = document.getElementById('spotsNumber');
   if (spotsNumber) {
-    // Occasionally decrease the number for effect
     setInterval(() => {
       const current = parseInt(spotsNumber.textContent);
       if (current > 700 && Math.random() > 0.7) {
