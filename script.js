@@ -32,40 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 4000);
 
   // ==========================================
-  // 2. CUSTOM BOTTLE CURSOR
+  // 2. CUSTOM BOTTLE CURSOR (REMOVED)
   // ==========================================
-  const cursor = document.getElementById('roseCursor');
-  
-  if (cursor && window.innerWidth > 900) {
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    const smoothing = 0.12;
-    
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-    
-    function animateCursor() {
-      cursorX += (mouseX - cursorX) * smoothing;
-      cursorY += (mouseY - cursorY) * smoothing;
-      
-      cursor.style.left = cursorX + 'px';
-      cursor.style.top = cursorY + 'px';
-      
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
+  // Custom cursor logic has been removed as requested.
 
-    document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
-    document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
-    
-    const interactiveElements = document.querySelectorAll('a, button, .nav-card, .btn-chic');
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-    });
-  }
 
   // ==========================================
   // 3. SCROLL REVEAL ANIMATIONS

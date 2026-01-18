@@ -39,12 +39,11 @@ body {
   color: var(--near-black);
   line-height: 1.7;
   overflow-x: hidden;
-  cursor: none;
   padding-top: var(--banner-height);
 }
 
 a, button, input, [role="button"] {
-  cursor: none;
+  cursor: pointer;
 }
 
 /* --- Yellow Construction Banner --- */
@@ -69,32 +68,7 @@ a, button, input, [role="button"] {
 
 /* --- Custom Bottle Cursor --- */
 .rose-cursor {
-  position: fixed;
-  width: 56px;
-  height: 56px;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease-out, opacity 0.3s ease;
-  opacity: 0;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));
-}
-
-.rose-cursor svg {
-  width: 100%;
-  height: 100%;
-}
-
-body:hover .rose-cursor {
-  opacity: 1;
-}
-
-.rose-cursor.clicking {
-  transform: translate(-50%, -50%) scale(0.85) rotate(-8deg);
-}
-
-.rose-cursor.hovering {
-  transform: translate(-50%, -50%) scale(1.15);
+  display: none;
 }
 
 /* --- Page Loader (No progress bar) --- */
