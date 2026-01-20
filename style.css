@@ -368,6 +368,14 @@ a, button, input, [role="button"] {
   border-radius: 14px;
 }
 
+.section-image-static.proportional-img {
+  max-height: 80vh;
+  object-fit: contain;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .section-media.full-width {
   max-width: 650px;
   margin: 0 auto;
