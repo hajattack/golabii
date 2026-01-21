@@ -35,7 +35,8 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--warm-cream);
+  background: linear-gradient(135deg, #FFF0F5 0%, #FFD1DC 50%, #FFC0CB 100%);
+  background-attachment: fixed;
   color: var(--near-black);
   line-height: 1.7;
   overflow-x: hidden;
@@ -370,7 +371,8 @@ a, button, input, [role="button"] {
 }
 
 .content-section.alt-bg {
-  background: #FFF4D6;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .section-inner {
