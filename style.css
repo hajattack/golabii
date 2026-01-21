@@ -241,6 +241,12 @@ a, button, input, [role="button"] {
   transform: scale(1);
 }
 
+.hero-frame video.hero-img {
+  display: block;
+  filter: none;
+  transform: scale(1);
+}
+
 .hero-text-plaque {
   margin-top: 2rem;
   max-width: 90%;
