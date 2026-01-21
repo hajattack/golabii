@@ -6,7 +6,7 @@
 :root {
   --saffron-red: #8B2332;
   --liquid-gold: #D4A84B;
-  --warm-cream: #FFFDF9;
+  --warm-cream: #FFF0F5;
   --deep-burgundy: #4A0E1C;
   --near-black: #1A1A1A;
   --blush-pink: #E8C4B8;
@@ -348,7 +348,7 @@ a, button, input, [role="button"] {
 }
 
 .content-section.alt-bg {
-  background: #FDF8F3;
+  background: #FFE8F0;
 }
 
 .section-inner {
