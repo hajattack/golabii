@@ -35,7 +35,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: linear-gradient(135deg, #FFF0F5 0%, #FFD1DC 50%, #FFC0CB 100%);
+  background: #F4D03F;
   background-attachment: fixed;
   color: var(--near-black);
   line-height: 1.7;
@@ -114,21 +114,33 @@ a, button, input, [role="button"] {
 /* --- Navigation --- */
 .main-nav {
   position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 8px 10px 8px 16px;
-  background: rgba(255, 253, 249, 0.95);
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 12px 20px;
+  background: rgba(255, 253, 249, 0.98);
   backdrop-filter: blur(20px);
-  border-radius: 100px;
-  border: 1px solid rgba(212, 168, 75, 0.2);
-  box-shadow: 0 4px 20px rgba(74, 14, 28, 0.08);
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(212, 168, 75, 0.2);
+  box-shadow: 0 2px 10px rgba(74, 14, 28, 0.06);
   opacity: 0;
-  animation: fadeInDown 0.8s var(--ease-out-expo) 2.5s forwards;
+  transform: none;
+  animation: fadeInNav 0.8s var(--ease-out-expo) 2.5s forwards;
+}
+
+@keyframes fadeInNav {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .spots-counter {
@@ -201,7 +213,7 @@ a, button, input, [role="button"] {
   align-items: center;
   justify-content: center;
   padding: 80px 24px 50px;
-  background: var(--warm-cream);
+  background: transparent;
 }
 
 .hero-frame {
@@ -249,45 +261,34 @@ a, button, input, [role="button"] {
 }
 
 .hero-text-plaque {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   max-width: 90%;
-  max-width: 850px;
-  text-align: center;
+  max-width: 700px;
+  text-align: left;
   position: relative;
-  padding: 2rem;
-  background: linear-gradient(135deg, #E8E0D5 0%, #D6CFC4 100%);
-  border-radius: 8px;
-  box-shadow: 
-    inset 0 0 50px rgba(0,0,0,0.1),
-    0 4px 15px rgba(0,0,0,0.15);
+  padding: 1.2rem 1.5rem;
+  background: rgba(255, 253, 249, 0.85);
+  border-left: 4px solid var(--saffron-red);
+  box-shadow: 0 4px 15px rgba(74, 14, 28, 0.08);
 }
 
 .hero-text-plaque::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none;
-  border-radius: 8px;
+  display: none;
 }
 
 .hero-text-plaque p {
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  font-size: 1.4rem;
-  line-height: 1.8;
-  color: #8B2332;
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-  position: relative;
-  text-shadow: 
-    2px 2px 0px rgba(0,0,0,0.2),
-    -1px -1px 0px rgba(255,255,255,0.5);
-  letter-spacing: 0.05em;
-  transform: rotate(-0.5deg);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--near-black);
+  text-align: left;
+  max-width: 100%;
+  margin: 0;
+  transform: none;
+  text-shadow: none;
+  opacity: 1;
+  mix-blend-mode: normal;
 }
 
 /* --- Card Navigation Strip --- */
@@ -366,7 +367,7 @@ a, button, input, [role="button"] {
 /* --- Content Sections --- */
 .content-section {
   padding: var(--section-padding) 24px;
-  background: var(--warm-cream);
+  background: transparent;
   scroll-margin-top: calc(var(--banner-height) + 80px);
 }
 
