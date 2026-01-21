@@ -113,7 +113,7 @@ a, button, input, [role="button"] {
 /* --- Navigation --- */
 .main-nav {
   position: fixed;
-  top: calc(var(--banner-height) + 16px);
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
@@ -239,6 +239,26 @@ a, button, input, [role="button"] {
 .hero-img.color-revealed {
   filter: grayscale(0%) brightness(1);
   transform: scale(1);
+}
+
+.hero-text-plaque {
+  margin-top: 2rem;
+  max-width: 90%;
+  max-width: 850px;
+  text-align: center;
+}
+
+.hero-text-plaque p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--near-black);
+  border-left: 3px solid var(--saffron-red);
+  padding-left: 1rem;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* --- Card Navigation Strip --- */
