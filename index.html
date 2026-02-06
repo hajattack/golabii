@@ -14,6 +14,9 @@
   
   <link rel="stylesheet" href="style.css" />
   
+  <!-- Preload 3D model so it downloads during the splash screen -->
+  <link rel="preload" href="floral-bottle.glb" as="fetch" crossorigin="anonymous">
+  
   <!-- Model Viewer for 3D GLB files -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 </head>
@@ -37,21 +40,27 @@
     <!-- HERO SECTION -->
     <section class="hero">
       <!-- 3D Model Viewer - First thing that shows up -->
-      <div class="model-viewer-container hero-model">
+      <div class="model-viewer-container hero-model" id="modelContainer">
         <model-viewer
-          src="floral bottle 3d model.glb"
-          alt="Floral Bottle 3D Model"
+          id="bottleModel"
+          src="floral-bottle.glb"
+          alt="Golabii Floral Bottle"
           auto-rotate
+          auto-rotate-delay="0"
+          rotation-per-second="30deg"
           camera-controls
-          interaction-policy="allow-when-focused"
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          shadow-intensity="1"
-          exposure="1"
-          environment-image="neutral"
+          touch-action="pan-y"
+          loading="eager"
+          reveal="auto"
+          shadow-intensity="0.8"
+          exposure="1.1"
+          camera-orbit="0deg 75deg 105%"
+          min-camera-orbit="auto auto 80%"
+          max-camera-orbit="auto auto 200%"
+          poster="logo2.jpg"
         >
-          <div class="model-loading" slot="poster">
-            <p>Loading 3D model...</p>
+          <div class="model-progress-bar" slot="progress-bar">
+            <div class="model-progress-fill"></div>
           </div>
         </model-viewer>
       </div>

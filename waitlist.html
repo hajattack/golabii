@@ -3,33 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>First pour early access</title>
-    <!-- A concise description improves SEO and entices clicks. -->
+    <title>First pour early access — Golabii</title>
     <meta
       name="description"
       content="Join the Golabii waitlist and help shape our botanical elixir. Please answer a few questions to help us craft something extraordinary."
     />
-    <!-- Preconnects for faster font loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Use the same fonts as the main site for consistency -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sacramento&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Append a version query string to bust caches and ensure the latest CSS loads.  
-         Increment this value whenever the CSS is modified so browsers fetch the new file. -->
-    <link rel="stylesheet" href="styles.css?v=20250905" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body class="waitlist-page">
-    <!-- Activism header removed on the waitlist page to keep the focus on the form -->
-    <!-- Main waitlist form -->
-    <main class="waitlist">
-      <h1>First pour early access</h1>
-      <p>
-        Tell us about yourself and get exclusive gifts!!
-      </p>
-      <form id="waitlist-form">
+    <!-- SVG Filter for Noise Texture -->
+    <svg class="hidden-filter">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0"/>
+      </filter>
+    </svg>
+
+    <nav class="floating-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <span class="nav-brand">g.</span>
+    </nav>
+
+    <main class="waitlist-container">
+      <header class="waitlist-header">
+        <h1>First Pour<br>Early Access</h1>
+        <p>
+          Tell us about yourself. Help us shape the future of Golabii.
+        </p>
+      </header>
+      
+      <form id="waitlist-form" class="editorial-form">
         <!-- First name (required) -->
         <div class="form-group">
           <label for="first_name">First name<span class="required">*</span></label>
@@ -65,36 +72,34 @@
         </div>
         <!-- Phone number (optional) -->
         <div class="form-group">
-          <label for="phone">Phone number (don't miss our surprise drop)</label>
+          <label for="phone">Phone number <span class="optional">(optional)</span></label>
           <input
             type="tel"
             id="phone"
             name="phone"
-            placeholder="Your phone number"
+            placeholder="For surprise drops"
           />
         </div>
         <!-- How did you hear about us? (required) -->
         <fieldset class="form-group">
           <legend>How did you hear about us?<span class="required">*</span></legend>
-          <div class="option">
-            <input type="radio" id="hear_word" name="hear" value="Word of mouth" required />
-            <label for="hear_word">Word of mouth</label>
-          </div>
-          <div class="option">
-            <input type="radio" id="hear_founder" name="hear" value="Met our founder in the street" />
-            <label for="hear_founder">Met our founder in the street (He's always talking about us)</label>
-          </div>
-          <div class="option">
-            <input type="radio" id="hear_event" name="hear" value="In person tasting event" />
-            <label for="hear_event">In person tasting event</label>
-          </div>
-          <div class="option">
-            <input type="radio" id="hear_social" name="hear" value="Social media" />
-            <label for="hear_social">Social media</label>
-          </div>
-          <div class="option">
-            <input type="radio" id="hear_club" name="hear" value="College club event or referral" />
-            <label for="hear_club">College club event/referral</label>
+          <div class="option-grid">
+            <label class="radio-label">
+              <input type="radio" name="hear" value="Word of mouth" required />
+              <span>Word of mouth</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="hear" value="Met our founder" />
+              <span>Met our founder</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="hear" value="Tasting event" />
+              <span>Tasting event</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="hear" value="Social media" />
+              <span>Social media</span>
+            </label>
           </div>
         </fieldset>
         <!-- City & Country (required) -->
@@ -110,7 +115,7 @@
         </div>
         <!-- Instagram handle (optional) -->
         <div class="form-group">
-          <label for="instagram">We want to follow you! We're also looking for social media ambassadors!</label>
+          <label for="instagram">Instagram handle</label>
           <input
             type="text"
             id="instagram"
@@ -118,30 +123,7 @@
             placeholder="@yourhandle"
           />
         </div>
-        <!-- What matters most? (choose up to 3) -->
-        <fieldset class="form-group">
-          <legend>Which aspects would be most important to you? <small>(choose up to 3)</small></legend>
-          <div class="option">
-            <input type="checkbox" id="important_nosugar" name="important" value="No/low sugar" />
-            <label for="important_nosugar">No/low sugar</label>
-          </div>
-          <div class="option">
-            <input type="checkbox" id="important_taste" name="important" value="Amazing taste" />
-            <label for="important_taste">Amazing taste</label>
-          </div>
-          <div class="option">
-            <input type="checkbox" id="important_packaging" name="important" value="Ethical sustainable packaging" />
-            <label for="important_packaging">Ethical sustainable packaging</label>
-          </div>
-          <div class="option">
-            <input type="checkbox" id="important_ingredients" name="important" value="Premium ingredients" />
-            <label for="important_ingredients">Premium ingredients</label>
-          </div>
-          <div class="option">
-            <input type="checkbox" id="important_price" name="important" value="Affordable price" />
-            <label for="important_price">Affordable price</label>
-          </div>
-        </fieldset>
+        
         <!-- Additional comments (optional) -->
         <div class="form-group">
           <label for="message">Comments or questions</label>
@@ -149,25 +131,28 @@
             id="message"
             name="message"
             placeholder="Anything else you'd like to share"
+            rows="4"
           ></textarea>
         </div>
-        <!-- Honeypot field for spam prevention: leave blank (hidden) -->
+        
+        <!-- Honeypot -->
         <div style="display: none;">
           <label for="extra_field">Leave this field blank</label>
           <input type="text" id="extra_field" name="extra_field" />
         </div>
-        <!-- Opt-in checkbox removed -->
-        <!-- Submit button -->
-        <button type="submit" class="cta-button">Submit</button>
-        <!-- Status message -->
+        
+        <button type="submit" class="btn-editorial large full-width">Submit Request</button>
+        
         <p class="status-message"></p>
       </form>
     </main>
-    <!-- Footer with dynamic year -->
+    
     <footer class="site-footer">
-      <p>&copy; <span id="year"></span> Golabii. All rights reserved.</p>
+      <div class="footer-content">
+        <span class="copyright">&copy; <span id="year"></span> Golabii. All rights reserved.</span>
+      </div>
     </footer>
-    <!-- Waitlist submission logic -->
+    
     <script src="waitlist.js"></script>
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();

@@ -336,15 +336,33 @@ model-viewer {
   --poster-color: transparent;
 }
 
-.model-loading {
+/* Model poster/loading state */
+model-viewer::part(default-poster) {
+  display: block;
+  object-fit: contain;
+  background: transparent;
+}
+
+/* Progress bar while loading */
+.model-progress-bar {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--saffron-red);
-  opacity: 0.7;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(0,0,0,0.1);
+}
+
+.model-progress-fill {
+  width: 0;
+  height: 100%;
+  background: var(--saffron-red);
+  transition: width 0.2s ease;
+}
+
+/* Hide container until model is ready to avoid blank box */
+.model-viewer-container.hero-model.loading {
+  background: rgba(255, 253, 249, 0.15);
 }
 
 @media (max-width: 900px) {

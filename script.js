@@ -6,13 +6,38 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
-  // 1. PAGE LOADER (Simple, no progress bar)
+  // 1. PAGE LOADER + 3D MODEL PRELOAD
   // ==========================================
   const loader = document.getElementById('pageLoader');
   const heroImg = document.getElementById('heroImg');
+  const bottleModel = document.getElementById('bottleModel');
+  const modelContainer = document.getElementById('modelContainer');
+  
+  // Track model loading progress
+  let modelLoaded = false;
+  if (bottleModel) {
+    modelContainer.classList.add('loading');
+    
+    // Listen for model load progress
+    bottleModel.addEventListener('progress', (e) => {
+      const progressFill = bottleModel.querySelector('.model-progress-fill');
+      if (progressFill && e.detail && e.detail.totalProgress !== undefined) {
+        progressFill.style.width = (e.detail.totalProgress * 100) + '%';
+      }
+    });
+    
+    // When model finishes loading
+    bottleModel.addEventListener('load', () => {
+      modelLoaded = true;
+      modelContainer.classList.remove('loading');
+      const progressBar = bottleModel.querySelector('.model-progress-bar');
+      if (progressBar) progressBar.style.display = 'none';
+    });
+  }
   
   // Wait for page to load, then hide loader
   window.addEventListener('load', () => {
+    // Keep splash screen up for at least 1.8s so model can download
     setTimeout(() => {
       loader.classList.add('loaded');
       
@@ -22,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
           heroImg.classList.add('color-revealed');
         }
       }, 500);
-    }, 1800); // Wait 1.8 seconds for assets
+    }, 1800);
   });
   
-  // Fallback: always hide loader after 4 seconds
+  // Fallback: always hide loader after 5 seconds (extra time for 3D model)
   setTimeout(() => {
     loader.classList.add('loaded');
     if (heroImg) heroImg.classList.add('color-revealed');
-  }, 4000);
+  }, 5000);
 
   // ==========================================
   // 2. CUSTOM BOTTLE CURSOR (REMOVED)
