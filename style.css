@@ -291,6 +291,80 @@ a, button, input, [role="button"] {
   mix-blend-mode: normal;
 }
 
+/* --- 3D Model Viewer --- */
+.model-viewer-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 600px;
+  margin: 2rem auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(74, 14, 28, 0.15);
+  background: rgba(255, 253, 249, 0.3);
+  animation: floatModel 6s ease-in-out infinite;
+}
+
+.model-viewer-container.hero-model {
+  max-width: 90%;
+  max-width: 850px;
+  height: 80vh;
+  max-height: 800px;
+  margin: 0 auto 2rem;
+  order: -1;
+  z-index: 1;
+}
+
+.hero-video-below {
+  margin-top: 2rem;
+  order: 1;
+}
+
+@keyframes floatModel {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+model-viewer {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  --poster-color: transparent;
+}
+
+.model-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--saffron-red);
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .model-viewer-container {
+    max-width: 90%;
+    height: 400px;
+    margin: 1.5rem auto;
+  }
+  
+  .model-viewer-container.hero-model {
+    height: 60vh;
+    max-height: 500px;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .hero-video-below {
+    margin-top: 1.5rem;
+  }
+}
+
 /* --- Card Navigation Strip --- */
 .card-nav-strip {
   display: flex;
