@@ -35,7 +35,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: #F4D03F;
+  background: #ffffff;
   background-attachment: fixed;
   color: var(--near-black);
   line-height: 1.7;
@@ -211,9 +211,9 @@ a, button, input, [role="button"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 80px 24px 50px;
-  background: transparent;
+  justify-content: flex-start;
+  padding: 48px 0 50px;
+  background: #ffffff;
 }
 
 .hero-frame {
@@ -234,9 +234,9 @@ a, button, input, [role="button"] {
   background: radial-gradient(
     ellipse at center,
     transparent 45%,
-    rgba(255, 253, 249, 0.35) 65%,
-    rgba(255, 253, 249, 0.8) 85%,
-    var(--warm-cream) 100%
+    rgba(255, 255, 255, 0.35) 65%,
+    rgba(255, 255, 255, 0.8) 85%,
+    #ffffff 100%
   );
 }
 
@@ -298,19 +298,18 @@ a, button, input, [role="button"] {
   max-width: 600px;
   height: 600px;
   margin: 2rem auto;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 70px rgba(74, 14, 28, 0.15);
-  background: rgba(255, 253, 249, 0.3);
-  animation: floatModel 6s ease-in-out infinite;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  background: transparent;
 }
 
 .model-viewer-container.hero-model {
-  max-width: 90%;
-  max-width: 850px;
-  height: 80vh;
-  max-height: 800px;
-  margin: 0 auto 2rem;
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
   order: -1;
   z-index: 1;
 }
@@ -320,27 +319,20 @@ a, button, input, [role="button"] {
   order: 1;
 }
 
-@keyframes floatModel {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
 model-viewer {
   width: 100%;
   height: 100%;
-  background: transparent;
-  --poster-color: transparent;
+  background: #ffffff;
+  --poster-color: #ffffff;
+  outline: none;
+  border: none;
 }
 
 /* Model poster/loading state */
 model-viewer::part(default-poster) {
   display: block;
   object-fit: contain;
-  background: transparent;
+  background: #ffffff;
 }
 
 /* Progress bar while loading */
@@ -349,8 +341,9 @@ model-viewer::part(default-poster) {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: rgba(0,0,0,0.1);
+  height: 3px;
+  background: rgba(0,0,0,0.05);
+  z-index: 10;
 }
 
 .model-progress-fill {
@@ -362,24 +355,60 @@ model-viewer::part(default-poster) {
 
 /* Hide container until model is ready to avoid blank box */
 .model-viewer-container.hero-model.loading {
-  background: rgba(255, 253, 249, 0.15);
+  background: #ffffff;
+}
+
+/* Text overlay on the 3D scene floor */
+.model-floor-text {
+  position: absolute;
+  bottom: 12%;
+  right: 8%;
+  z-index: 10;
+  pointer-events: none;
+  text-align: right;
+}
+
+.model-floor-brand {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--saffron-red);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(139, 35, 50, 0.08);
+}
+
+.model-floor-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.4vw, 1rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--liquid-gold);
+  margin-top: 0.3rem;
 }
 
 @media (max-width: 900px) {
   .model-viewer-container {
-    max-width: 90%;
+    max-width: 100%;
     height: 400px;
     margin: 1.5rem auto;
   }
   
   .model-viewer-container.hero-model {
-    height: 60vh;
-    max-height: 500px;
-    margin: 0 auto 1.5rem;
+    height: 75vh;
+    max-height: none;
+    margin: 0;
   }
   
   .hero-video-below {
     margin-top: 1.5rem;
+  }
+  
+  .model-floor-text {
+    bottom: 8%;
+    right: 6%;
   }
 }
 
@@ -464,8 +493,7 @@ model-viewer::part(default-poster) {
 }
 
 .content-section.alt-bg {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
+  background: #fafafa;
 }
 
 .section-inner {
