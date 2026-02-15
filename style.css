@@ -1,11 +1,14 @@
 /* ============================================
-   GOLABII — Clean Wireframe Layout V4
-   3D Model + Brand Block + Golden Image Hero
+   GOLABII — V5 Clean Layout
+   Gold mirror nav pills, glisten effects,
+   unified desktop/mobile
    ============================================ */
 
 :root {
   --saffron-red: #8B2332;
   --liquid-gold: #D4A84B;
+  --gold-light: #E8C96A;
+  --gold-shimmer: #F5E6A3;
   --warm-cream: #FFF9E6;
   --deep-burgundy: #4A0E1C;
   --near-black: #1A1A1A;
@@ -18,6 +21,7 @@
   --section-padding: clamp(50px, 8vh, 100px);
   --container-max: 1100px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-height: 56px;
 }
 
 *, *::before, *::after {
@@ -83,7 +87,7 @@ a, button, input, [role="button"] {
 }
 
 /* ==========================================
-   NAVIGATION — Text links + CTA
+   NAVIGATION — Gold mirror pill bubbles
    ========================================== */
 .main-nav {
   position: fixed;
@@ -91,13 +95,15 @@ a, button, input, [role="button"] {
   left: 0;
   right: 0;
   z-index: 100;
+  height: var(--nav-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 32px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(212, 168, 75, 0.12);
   opacity: 0;
   animation: fadeInNav 0.8s var(--ease-out-expo) 2.5s forwards;
 }
@@ -110,30 +116,77 @@ a, button, input, [role="button"] {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 3vw, 2.5rem);
+  gap: 8px;
 }
 
-.nav-link {
+/* Gold mirror pill bubbles */
+.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 18px;
+  border-radius: 100px;
   font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--near-black);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--liquid-gold);
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  letter-spacing: 0.07em;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 168, 75, 0.08) 0%,
+    rgba(212, 168, 75, 0.15) 50%,
+    rgba(212, 168, 75, 0.08) 100%
+  );
+  border: 1px solid rgba(212, 168, 75, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.nav-link:hover {
-  opacity: 1;
-  color: var(--saffron-red);
+/* Apple mirror shimmer effect */
+.nav-pill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(245, 230, 163, 0.35) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
 }
 
+.nav-pill:hover::before {
+  left: 100%;
+}
+
+.nav-pill:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 168, 75, 0.18) 0%,
+    rgba(212, 168, 75, 0.28) 50%,
+    rgba(212, 168, 75, 0.18) 100%
+  );
+  border-color: rgba(212, 168, 75, 0.45);
+  color: #B8892A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 168, 75, 0.15);
+}
+
+/* Join Waitlist CTA with glisten */
 .nav-cta-chic {
+  position: relative;
+  overflow: hidden;
   background: var(--saffron-red);
   color: white;
-  padding: 10px 24px;
+  padding: 9px 22px;
   border-radius: 100px;
   font-family: var(--font-display);
   font-size: 0.9rem;
@@ -152,26 +205,60 @@ a, button, input, [role="button"] {
   box-shadow: 0 6px 18px rgba(139, 35, 50, 0.35);
 }
 
+/* Glisten shine animation on page load */
+.nav-cta-chic::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  opacity: 0;
+  animation: ctaGlisten 0.8s ease 3.8s forwards;
+}
+
+@keyframes ctaGlisten {
+  0% {
+    left: -75%;
+    opacity: 1;
+  }
+  100% {
+    left: 150%;
+    opacity: 0;
+  }
+}
+
 /* ==========================================
-   SECTION 1: 3D MODEL (Full viewport, white)
+   HERO: 3D MODEL SECTION
+   Desktop & mobile both use same approach
    ========================================== */
 .hero-model-section {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
-  padding-top: 52px; /* nav height */
+  padding-top: var(--nav-height);
 }
 
 .model-viewer-container {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - var(--nav-height));
+  height: calc(100dvh - var(--nav-height));
 }
 
 .model-viewer-container.hero-model {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - var(--nav-height));
+  height: calc(100dvh - var(--nav-height));
 }
 
 model-viewer {
@@ -210,75 +297,73 @@ model-viewer::part(default-poster) {
   background: #ffffff;
 }
 
-/* ==========================================
-   SECTION 2: BRAND TEXT BLOCK
-   ========================================== */
-.brand-block {
-  background: #ffffff;
-  padding: 3rem 32px 4rem;
+/* Text overlay on right side of bottle */
+.model-text-overlay {
+  position: absolute;
+  bottom: 15%;
+  right: 6%;
+  z-index: 10;
+  pointer-events: none;
+  text-align: right;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInModelText 1s ease 3.5s forwards;
 }
 
-.brand-block-inner {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+@keyframes fadeInModelText {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.brand-block-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.brand-title {
+.model-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 300;
   font-style: italic;
   color: var(--saffron-red);
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 1.1;
 }
 
-.brand-mission {
+.model-subtitle {
   font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--near-black);
-  opacity: 0.6;
-  margin-top: 0.5rem;
-}
-
-.brand-charity {
-  font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
   font-weight: 600;
-  color: var(--saffron-red);
-  margin-top: 0.2rem;
-}
-
-.brand-block-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  padding-top: 0.5rem;
-}
-
-.coming-soon-tag {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   color: var(--liquid-gold);
-  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Glisten effect on subtitle (fires after the CTA glisten) */
+.model-subtitle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(245, 230, 163, 0.6) 50%,
+    transparent 100%
+  );
+  animation: subtitleGlisten 0.8s ease 4.8s forwards;
+}
+
+@keyframes subtitleGlisten {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 
 /* ==========================================
-   SECTION 3: GOLDEN FLORAL IMAGE + INGREDIENTS
+   GOLDEN FLORAL IMAGE + INGREDIENTS
    ========================================== */
 .ingredients-hero {
   position: relative;
@@ -295,7 +380,7 @@ model-viewer::part(default-poster) {
   display: block;
   width: 100%;
   height: auto;
-  min-height: 60vh;
+  min-height: 50vh;
   object-fit: cover;
 }
 
@@ -312,55 +397,27 @@ model-viewer::part(default-poster) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.8rem, 2vw, 1.5rem);
+  gap: clamp(0.6rem, 1.5vw, 1.2rem);
 }
 
 .ing-item {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-size: clamp(1.8rem, 5.5vw, 4rem);
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
-  line-height: 1.1;
-}
-
-.ingredients-side-tag {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3rem;
-  z-index: 5;
-}
-
-.kickstarter-tag {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #ffffff;
-  opacity: 0.85;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
-
-.ingredients-side-tag .coming-soon-tag {
-  color: #ffffff;
-  font-size: 1.1rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  line-height: 1.15;
 }
 
 /* ==========================================
-   CONTENT SECTIONS (below the fold)
+   CONTENT SECTIONS
    ========================================== */
 .content-section {
   padding: var(--section-padding) 24px;
   background: #ffffff;
-  scroll-margin-top: 60px;
+  scroll-margin-top: var(--nav-height);
 }
 
 .content-section.alt-bg {
@@ -596,7 +653,7 @@ model-viewer::part(default-poster) {
 }
 
 /* ==========================================
-   MOBILE RESPONSIVE
+   RESPONSIVE — Same experience everywhere
    ========================================== */
 @media (max-width: 900px) {
   .section-inner {
@@ -619,57 +676,24 @@ model-viewer::part(default-poster) {
   
   /* Nav */
   .main-nav {
-    padding: 10px 16px;
-    gap: 0.5rem;
+    padding: 0 12px;
   }
   
-  .nav-links {
-    gap: 0.6rem;
-  }
-  
-  .nav-link {
+  .nav-pill {
+    padding: 6px 12px;
     font-size: 0.65rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
   }
   
   .nav-cta-chic {
-    padding: 8px 16px;
+    padding: 7px 14px;
     font-size: 0.8rem;
   }
   
-  /* 3D Model */
-  .hero-model-section {
-    height: 70vh;
-    padding-top: 48px;
-  }
-  
-  /* Brand Block */
-  .brand-block {
-    padding: 2rem 20px 3rem;
-  }
-  
-  .brand-block-inner {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .brand-block-right {
-    align-items: flex-start;
-  }
-  
-  /* Ingredients */
-  .ingredients-bg {
-    min-height: 50vh;
-  }
-  
-  .ing-item {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-    letter-spacing: 0.08em;
-  }
-  
-  .ingredients-side-tag {
-    bottom: 1rem;
-    right: 1rem;
+  /* Model text */
+  .model-text-overlay {
+    bottom: 10%;
+    right: 5%;
   }
   
   body, a, button {
@@ -677,7 +701,26 @@ model-viewer::part(default-poster) {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
+  .nav-pill {
+    padding: 5px 10px;
+    font-size: 0.6rem;
+  }
+  
+  .nav-cta-chic {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .model-text-overlay {
+    bottom: 8%;
+    right: 4%;
+  }
+  
+  .model-title {
+    font-size: 1.6rem;
+  }
+  
   .section-title {
     font-size: 1.5rem;
   }
@@ -685,14 +728,6 @@ model-viewer::part(default-poster) {
   .btn-chic {
     padding: 0.8rem 1.8rem;
     font-size: 0.95rem;
-  }
-  
-  .nav-links {
-    gap: 0.4rem;
-  }
-  
-  .nav-link {
-    font-size: 0.6rem;
   }
 }
 
