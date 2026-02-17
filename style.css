@@ -106,6 +106,8 @@ a, button, input, [role="button"] {
   box-shadow: none;
   opacity: 0;
   animation: fadeInNav 0.6s ease 2.2s forwards;
+  border: none;
+  outline: none;
 }
 
 @keyframes fadeInNav {
@@ -130,12 +132,14 @@ a, button, input, [role="button"] {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
+  border: none;
+  outline: none;
 }
 
 .nav-bubble-link {
   display: inline-flex;
   align-items: center;
-  padding: 11px 32px;
+  padding: 12px 40px;
   font-family: var(--font-body);
   font-size: 0.73rem;
   font-weight: 600;
@@ -146,6 +150,8 @@ a, button, input, [role="button"] {
   transition: background 0.2s ease;
   position: relative;
   z-index: 1;
+  border: none;
+  outline: none;
 }
 
 .nav-bubble-link:hover {
@@ -167,10 +173,10 @@ a, button, input, [role="button"] {
   overflow: hidden;
   background: var(--saffron-red);
   color: white;
-  padding: 13px 34px;
+  padding: 15px 40px;
   border-radius: 100px;
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 1.12rem;
   font-weight: 600;
   font-style: italic;
   text-decoration: none;
@@ -178,12 +184,19 @@ a, button, input, [role="button"] {
   transition: all 0.3s ease;
   box-shadow: 0 4px 18px rgba(139, 35, 50, 0.35);
   white-space: nowrap;
+  border: none;
+  outline: none;
 }
 
 .nav-cta-chic:hover {
   background: #6d1a28;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(139, 35, 50, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 245, 225, 0.28), 0 0 24px rgba(139, 35, 50, 0.52), 0 10px 28px rgba(139, 35, 50, 0.4);
+}
+
+.nav-cta-chic:active {
+  transform: translateY(0);
+  box-shadow: 0 0 0 4px rgba(255, 245, 225, 0.35), 0 0 28px rgba(139, 35, 50, 0.58), 0 6px 18px rgba(139, 35, 50, 0.45);
 }
 
 /* Looping glisten on Join Waitlist — every 2 seconds */
@@ -284,20 +297,21 @@ model-viewer::part(default-poster) {
 /* Text overlay — right-bottom */
 .model-text-overlay {
   position: absolute;
-  bottom: 8%;
-  right: 3%;
+  bottom: 5%;
+  right: 2%;
   z-index: 10;
   pointer-events: none;
   text-align: right;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(20px) scale(0.9);
+  transform-origin: bottom right;
   animation: fadeInModelText 1s ease 3s forwards;
 }
 
 @keyframes fadeInModelText {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(0.9);
   }
 }
 
@@ -311,7 +325,8 @@ model-viewer::part(default-poster) {
   line-height: 1.05;
   position: relative;
   overflow: hidden;
-  display: inline-block;
+  display: block;
+  margin-bottom: 0.08rem;
 }
 
 /* Slow glisten on Saffron Elixir title — once at 3s */
@@ -328,7 +343,7 @@ model-viewer::part(default-poster) {
     rgba(139, 35, 50, 0.2) 50%,
     transparent 100%
   );
-  animation: titleGlistenOnce 1.8s ease 3.2s forwards;
+  animation: titleGlistenOnce 1.8s ease 3s forwards;
 }
 
 @keyframes titleGlistenOnce {
@@ -343,10 +358,10 @@ model-viewer::part(default-poster) {
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--gold-deep);
-  margin-top: 0.2rem;
+  margin-top: 0.08rem;
   position: relative;
   overflow: hidden;
-  display: inline-block;
+  display: block;
 }
 
 /* Slow glisten on subtitle — after title finishes */
@@ -440,8 +455,8 @@ model-viewer::part(default-poster) {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   gap: 0;
   position: relative;
 }
@@ -455,6 +470,8 @@ model-viewer::part(default-poster) {
   color: var(--liquid-gold);
   letter-spacing: 0.08em;
   margin-bottom: 1.4rem;
+  width: 100%;
+  text-align: left;
 }
 
 .section-label.large-label {
@@ -488,6 +505,8 @@ model-viewer::part(default-poster) {
   color: var(--saffron-red);
   line-height: 1.2;
   margin-bottom: 1rem;
+  width: 100%;
+  text-align: left;
 }
 
 /* Body description text */
@@ -497,6 +516,8 @@ model-viewer::part(default-poster) {
   color: var(--near-black);
   line-height: 1.8;
   max-width: 55ch;
+  width: 100%;
+  text-align: left;
 }
 
 .section-desc strong {
@@ -641,20 +662,34 @@ model-viewer::part(default-poster) {
   .main-nav {
     padding: 0 14px;
   }
+
+  .nav-bubble {
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    gap: 6px;
+  }
+
+  .nav-divider {
+    display: none;
+  }
   
   .nav-bubble-link {
-    padding: 9px 16px;
+    padding: 9px 14px;
     font-size: 0.62rem;
+    border-radius: 999px;
+    background: linear-gradient(145deg, #a67c2e 0%, #c69a3a 40%, #a67c2e 100%);
+    box-shadow: 0 2px 8px rgba(166, 124, 46, 0.28);
   }
   
   .nav-cta-chic {
-    padding: 10px 22px;
-    font-size: 0.9rem;
+    padding: 11px 24px;
+    font-size: 0.94rem;
   }
   
   .model-text-overlay {
-    bottom: 5%;
-    right: 3%;
+    bottom: 4%;
+    right: 2%;
   }
   
   .hero-model-section {
@@ -667,35 +702,48 @@ model-viewer::part(default-poster) {
 }
 
 @media (max-width: 480px) {
+  .main-nav {
+    border: none;
+    box-shadow: none;
+  }
+
+  .nav-bubble {
+    background: transparent;
+    box-shadow: none;
+    gap: 5px;
+  }
+
   .nav-bubble-link {
-    padding: 8px 11px;
+    padding: 8px 10px;
     font-size: 0.55rem;
     letter-spacing: 0.03em;
+    border-radius: 999px;
+    background: linear-gradient(145deg, #a67c2e 0%, #c69a3a 40%, #a67c2e 100%);
+    box-shadow: 0 1px 6px rgba(166, 124, 46, 0.24);
   }
   
   .nav-divider {
-    width: 3px;
-    height: 3px;
+    display: none;
   }
   
   .nav-cta-chic {
-    padding: 9px 18px;
-    font-size: 0.82rem;
+    padding: 10px 20px;
+    font-size: 0.88rem;
   }
   
   .model-text-overlay {
-    bottom: 4%;
-    right: 3%;
+    bottom: 3.5%;
+    right: 2%;
   }
   
   .model-title {
-    font-size: 1.8rem;
+    font-size: 1.55rem;
   }
   
   .model-subtitle {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    margin-top: 0.15rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    margin-top: 0.06rem;
   }
   
   .section-title-book {
