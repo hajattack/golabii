@@ -1,7 +1,7 @@
 /* ============================================
-   GOLABII — V6 Unified Layout
-   Single gold nav bubble, glisten effects,
-   scroll-friendly 3D model
+   GOLABII — V7 Book Cover Layout
+   Transparent nav, looping glisten,
+   editorial stacked sections
    ============================================ */
 
 :root {
@@ -19,8 +19,8 @@
   --font-display: 'Cormorant Garamond', serif;
   --font-body: 'DM Sans', sans-serif;
   
-  --section-padding: clamp(50px, 8vh, 100px);
-  --container-max: 1100px;
+  --section-padding: clamp(60px, 10vh, 120px);
+  --container-max: 780px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-height: 60px;
 }
@@ -88,7 +88,7 @@ a, button, input, [role="button"] {
 }
 
 /* ==========================================
-   NAVIGATION — Static, no border, one gold bubble
+   NAVIGATION — Fully transparent, no background
    ========================================== */
 .main-nav {
   position: fixed;
@@ -100,12 +100,10 @@ a, button, input, [role="button"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
-  background: rgba(139, 35, 50, 0.08);
-  backdrop-filter: blur(40px) saturate(1.6);
-  -webkit-backdrop-filter: blur(40px) saturate(1.6);
-  border-bottom: 1px solid rgba(139, 35, 50, 0.12);
-  box-shadow: 0 1px 20px rgba(139, 35, 50, 0.06);
+  padding: 0 32px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   opacity: 0;
   animation: fadeInNav 0.6s ease 2.2s forwards;
 }
@@ -115,7 +113,7 @@ a, button, input, [role="button"] {
   to { opacity: 1; }
 }
 
-/* Single gold bubble containing all 3 links */
+/* Gold bubble — stretched wider on desktop */
 .nav-bubble {
   display: flex;
   align-items: center;
@@ -128,8 +126,8 @@ a, button, input, [role="button"] {
     #A67C2E 100%
   );
   box-shadow:
-    0 2px 10px rgba(166, 124, 46, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 2px 12px rgba(166, 124, 46, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
 }
@@ -137,14 +135,14 @@ a, button, input, [role="button"] {
 .nav-bubble-link {
   display: inline-flex;
   align-items: center;
-  padding: 10px 24px;
+  padding: 11px 32px;
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.73rem;
   font-weight: 600;
   color: #ffffff;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   transition: background 0.2s ease;
   position: relative;
   z-index: 1;
@@ -154,7 +152,7 @@ a, button, input, [role="button"] {
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* Chic diamond separator between links */
+/* Diamond separator */
 .nav-divider {
   width: 4px;
   height: 4px;
@@ -163,32 +161,32 @@ a, button, input, [role="button"] {
   flex-shrink: 0;
 }
 
-/* Join Waitlist CTA — bigger, prominent */
+/* Join Waitlist — bigger, prominent */
 .nav-cta-chic {
   position: relative;
   overflow: hidden;
   background: var(--saffron-red);
   color: white;
-  padding: 11px 28px;
+  padding: 13px 34px;
   border-radius: 100px;
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   font-style: italic;
   text-decoration: none;
   letter-spacing: 0.03em;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(139, 35, 50, 0.3);
+  box-shadow: 0 4px 18px rgba(139, 35, 50, 0.35);
   white-space: nowrap;
 }
 
 .nav-cta-chic:hover {
   background: #6d1a28;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(139, 35, 50, 0.4);
+  box-shadow: 0 8px 24px rgba(139, 35, 50, 0.45);
 }
 
-/* Glisten shine on red button — fires 3s after page loads, repeats twice */
+/* Looping glisten on Join Waitlist — every 2 seconds */
 .nav-cta-chic::after {
   content: '';
   position: absolute;
@@ -199,18 +197,24 @@ a, button, input, [role="button"] {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.55) 50%,
     transparent 100%
   );
   transform: skewX(-20deg);
-  opacity: 0;
-  animation: ctaGlisten 0.7s ease 3s forwards, ctaGlisten 0.7s ease 4s forwards;
+  animation: ctaGlistenLoop 2s ease-in-out 3s infinite;
 }
 
-@keyframes ctaGlisten {
+@keyframes ctaGlistenLoop {
   0% {
     left: -80%;
+    opacity: 0;
+  }
+  10% {
     opacity: 1;
+  }
+  50% {
+    left: 170%;
+    opacity: 0;
   }
   100% {
     left: 170%;
@@ -219,7 +223,7 @@ a, button, input, [role="button"] {
 }
 
 /* ==========================================
-   HERO: 3D MODEL — 80vh so next section peeks
+   HERO: 3D MODEL
    ========================================== */
 .hero-model-section {
   position: relative;
@@ -277,7 +281,7 @@ model-viewer::part(default-poster) {
   background: #ffffff;
 }
 
-/* Text overlay — far right-bottom, bolder, away from model */
+/* Text overlay — right-bottom */
 .model-text-overlay {
   position: absolute;
   bottom: 8%;
@@ -287,7 +291,7 @@ model-viewer::part(default-poster) {
   text-align: right;
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInModelText 1s ease 3.2s forwards;
+  animation: fadeInModelText 1s ease 3s forwards;
 }
 
 @keyframes fadeInModelText {
@@ -305,6 +309,31 @@ model-viewer::part(default-poster) {
   color: var(--saffron-red);
   letter-spacing: 0.04em;
   line-height: 1.05;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Slow glisten on Saffron Elixir title — once at 3s */
+.model-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 35, 50, 0.2) 50%,
+    transparent 100%
+  );
+  animation: titleGlistenOnce 1.8s ease 3.2s forwards;
+}
+
+@keyframes titleGlistenOnce {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 
 .model-subtitle {
@@ -320,7 +349,7 @@ model-viewer::part(default-poster) {
   display: inline-block;
 }
 
-/* Glisten on subtitle — fires after CTA glisten */
+/* Slow glisten on subtitle — after title finishes */
 .model-subtitle::after {
   content: '';
   position: absolute;
@@ -334,7 +363,7 @@ model-viewer::part(default-poster) {
     rgba(245, 230, 163, 0.7) 50%,
     transparent 100%
   );
-  animation: subtitleGlisten 0.9s ease 4.2s forwards;
+  animation: subtitleGlisten 1.6s ease 5s forwards;
 }
 
 @keyframes subtitleGlisten {
@@ -392,7 +421,8 @@ model-viewer::part(default-poster) {
 }
 
 /* ==========================================
-   CONTENT SECTIONS
+   CONTENT SECTIONS — Book cover editorial layout
+   Subtitle label above, image center, title below, body beneath
    ========================================== */
 .content-section {
   padding: var(--section-padding) 24px;
@@ -404,100 +434,72 @@ model-viewer::part(default-poster) {
   background: #fafafa;
 }
 
-.section-inner {
+/* Book cover stacked layout */
+.section-inner-book {
   max-width: var(--container-max);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(30px, 6vw, 60px);
-  align-items: center;
-}
-
-.section-inner.reverse {
-  direction: rtl;
-}
-
-.section-inner.reverse > * {
-  direction: ltr;
-}
-
-.section-inner.centered {
-  grid-template-columns: 1fr;
-  text-align: center;
-  gap: 1.5rem;
-}
-
-.section-media {
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 16px 45px rgba(74, 14, 28, 0.1);
-  background: #f0ebe3;
-}
-
-.section-video {
-  width: 100%;
-  display: block;
-  border-radius: 14px;
-  background: #f0ebe3;
-}
-
-.section-image-static {
-  width: 100%;
-  display: block;
-  border-radius: 14px;
-}
-
-.section-media.full-width {
-  max-width: 650px;
-  margin: 0 auto;
-}
-
-.section-text {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-}
-
-.section-text.centered-text {
   align-items: center;
+  text-align: center;
+  gap: 0;
+  position: relative;
 }
 
-.section-title {
+/* Small category label above the image */
+.section-label {
   font-family: var(--font-display);
-  font-size: clamp(1.7rem, 3.8vw, 2.7rem);
-  font-weight: 400;
-  color: var(--saffron-red);
-  line-height: 1.15;
-  margin-bottom: 0.2rem;
-}
-
-.section-subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
   font-weight: 500;
   font-style: italic;
   color: var(--liquid-gold);
-  margin-bottom: 0.8rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.4rem;
 }
 
-.section-subtitle.large {
+.section-label.large-label {
   font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  margin-bottom: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 1.8rem;
 }
 
-.section-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+/* Media block — centered image/video */
+.section-media-book {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(74, 14, 28, 0.08);
+  background: #f0ebe3;
+  margin-bottom: 2rem;
 }
 
-.section-body p {
-  font-size: 1rem;
+.section-media-book .section-video {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  background: #f0ebe3;
+}
+
+/* Title below the image */
+.section-title-book {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 400;
+  color: var(--saffron-red);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* Body description text */
+.section-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
   color: var(--near-black);
-  max-width: 42ch;
+  line-height: 1.8;
+  max-width: 55ch;
 }
 
-.section-body strong {
+.section-desc strong {
   color: var(--saffron-red);
 }
 
@@ -538,7 +540,7 @@ model-viewer::part(default-poster) {
 }
 
 .btn-chic.inline-btn {
-  margin-top: 1.2rem;
+  margin-top: 1.6rem;
 }
 
 /* --- Rose Explosion --- */
@@ -636,26 +638,8 @@ model-viewer::part(default-poster) {
    RESPONSIVE
    ========================================== */
 @media (max-width: 900px) {
-  .section-inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    text-align: center;
-  }
-  
-  .section-inner.reverse {
-    direction: ltr;
-  }
-  
-  .section-text {
-    align-items: center;
-  }
-  
-  .section-body p {
-    max-width: 100%;
-  }
-  
   .main-nav {
-    padding: 0 12px;
+    padding: 0 14px;
   }
   
   .nav-bubble-link {
@@ -664,17 +648,17 @@ model-viewer::part(default-poster) {
   }
   
   .nav-cta-chic {
-    padding: 9px 20px;
-    font-size: 0.85rem;
+    padding: 10px 22px;
+    font-size: 0.9rem;
   }
   
   .model-text-overlay {
-    bottom: 6%;
+    bottom: 5%;
     right: 3%;
   }
   
   .hero-model-section {
-    height: 88vh;
+    height: 92vh;
   }
   
   body, a, button {
@@ -684,7 +668,7 @@ model-viewer::part(default-poster) {
 
 @media (max-width: 480px) {
   .nav-bubble-link {
-    padding: 8px 12px;
+    padding: 8px 11px;
     font-size: 0.55rem;
     letter-spacing: 0.03em;
   }
@@ -695,12 +679,12 @@ model-viewer::part(default-poster) {
   }
   
   .nav-cta-chic {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+    padding: 9px 18px;
+    font-size: 0.82rem;
   }
   
   .model-text-overlay {
-    bottom: 5%;
+    bottom: 4%;
     right: 3%;
   }
   
@@ -714,7 +698,7 @@ model-viewer::part(default-poster) {
     margin-top: 0.15rem;
   }
   
-  .section-title {
+  .section-title-book {
     font-size: 1.5rem;
   }
   
@@ -724,7 +708,7 @@ model-viewer::part(default-poster) {
   }
   
   .hero-model-section {
-    height: 85vh;
+    height: 93vh;
   }
 }
 
