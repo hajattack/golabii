@@ -1,12 +1,13 @@
 /* ============================================
-   GOLABII — V5 Clean Layout
-   Gold mirror nav pills, glisten effects,
-   unified desktop/mobile
+   GOLABII — V6 Unified Layout
+   Single gold nav bubble, glisten effects,
+   scroll-friendly 3D model
    ============================================ */
 
 :root {
   --saffron-red: #8B2332;
   --liquid-gold: #D4A84B;
+  --gold-deep: #A67C2E;
   --gold-light: #E8C96A;
   --gold-shimmer: #F5E6A3;
   --warm-cream: #FFF9E6;
@@ -21,7 +22,7 @@
   --section-padding: clamp(50px, 8vh, 100px);
   --container-max: 1100px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --nav-height: 56px;
+  --nav-height: 60px;
 }
 
 *, *::before, *::after {
@@ -87,7 +88,7 @@ a, button, input, [role="button"] {
 }
 
 /* ==========================================
-   NAVIGATION — Gold mirror pill bubbles
+   NAVIGATION — Static, no border, one gold bubble
    ========================================== */
 .main-nav {
   position: fixed;
@@ -99,13 +100,14 @@ a, button, input, [role="button"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 0 28px;
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(212, 168, 75, 0.12);
+  border: none;
+  box-shadow: none;
   opacity: 0;
-  animation: fadeInNav 0.8s var(--ease-out-expo) 2.5s forwards;
+  animation: fadeInNav 0.6s ease 2.2s forwards;
 }
 
 @keyframes fadeInNav {
@@ -113,152 +115,154 @@ a, button, input, [role="button"] {
   to { opacity: 1; }
 }
 
-.nav-links {
+/* Single gold bubble containing all 3 links */
+.nav-bubble {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-/* Gold mirror pill bubbles */
-.nav-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 18px;
+  padding: 0;
   border-radius: 100px;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--liquid-gold);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
   background: linear-gradient(
-    135deg,
-    rgba(212, 168, 75, 0.08) 0%,
-    rgba(212, 168, 75, 0.15) 50%,
-    rgba(212, 168, 75, 0.08) 100%
+    145deg,
+    #A67C2E 0%,
+    #C69A3A 40%,
+    #A67C2E 100%
   );
-  border: 1px solid rgba(212, 168, 75, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  transition: all 0.3s ease;
-  position: relative;
+  box-shadow:
+    0 2px 8px rgba(166, 124, 46, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   overflow: hidden;
+  position: relative;
 }
 
-/* Apple mirror shimmer effect */
-.nav-pill::before {
+/* Shimmer sweep on the whole bubble */
+.nav-bubble::after {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
-  width: 100%;
+  width: 60%;
   height: 100%;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(245, 230, 163, 0.35) 50%,
+    rgba(255, 255, 255, 0.2) 50%,
     transparent 100%
   );
-  transition: left 0.5s ease;
+  transform: skewX(-15deg);
+  pointer-events: none;
+  animation: bubbleShimmer 3s ease-in-out 4s infinite;
 }
 
-.nav-pill:hover::before {
-  left: 100%;
+@keyframes bubbleShimmer {
+  0% { left: -100%; }
+  40% { left: 150%; }
+  100% { left: 150%; }
 }
 
-.nav-pill:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(212, 168, 75, 0.18) 0%,
-    rgba(212, 168, 75, 0.28) 50%,
-    rgba(212, 168, 75, 0.18) 100%
-  );
-  border-color: rgba(212, 168, 75, 0.45);
-  color: #B8892A;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(212, 168, 75, 0.15);
+.nav-bubble-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 18px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  transition: background 0.2s ease;
+  position: relative;
+  z-index: 1;
 }
 
-/* Join Waitlist CTA with glisten */
+.nav-bubble-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Chic diamond separator between links */
+.nav-divider {
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.45);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* Join Waitlist CTA — bigger, prominent */
 .nav-cta-chic {
   position: relative;
   overflow: hidden;
   background: var(--saffron-red);
   color: white;
-  padding: 9px 22px;
+  padding: 11px 28px;
   border-radius: 100px;
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   font-style: italic;
   text-decoration: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(139, 35, 50, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 35, 50, 0.3);
   white-space: nowrap;
 }
 
 .nav-cta-chic:hover {
   background: #6d1a28;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(139, 35, 50, 0.35);
+  box-shadow: 0 8px 24px rgba(139, 35, 50, 0.4);
 }
 
-/* Glisten shine animation on page load */
+/* Glisten shine — fires 3 seconds after page loads */
 .nav-cta-chic::after {
   content: '';
   position: absolute;
   top: -50%;
-  left: -75%;
+  left: -80%;
   width: 50%;
   height: 200%;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.5) 50%,
     transparent 100%
   );
   transform: skewX(-20deg);
-  opacity: 0;
-  animation: ctaGlisten 0.8s ease 3.8s forwards;
+  animation: ctaGlisten 0.9s ease 3s forwards;
 }
 
 @keyframes ctaGlisten {
   0% {
-    left: -75%;
+    left: -80%;
     opacity: 1;
   }
   100% {
-    left: 150%;
+    left: 160%;
     opacity: 0;
   }
 }
 
 /* ==========================================
-   HERO: 3D MODEL SECTION
-   Desktop & mobile both use same approach
+   HERO: 3D MODEL — 80vh so next section peeks
    ========================================== */
 .hero-model-section {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 82vh;
   background: #ffffff;
   padding-top: var(--nav-height);
+  overflow: hidden;
 }
 
 .model-viewer-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - var(--nav-height));
-  height: calc(100dvh - var(--nav-height));
+  height: 100%;
 }
 
 .model-viewer-container.hero-model {
   width: 100%;
-  height: calc(100vh - var(--nav-height));
-  height: calc(100dvh - var(--nav-height));
+  height: 100%;
 }
 
 model-viewer {
@@ -297,17 +301,17 @@ model-viewer::part(default-poster) {
   background: #ffffff;
 }
 
-/* Text overlay on right side of bottle */
+/* Text overlay — far right-bottom, bolder, away from model */
 .model-text-overlay {
   position: absolute;
-  bottom: 15%;
-  right: 6%;
+  bottom: 8%;
+  right: 3%;
   z-index: 10;
   pointer-events: none;
   text-align: right;
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInModelText 1s ease 3.5s forwards;
+  animation: fadeInModelText 1s ease 3.2s forwards;
 }
 
 @keyframes fadeInModelText {
@@ -319,28 +323,28 @@ model-viewer::part(default-poster) {
 
 .model-title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 300;
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 600;
   font-style: italic;
   color: var(--saffron-red);
   letter-spacing: 0.04em;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .model-subtitle {
   font-family: var(--font-body);
-  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
-  font-weight: 600;
+  font-size: clamp(0.75rem, 1.3vw, 1rem);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--liquid-gold);
-  margin-top: 0.5rem;
+  letter-spacing: 0.22em;
+  color: var(--gold-deep);
+  margin-top: 0.6rem;
   position: relative;
   overflow: hidden;
   display: inline-block;
 }
 
-/* Glisten effect on subtitle (fires after the CTA glisten) */
+/* Glisten on subtitle — fires after CTA glisten */
 .model-subtitle::after {
   content: '';
   position: absolute;
@@ -351,10 +355,10 @@ model-viewer::part(default-poster) {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(245, 230, 163, 0.6) 50%,
+    rgba(245, 230, 163, 0.7) 50%,
     transparent 100%
   );
-  animation: subtitleGlisten 0.8s ease 4.8s forwards;
+  animation: subtitleGlisten 0.9s ease 4.2s forwards;
 }
 
 @keyframes subtitleGlisten {
@@ -653,7 +657,7 @@ model-viewer::part(default-poster) {
 }
 
 /* ==========================================
-   RESPONSIVE — Same experience everywhere
+   RESPONSIVE
    ========================================== */
 @media (max-width: 900px) {
   .section-inner {
@@ -674,26 +678,27 @@ model-viewer::part(default-poster) {
     max-width: 100%;
   }
   
-  /* Nav */
   .main-nav {
     padding: 0 12px;
   }
   
-  .nav-pill {
-    padding: 6px 12px;
-    font-size: 0.65rem;
-    letter-spacing: 0.04em;
+  .nav-bubble-link {
+    padding: 8px 12px;
+    font-size: 0.62rem;
   }
   
   .nav-cta-chic {
-    padding: 7px 14px;
-    font-size: 0.8rem;
+    padding: 9px 18px;
+    font-size: 0.85rem;
   }
   
-  /* Model text */
   .model-text-overlay {
-    bottom: 10%;
-    right: 5%;
+    bottom: 6%;
+    right: 3%;
+  }
+  
+  .hero-model-section {
+    height: 75vh;
   }
   
   body, a, button {
@@ -702,23 +707,34 @@ model-viewer::part(default-poster) {
 }
 
 @media (max-width: 480px) {
-  .nav-pill {
-    padding: 5px 10px;
-    font-size: 0.6rem;
+  .nav-bubble-link {
+    padding: 7px 9px;
+    font-size: 0.55rem;
+    letter-spacing: 0.03em;
+  }
+  
+  .nav-divider {
+    width: 3px;
+    height: 3px;
   }
   
   .nav-cta-chic {
-    padding: 6px 12px;
-    font-size: 0.75rem;
+    padding: 8px 14px;
+    font-size: 0.8rem;
   }
   
   .model-text-overlay {
-    bottom: 8%;
-    right: 4%;
+    bottom: 5%;
+    right: 3%;
   }
   
   .model-title {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+  }
+  
+  .model-subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
   }
   
   .section-title {
@@ -728,6 +744,10 @@ model-viewer::part(default-poster) {
   .btn-chic {
     padding: 0.8rem 1.8rem;
     font-size: 0.95rem;
+  }
+  
+  .hero-model-section {
+    height: 70vh;
   }
 }
 

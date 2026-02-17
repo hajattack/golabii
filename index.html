@@ -30,10 +30,12 @@
 
   <!-- Navigation -->
   <nav class="main-nav">
-    <div class="nav-links">
-      <a href="#our-mission" class="nav-pill">Our Mission</a>
-      <a href="#ingredients" class="nav-pill">Ingredients</a>
-      <a href="mailto:hello@golabii.com" class="nav-pill">Connect</a>
+    <div class="nav-bubble">
+      <a href="#our-mission" class="nav-bubble-link">Our Mission</a>
+      <span class="nav-divider"></span>
+      <a href="#ingredients" class="nav-bubble-link">Ingredients</a>
+      <span class="nav-divider"></span>
+      <a href="mailto:hello@golabii.com" class="nav-bubble-link">Connect</a>
     </div>
     <a href="waitlist.html" class="nav-cta-chic" id="joinBtn">Join Waitlist</a>
   </nav>
@@ -51,14 +53,13 @@
           auto-rotate-delay="0"
           rotation-per-second="30deg"
           camera-controls
+          disable-zoom
           touch-action="pan-y"
           loading="eager"
           reveal="auto"
           shadow-intensity="0.8"
           exposure="1.1"
           camera-orbit="0deg 75deg 105%"
-          min-camera-orbit="auto auto 80%"
-          max-camera-orbit="auto auto 200%"
           poster="logo2.jpg"
           style="background: #ffffff;"
         >
