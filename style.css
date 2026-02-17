@@ -6,6 +6,7 @@
 
 :root {
   --saffron-red: #8B2332;
+  --charcoal: #2F2F2F;
   --liquid-gold: #D4A84B;
   --gold-deep: #A67C2E;
   --gold-light: #E8C96A;
@@ -102,11 +103,16 @@ a, button, input, [role="button"] {
   justify-content: space-between;
   padding: 0 32px;
   background: transparent;
-  border: none;
-  box-shadow: none;
+  border: none !important;
+  box-shadow: none !important;
   opacity: 0;
   animation: fadeInNav 0.6s ease 2.2s forwards;
-  outline: none;
+  outline: none !important;
+}
+
+.main-nav:focus,
+.main-nav *:focus {
+  outline: none !important;
 }
 
 @keyframes fadeInNav {
@@ -250,6 +256,8 @@ a, button, input, [role="button"] {
   position: relative;
   width: 100%;
   height: 100%;
+  outline: none;
+  border: none;
 }
 
 .model-viewer-container.hero-model {
@@ -262,8 +270,15 @@ model-viewer {
   height: 100%;
   background: #ffffff;
   --poster-color: #ffffff;
-  outline: none;
-  border: none;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+model-viewer:focus,
+model-viewer:focus-visible {
+  outline: none !important;
+  border: none !important;
 }
 
 model-viewer::part(default-poster) {
@@ -461,13 +476,13 @@ model-viewer::part(default-poster) {
   position: relative;
 }
 
-/* Small category label above the image */
+/* Small category label above the image — deep red */
 .section-label {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
   font-style: italic;
-  color: var(--liquid-gold);
+  color: var(--saffron-red);
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
   width: 100%;
@@ -477,7 +492,8 @@ model-viewer::part(default-poster) {
 
 .section-label.large-label {
   font-size: clamp(3rem, 6vw, 4.5rem);
-  font-weight: 400;
+  font-weight: 700;
+  color: var(--saffron-red);
   margin-bottom: 1.8rem;
 }
 
@@ -498,11 +514,11 @@ model-viewer::part(default-poster) {
   background: #f0ebe3;
 }
 
-/* Title below the image */
+/* Title below the image — larger, bolder */
 .section-title-book {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
   color: var(--saffron-red);
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -510,11 +526,12 @@ model-viewer::part(default-poster) {
   text-align: left;
 }
 
-/* Body description text */
+/* Body description text — bolder, charcoal */
 .section-desc {
   font-family: var(--font-body);
   font-size: clamp(0.9rem, 1.4vw, 1.05rem);
-  color: var(--near-black);
+  font-weight: 600;
+  color: var(--charcoal);
   line-height: 1.8;
   max-width: 55ch;
   width: 100%;
@@ -523,6 +540,7 @@ model-viewer::part(default-poster) {
 
 .section-desc strong {
   color: var(--saffron-red);
+  font-weight: 700;
 }
 
 .thank-you-section {
