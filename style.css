@@ -126,15 +126,12 @@ a, button, input, [role="button"] {
   align-items: center;
   padding: 0;
   border-radius: 100px;
-  background: linear-gradient(
-    145deg,
-    #A67C2E 0%,
-    #C69A3A 40%,
-    #A67C2E 100%
-  );
+  background: linear-gradient(110deg, #fff2c6 0%, #f59d1f 22%, #d41d10 48%, #56080d 82%, #2a0208 100%);
   box-shadow:
-    0 2px 12px rgba(166, 124, 46, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 22px rgba(212, 28, 12, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   position: relative;
   border: none;
@@ -160,7 +157,7 @@ a, button, input, [role="button"] {
 }
 
 .nav-bubble-link:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* Diamond separator */
@@ -176,7 +173,7 @@ a, button, input, [role="button"] {
 .nav-cta-chic {
   position: relative;
   overflow: hidden;
-  background: var(--saffron-red);
+  background: linear-gradient(110deg, #fff2c6 0%, #f59d1f 22%, #d41d10 48%, #56080d 82%, #2a0208 100%);
   color: white;
   padding: 15px 40px;
   border-radius: 100px;
@@ -187,16 +184,20 @@ a, button, input, [role="button"] {
   text-decoration: none;
   letter-spacing: 0.03em;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 18px rgba(139, 35, 50, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 24px rgba(212, 28, 12, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.22);
   white-space: nowrap;
   border: none;
   outline: none;
 }
 
 .nav-cta-chic:hover {
-  background: #6d1a28;
+  background: linear-gradient(110deg, #fff6d8 0%, #f6ac2f 22%, #e22a14 48%, #690b11 82%, #33030b 100%);
   transform: translateY(-2px);
-  box-shadow: 0 0 0 3px rgba(255, 245, 225, 0.28), 0 0 24px rgba(139, 35, 50, 0.52), 0 10px 28px rgba(139, 35, 50, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 245, 225, 0.32), 0 0 26px rgba(212, 28, 12, 0.48), 0 10px 30px rgba(89, 9, 15, 0.42);
 }
 
 .nav-cta-chic:active {
@@ -331,7 +332,7 @@ model-viewer::part(default-poster) {
 
 .model-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 5rem);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
   font-weight: 600;
   font-style: italic;
   color: var(--saffron-red);
@@ -461,7 +462,7 @@ model-viewer::part(default-poster) {
 }
 
 .content-section.alt-bg {
-  background: #fafafa;
+  background: #ffffff;
 }
 
 /* Book cover stacked layout */
