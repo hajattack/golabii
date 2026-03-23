@@ -21,7 +21,7 @@
   --font-body: 'DM Sans', sans-serif;
   
   --section-padding: clamp(60px, 10vh, 120px);
-  --container-max: 780px;
+  --container-max: 900px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-height: 60px;
 }
@@ -444,12 +444,6 @@ model-viewer::part(default-poster) {
   line-height: 1.1;
 }
 
-.section-label.large-label {
-  font-size: clamp(3rem, 6vw, 4.5rem);
-  font-weight: 700;
-  color: var(--saffron-red);
-  margin-bottom: 1.8rem;
-}
 
 /* Media block — centered image/video */
 .section-media-book {
@@ -463,7 +457,7 @@ model-viewer::part(default-poster) {
 
 .section-media-book .section-video {
   width: 100%;
-  max-height: 50vh;
+  max-height: 70vh;
   object-fit: cover;
   display: block;
   border-radius: 10px;
@@ -500,7 +494,38 @@ model-viewer::part(default-poster) {
 }
 
 .thank-you-section {
-  padding-bottom: calc(var(--section-padding) + 30px);
+  padding: clamp(80px, 14vh, 160px) 24px;
+}
+
+.thank-you-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.2rem;
+  position: relative;
+}
+
+.thank-you-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--saffron-red);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+}
+
+.thank-you-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 500;
+  color: var(--charcoal);
+  line-height: 1.7;
+  max-width: 42ch;
+  margin-bottom: 0.6rem;
 }
 
 /* --- Chic Button --- */
@@ -655,6 +680,10 @@ model-viewer::part(default-poster) {
   
   .hero-model-section {
     height: 96vh;
+  }
+  
+  .section-media-book .section-video {
+    max-height: 50vh;
   }
   
   body, a, button {

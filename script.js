@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const roseExplosion = document.getElementById('roseExplosion');
   if (roseExplosion) {
-    const ctaBtn = roseExplosion.closest('.section-inner-book')?.querySelector('.btn-chic');
+    const ctaBtn = roseExplosion.closest('.thank-you-inner')?.querySelector('.btn-chic');
     if (ctaBtn) {
       ctaBtn.addEventListener('click', (e) => {
         e.preventDefault();
