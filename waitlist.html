@@ -1,161 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>First pour early access — Golabii</title>
-    <meta
-      name="description"
-      content="Join the Golabii waitlist and help shape our botanical elixir. Please answer a few questions to help us craft something extraordinary."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body class="waitlist-page">
-    <!-- SVG Filter for Noise Texture -->
-    <svg class="hidden-filter">
-      <filter id="noiseFilter">
-        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
-        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0"/>
-      </filter>
-    </svg>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Pour Early Access — Golabii</title>
+  <meta name="description" content="Join the Golabii waitlist and help shape our botanical elixir. Answer a few questions to help us craft something extraordinary." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23D4A84B'/></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <nav class="floating-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <span class="nav-brand">g.</span>
-    </nav>
+    :root {
+      --bg: #4A0E1C;
+      --bg-form: rgba(255, 255, 255, 0.04);
+      --gold: #D4A84B;
+      --gold-light: #E8C96A;
+      --gold-muted: rgba(212, 168, 75, 0.35);
+      --cream: #FFF9E6;
+      --text: #F5E6C8;
+      --text-muted: rgba(245, 230, 200, 0.5);
+      --input-border: rgba(212, 168, 75, 0.25);
+      --input-bg: rgba(255, 255, 255, 0.06);
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
 
-    <main class="waitlist-container">
-      <header class="waitlist-header">
-        <h1>First Pour<br>Early Access</h1>
-        <p>
-          Tell us about yourself. Help us shape the future of Golabii.
-        </p>
-      </header>
-      
-      <form id="waitlist-form" class="editorial-form">
-        <!-- First name (required) -->
-        <div class="form-group">
-          <label for="first_name">First name<span class="required">*</span></label>
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            placeholder="Your first name"
-            required
-          />
-        </div>
-        <!-- Last name (required) -->
-        <div class="form-group">
-          <label for="last_name">Last name<span class="required">*</span></label>
-          <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            placeholder="Your last name"
-            required
-          />
-        </div>
-        <!-- Email (required) -->
-        <div class="form-group">
-          <label for="email">Email<span class="required">*</span></label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-            required
-          />
-        </div>
-        <!-- Phone number (optional) -->
-        <div class="form-group">
-          <label for="phone">Phone number <span class="optional">(optional)</span></label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            placeholder="For surprise drops"
-          />
-        </div>
-        <!-- How did you hear about us? (required) -->
-        <fieldset class="form-group">
-          <legend>How did you hear about us?<span class="required">*</span></legend>
-          <div class="option-grid">
-            <label class="radio-label">
-              <input type="radio" name="hear" value="Word of mouth" required />
-              <span>Word of mouth</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="hear" value="Met our founder" />
-              <span>Met our founder</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="hear" value="Tasting event" />
-              <span>Tasting event</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="hear" value="Social media" />
-              <span>Social media</span>
-            </label>
-          </div>
-        </fieldset>
-        <!-- City & Country (required) -->
-        <div class="form-group">
-          <label for="city_country">City &amp; country<span class="required">*</span></label>
-          <input
-            type="text"
-            id="city_country"
-            name="city_country"
-            placeholder="City, Country"
-            required
-          />
-        </div>
-        <!-- Instagram handle (optional) -->
-        <div class="form-group">
-          <label for="instagram">Instagram handle</label>
-          <input
-            type="text"
-            id="instagram"
-            name="instagram"
-            placeholder="@yourhandle"
-          />
-        </div>
-        
-        <!-- Additional comments (optional) -->
-        <div class="form-group">
-          <label for="message">Comments or questions</label>
-          <textarea
-            id="message"
-            name="message"
-            placeholder="Anything else you'd like to share"
-            rows="4"
-          ></textarea>
-        </div>
-        
-        <!-- Honeypot -->
-        <div style="display: none;">
-          <label for="extra_field">Leave this field blank</label>
-          <input type="text" id="extra_field" name="extra_field" />
-        </div>
-        
-        <button type="submit" class="btn-editorial large full-width">Submit Request</button>
-        
-        <p class="status-message"></p>
-      </form>
-    </main>
-    
-    <footer class="site-footer">
-      <div class="footer-content">
-        <span class="copyright">&copy; <span id="year"></span> Golabii. All rights reserved.</span>
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- Top nav --- */
+    .wl-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 32px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .wl-nav-home {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .wl-nav-home:hover { opacity: 0.7; }
+
+    .wl-nav-brand {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    /* --- Main container --- */
+    .wl-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 24px 80px;
+      max-width: 580px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* --- Header --- */
+    .wl-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .wl-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+
+    .wl-headline em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .wl-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+    }
+
+    /* --- Form --- */
+    .wl-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .wl-field {
+      padding: 20px 0;
+      border-top: 1px solid var(--input-border);
+    }
+
+    .wl-field:last-of-type {
+      border-bottom: 1px solid var(--input-border);
+    }
+
+    .wl-label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .wl-label .req {
+      color: var(--gold-light);
+      margin-left: 2px;
+    }
+
+    .wl-label .opt {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+    }
+
+    .wl-input,
+    .wl-textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--cream);
+      transition: border-color 0.25s ease, background 0.25s ease;
+      outline: none;
+    }
+
+    .wl-input::placeholder,
+    .wl-textarea::placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .wl-input:focus,
+    .wl-textarea:focus {
+      border-color: var(--gold-muted);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .wl-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* --- Radio grid (Poolsuite-inspired) --- */
+    .wl-fieldset {
+      border: none;
+      padding: 20px 0;
+      border-top: 1px solid var(--input-border);
+    }
+
+    .wl-legend {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .wl-legend .req {
+      color: var(--gold-light);
+      margin-left: 2px;
+    }
+
+    .wl-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .wl-radio {
+      position: relative;
+      cursor: pointer;
+      display: block;
+    }
+
+    .wl-radio input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .wl-radio span {
+      display: block;
+      padding: 12px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: center;
+      transition: all 0.25s ease;
+      background: var(--input-bg);
+    }
+
+    .wl-radio:hover span {
+      border-color: var(--gold-muted);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .wl-radio input:checked + span {
+      border-color: var(--gold);
+      background: rgba(212, 168, 75, 0.12);
+      color: var(--gold-light);
+    }
+
+    /* --- Submit button --- */
+    .wl-submit {
+      margin-top: 36px;
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 100px;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wl-submit:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 168, 75, 0.3);
+    }
+
+    .wl-submit:active {
+      transform: translateY(0);
+    }
+
+    .wl-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* --- Status message --- */
+    .wl-status {
+      text-align: center;
+      margin-top: 20px;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--gold-light);
+      min-height: 1.5em;
+    }
+
+    /* --- Footer --- */
+    .wl-footer {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .wl-footer-brand {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .wl-footer-copy {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* --- Honeypot --- */
+    .wl-hp { display: none; }
+
+    /* --- Responsive --- */
+    @media (max-width: 480px) {
+      .wl-nav { padding: 18px 20px; }
+      .wl-main { padding: 10px 20px 60px; }
+      .wl-options { grid-template-columns: 1fr; }
+      .wl-headline { margin-bottom: 14px; }
+      .wl-header { margin-bottom: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="wl-nav">
+    <a href="index.html" class="wl-nav-home">&larr; Home</a>
+    <span class="wl-nav-brand">Golabii</span>
+  </nav>
+
+  <main class="wl-main">
+    <header class="wl-header">
+      <h1 class="wl-headline">Indisputably,<br><em>it is time.</em></h1>
+      <p class="wl-sub">May we count on your support?<br>Or, at least, your curiosity?</p>
+    </header>
+
+    <form id="waitlist-form" class="wl-form">
+
+      <div class="wl-field">
+        <label for="first_name" class="wl-label">First name<span class="req">*</span></label>
+        <input type="text" id="first_name" name="first_name" class="wl-input" placeholder="Your first name" required />
       </div>
-    </footer>
-    
-    <script src="waitlist.js"></script>
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
-  </body>
+
+      <div class="wl-field">
+        <label for="last_name" class="wl-label">Last name<span class="req">*</span></label>
+        <input type="text" id="last_name" name="last_name" class="wl-input" placeholder="Your last name" required />
+      </div>
+
+      <div class="wl-field">
+        <label for="email" class="wl-label">Email<span class="req">*</span></label>
+        <input type="email" id="email" name="email" class="wl-input" placeholder="you@example.com" required />
+      </div>
+
+      <div class="wl-field">
+        <label for="phone" class="wl-label">Phone number <span class="opt">(optional)</span></label>
+        <input type="tel" id="phone" name="phone" class="wl-input" placeholder="For surprise drops" />
+      </div>
+
+      <fieldset class="wl-fieldset">
+        <legend class="wl-legend">How did you hear about us?<span class="req">*</span></legend>
+        <div class="wl-options">
+          <label class="wl-radio">
+            <input type="radio" name="hear" value="Word of mouth" required />
+            <span>Word of mouth</span>
+          </label>
+          <label class="wl-radio">
+            <input type="radio" name="hear" value="Met our founder" />
+            <span>Met our founder</span>
+          </label>
+          <label class="wl-radio">
+            <input type="radio" name="hear" value="Tasting event" />
+            <span>Tasting event</span>
+          </label>
+          <label class="wl-radio">
+            <input type="radio" name="hear" value="Social media" />
+            <span>Social media</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="wl-field">
+        <label for="city_country" class="wl-label">City &amp; country<span class="req">*</span></label>
+        <input type="text" id="city_country" name="city_country" class="wl-input" placeholder="City, Country" required />
+      </div>
+
+      <div class="wl-field">
+        <label for="instagram" class="wl-label">Instagram handle</label>
+        <input type="text" id="instagram" name="instagram" class="wl-input" placeholder="@yourhandle" />
+      </div>
+
+      <div class="wl-field">
+        <label for="message" class="wl-label">Comments or questions</label>
+        <textarea id="message" name="message" class="wl-textarea" placeholder="Anything else you'd like to share"></textarea>
+      </div>
+
+      <div class="wl-hp">
+        <label for="extra_field">Leave blank</label>
+        <input type="text" id="extra_field" name="extra_field" />
+      </div>
+
+      <button type="submit" class="wl-submit">Submit Request</button>
+      <p class="wl-status status-message"></p>
+    </form>
+  </main>
+
+  <footer class="wl-footer">
+    <span class="wl-footer-brand">Golabii</span>
+    <span class="wl-footer-copy">&copy; 2025 Golabii. Small batch. Non-profit mission.</span>
+  </footer>
+
+  <script src="waitlist.js"></script>
+</body>
 </html>
