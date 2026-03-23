@@ -10,6 +10,8 @@ Includes a hidden honeypot field to deter bots. If the honeypot contains anythin
 // to a Google Sheet. This should be the endpoint of the Apps Script deployment.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbG5ItFb29DF0LBCe2wSCp_b7aM2jXx06qV6_FjD5eWa8-f3JzhM3fTu2V9kuyDOO4/exec';
 
+const NTFY_TOPIC = 'golabii-waitlist-9x7k';
+
 // Wait for the DOM to be fully loaded before attaching event handlers
 document.addEventListener('DOMContentLoaded', () => {
   // Grab form and status message elements safely
@@ -72,6 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (json.ok) {
         statusMessage.textContent = "Thank you! You've been added to our waitlist.";
         form.reset();
+
+        fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+          method: 'POST',
+          headers: { 'Title': 'New Golabii Waitlist Signup' },
+          body: `${data.first_name} ${data.last_name} (${data.email}) from ${data.city_country || 'unknown location'}`,
+        }).catch(() => {});
+
       } else {
         statusMessage.textContent = 'Oops! There was a problem. Please try again later.';
       }
