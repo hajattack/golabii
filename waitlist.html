@@ -255,6 +255,43 @@
       color: var(--gold-light);
     }
 
+    .wl-check {
+      position: relative;
+      cursor: pointer;
+      display: block;
+    }
+
+    .wl-check input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .wl-check span {
+      display: block;
+      padding: 12px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: center;
+      transition: all 0.25s ease;
+      background: var(--input-bg);
+    }
+
+    .wl-check:hover span {
+      border-color: var(--gold-muted);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .wl-check input:checked + span {
+      border-color: var(--gold);
+      background: rgba(212, 168, 75, 0.12);
+      color: var(--gold-light);
+    }
+
     /* --- Submit button --- */
     .wl-submit {
       margin-top: 36px;
@@ -399,6 +436,32 @@
         </div>
       </fieldset>
 
+      <fieldset class="wl-fieldset">
+        <legend class="wl-legend">Which would be most important to you? <span class="opt">(choose 3)</span></legend>
+        <div class="wl-options">
+          <label class="wl-check">
+            <input type="checkbox" name="important" value="No/low sugar" />
+            <span>No/low sugar</span>
+          </label>
+          <label class="wl-check">
+            <input type="checkbox" name="important" value="Amazing taste" />
+            <span>Amazing taste</span>
+          </label>
+          <label class="wl-check">
+            <input type="checkbox" name="important" value="Ethical sustainable packaging" />
+            <span>Ethical sustainable packaging</span>
+          </label>
+          <label class="wl-check">
+            <input type="checkbox" name="important" value="Premium ingredients" />
+            <span>Premium ingredients</span>
+          </label>
+          <label class="wl-check">
+            <input type="checkbox" name="important" value="Affordable price" />
+            <span>Affordable price</span>
+          </label>
+        </div>
+      </fieldset>
+
       <div class="wl-field">
         <label for="city_country" class="wl-label">City &amp; country<span class="req">*</span></label>
         <input type="text" id="city_country" name="city_country" class="wl-input" placeholder="City, Country" required />
@@ -430,5 +493,16 @@
   </footer>
 
   <script src="waitlist.js"></script>
+  <script>
+    document.querySelectorAll('.wl-check input[name="important"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = document.querySelectorAll('.wl-check input[name="important"]:checked');
+        document.querySelectorAll('.wl-check input[name="important"]').forEach(el => {
+          el.disabled = !el.checked && checked.length >= 3;
+          el.closest('.wl-check').style.opacity = el.disabled ? '0.4' : '1';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
