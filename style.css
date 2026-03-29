@@ -372,8 +372,7 @@ model-viewer::part(default-poster) {
 .ingredients-bg {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 55vh;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
 }
 
@@ -457,7 +456,7 @@ model-viewer::part(default-poster) {
 
 .section-media-book .section-video {
   width: 100%;
-  max-height: 70vh;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   display: block;
   border-radius: 10px;
@@ -668,7 +667,7 @@ model-viewer::part(default-poster) {
   }
   
   .section-media-book .section-video {
-    max-height: 50vh;
+    aspect-ratio: 3 / 4;
   }
   
   body, a, button {
