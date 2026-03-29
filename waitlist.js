@@ -8,7 +8,7 @@ Includes a hidden honeypot field to deter bots. If the honeypot contains anythin
 
 // URL of the deployed Google Apps Script web app that saves form submissions
 // to a Google Sheet. This should be the endpoint of the Apps Script deployment.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby62NJniY3w2uh4NyXJgOt5CmokUbmBcuhqTrIIcRwg4oQYo5L7EdEbJ29rUDkN5Y4/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzuDxuVG9gxDVkG1Nls1dV7CCACWI6c5icZa4t_hcfItUpfKUav_6_ejfthP1kkYLxb/exec';
 
 // Wait for the DOM to be fully loaded before attaching event handlers
 document.addEventListener('DOMContentLoaded', () => {
