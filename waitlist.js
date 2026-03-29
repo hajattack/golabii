@@ -61,23 +61,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(data),
       });
-      const json = await response.json();
-      if (json.ok) {
-        statusMessage.textContent = "Thank you! You've been added to our waitlist.";
-        form.reset();
-      } else {
-        statusMessage.textContent = 'Oops! There was a problem. Please try again later.';
-      }
+      statusMessage.textContent = "Thank you! You've been added to our waitlist.";
+      statusMessage.style.color = '#E8C96A';
+      form.reset();
+      document.querySelectorAll('.wl-check input[name="important"]').forEach(el => {
+        el.disabled = false;
+        el.closest('.wl-check').style.opacity = '1';
+      });
     } catch (error) {
-      console.error('Error submitting waitlist form:', error);
       statusMessage.textContent = 'Something went wrong. Please try again later.';
+      statusMessage.style.color = '#ff6b6b';
     } finally {
       if (submitButton) submitButton.disabled = false;
     }
