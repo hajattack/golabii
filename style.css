@@ -433,7 +433,7 @@ model-viewer::part(default-poster) {
 .section-label {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 400;
   font-style: italic;
   color: var(--saffron-red);
   letter-spacing: 0.08em;
@@ -465,11 +465,11 @@ model-viewer::part(default-poster) {
   background: #f0ebe3;
 }
 
-/* Title below the image — larger, bolder */
+/* Title below the image */
 .section-title-book {
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 500;
   color: var(--saffron-red);
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -477,11 +477,11 @@ model-viewer::part(default-poster) {
   text-align: left;
 }
 
-/* Body description text — bolder, charcoal */
+/* Body description text */
 .section-desc {
   font-family: var(--font-body);
   font-size: clamp(0.9rem, 1.4vw, 1.05rem);
-  font-weight: 600;
+  font-weight: 400;
   color: var(--charcoal);
   line-height: 1.8;
   max-width: 55ch;
