@@ -372,8 +372,7 @@ model-viewer::part(default-poster) {
 .ingredients-bg {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 50vh;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
 
@@ -448,6 +447,7 @@ model-viewer::part(default-poster) {
 /* Media block — centered image/video */
 .section-media-book {
   width: 100%;
+  max-width: 600px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 12px 40px rgba(74, 14, 28, 0.08);
@@ -457,9 +457,8 @@ model-viewer::part(default-poster) {
 
 .section-media-book .section-video {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 50vh;
-  object-fit: cover;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
   display: block;
   border-radius: 10px;
   background: #f0ebe3;
@@ -668,13 +667,13 @@ model-viewer::part(default-poster) {
     height: 96vh;
   }
   
-  .section-media-book .section-video {
-    aspect-ratio: 3 / 4;
-    max-height: none;
+  .section-media-book {
+    max-width: 100%;
   }
 
-  .ingredients-bg {
-    max-height: none;
+  .section-media-book .section-video {
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
   }
   
   body, a, button {
