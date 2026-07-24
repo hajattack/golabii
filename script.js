@@ -9,22 +9,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. PAGE LOADER + 3D MODEL PRELOAD
   // ==========================================
   const loader = document.getElementById('pageLoader');
+  const bottleModel = document.getElementById('bottleModel');
   const modelContainer = document.getElementById('modelContainer');
-  const progressFill = modelContainer?.querySelector('.model-progress-fill');
-  const progressBar = modelContainer?.querySelector('.model-progress-bar');
 
-  if (modelContainer) {
+  if (bottleModel && modelContainer) {
     modelContainer.classList.add('loading');
 
-    window.addEventListener('golabii:hero-progress', (event) => {
-      const progress = event.detail?.progress;
-      if (progressFill && Number.isFinite(progress)) {
-        progressFill.style.width = `${Math.round(progress * 100)}%`;
+    bottleModel.addEventListener('progress', (e) => {
+      const progressFill = bottleModel.querySelector('.model-progress-fill');
+      if (progressFill && e.detail && e.detail.totalProgress !== undefined) {
+        progressFill.style.width = (e.detail.totalProgress * 100) + '%';
       }
     });
 
-    window.addEventListener('golabii:hero-ready', () => {
+    bottleModel.addEventListener('load', () => {
       modelContainer.classList.remove('loading');
+      const progressBar = bottleModel.querySelector('.model-progress-bar');
       if (progressBar) progressBar.style.display = 'none';
     });
   }
