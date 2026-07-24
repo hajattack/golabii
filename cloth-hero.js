@@ -9,7 +9,7 @@ if (!canvas || !container) {
   throw new Error('The Golabii cloth hero is missing its canvas.');
 }
 
-const GRID_SIZE = 35;
+const GRID_SIZE = 39;
 const PARTICLE_COUNT = GRID_SIZE * GRID_SIZE;
 const CLOTH_WIDTH = 1.05;
 const CLOTH_LENGTH = 2.34;
@@ -44,11 +44,11 @@ scene.add(world);
 const hemiLight = new THREE.HemisphereLight(0xfffbf4, 0x5b1a29, 1.7);
 scene.add(hemiLight);
 
-const keyLight = new THREE.DirectionalLight(0xfff4df, 1.55);
+const keyLight = new THREE.DirectionalLight(0xfff4df, 1.8);
 keyLight.position.set(-2.8, 3.5, 4);
 scene.add(keyLight);
 
-const rimLight = new THREE.DirectionalLight(0xe9a3aa, 0.65);
+const rimLight = new THREE.DirectionalLight(0xe9a3aa, 0.8);
 rimLight.position.set(3, 1.8, -2.4);
 scene.add(rimLight);
 
@@ -80,42 +80,80 @@ class SilkCloth {
         const sidePath = Math.max(0, Math.abs(materialX) - 0.15);
         const hangingPath = Math.max(0, Math.abs(materialZ) - 0.13);
         const combinedDrop = Math.hypot(hangingPath, sidePath * 0.86);
-        const sideFold =
-          Math.sin(materialX * 43 + materialZ * 4.5) *
-          Math.min(0.004, hangingPath * 0.005);
-        const drapeX =
-          Math.min(Math.abs(materialX), 0.15) +
-          0.08 * (1 - Math.exp(-sidePath * 8)) +
-          sidePath * 0.05;
-        const drapeZ =
-          Math.min(Math.abs(materialZ), 0.13) +
-          0.11 * (1 - Math.exp(-hangingPath * 6)) +
-          hangingPath * 0.03;
-        const wrinkle =
-          (Math.sin(materialX * 45) +
-            Math.sin(materialX * 19 + 1.1) * 0.42) *
-          0.008 *
-          (0.3 + Math.min(1, hangingPath / 0.34));
+        const wrappedMaterialX = materialX * 2.2;
+        const materialRadius = Math.hypot(wrappedMaterialX, materialZ);
+        const directionX =
+          materialRadius > 1e-5 ? wrappedMaterialX / materialRadius : 0;
+        const directionZ =
+          materialRadius > 1e-5 ? materialZ / materialRadius : 0;
+        const angle = Math.atan2(materialZ, wrappedMaterialX);
+        const capEllipse = Math.hypot(
+          materialX / 0.132,
+          materialZ / 0.115
+        );
+        const capOverhang = Math.max(0, capEllipse - 1);
         const topCurve =
-          (1 - Math.min(1, hangingPath / 0.16)) *
-          Math.pow(Math.min(Math.abs(materialX), 0.15) / 0.15, 2) *
-          0.012;
-
-        const px =
-          Math.sign(materialX) * drapeX + sideFold;
-        const pz =
-          Math.sign(materialZ) * drapeZ +
-          (materialZ >= 0 ? wrinkle : -wrinkle);
+          Math.min(0.05, capOverhang * 0.07) *
+          (1 - Math.min(1, combinedDrop / 0.18));
         const py =
-          0.522 -
+          0.523 -
           combinedDrop * 0.985 -
           topCurve -
-          Math.min(0.012, hangingPath * 0.012) *
-            Math.cos(materialX * 28);
+          Math.min(0.008, hangingPath * 0.009) *
+            Math.cos(materialX * 34);
+        const clampedY = Math.max(GROUND_Y + 0.004, py);
+        const bottleRadius = this.bottleRadiusAt(clampedY);
+        const bodyDrape = THREE.MathUtils.smoothstep(
+          combinedDrop + capOverhang * 0.28,
+          0.015,
+          0.2
+        );
+        const foldEnvelope = THREE.MathUtils.smoothstep(
+          combinedDrop,
+          0.035,
+          0.42
+        );
+        const foldWave =
+          0.5 +
+          0.5 *
+            Math.sin(
+              angle * 24 +
+              combinedDrop * 1.9 +
+              Math.sin(combinedDrop * 9) * 0.18
+            );
+        const foldDepth =
+          foldEnvelope * (0.002 + Math.pow(foldWave, 2) * 0.016);
+
+        let px = materialX;
+        let pz = materialZ;
+
+        if (bottleRadius > 0) {
+          const contactRadius = bottleRadius + 0.012 + foldDepth;
+          px = THREE.MathUtils.lerp(
+            materialX,
+            directionX * contactRadius,
+            bodyDrape
+          );
+          pz = THREE.MathUtils.lerp(
+            materialZ,
+            directionZ * contactRadius,
+            bodyDrape
+          );
+        } else if (clampedY <= GROUND_Y + 0.006) {
+          const pooledRadius =
+            0.215 +
+            Math.min(
+              0.025,
+              Math.max(0, combinedDrop - 1) * 0.35
+            ) +
+            foldDepth * 0.45;
+          px = directionX * pooledRadius;
+          pz = directionZ * pooledRadius;
+        }
 
         const offset = this.index(x, y) * 3;
         this.positions[offset] = px;
-        this.positions[offset + 1] = Math.max(GROUND_Y + 0.004, py);
+        this.positions[offset + 1] = clampedY;
         this.positions[offset + 2] = pz;
       }
     }
@@ -242,7 +280,7 @@ class SilkCloth {
     this.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 3);
 
     this.material = new THREE.MeshStandardMaterial({
-      color: 0x651629,
+      color: 0x6f172b,
       metalness: 0,
       roughness: 0.88,
       side: THREE.DoubleSide
@@ -263,14 +301,9 @@ class SilkCloth {
 
     if (y < 0.195) return 0.205;
 
-    if (y < 0.345) {
-      const t = (y - 0.195) / 0.15;
-      const smooth = t * t * (3 - 2 * t);
-      return THREE.MathUtils.lerp(0.205, 0.118, smooth);
-    }
-
-    if (y < 0.425) return 0.118;
-    return 0.132;
+    const t = THREE.MathUtils.clamp((y - 0.195) / 0.31, 0, 1);
+    const smooth = t * t * (3 - 2 * t);
+    return THREE.MathUtils.lerp(0.205, 0.134, smooth);
   }
 
   solveDistanceConstraints(dt) {
@@ -307,7 +340,7 @@ class SilkCloth {
 
   solveBottleCollision() {
     const positions = this.positions;
-    const clearance = 0.035;
+    const clearance = 0.006;
 
     for (let particle = 0; particle < PARTICLE_COUNT; particle += 1) {
       const offset = particle * 3;
@@ -733,8 +766,8 @@ function resizeRenderer() {
   const height = Math.max(1, container.clientHeight);
   const mobile = width < 720;
   camera.position.z = mobile ? 2.55 : 2.35;
-  world.position.y = mobile ? 0.005 : -0.015;
-  world.scale.set(mobile ? 0.78 : 1, 1, mobile ? 0.78 : 1);
+  world.position.y = mobile ? 0.02 : -0.015;
+  world.scale.set(mobile ? 1.1 : 1, 1, mobile ? 1.1 : 1);
   camera.lookAt(0, 0.015, 0);
   renderer.setPixelRatio(
     Math.min(window.devicePixelRatio || 1, mobile ? 1.35 : 1.7)
