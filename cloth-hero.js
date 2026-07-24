@@ -1,26 +1,24 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const canvas = document.getElementById('bottleCanvas');
 const container = document.getElementById('modelContainer');
 const resetButton = document.getElementById('clothReset');
+const pincher = document.getElementById('clothPincher');
 
 if (!canvas || !container) {
   throw new Error('The Golabii cloth hero is missing its canvas.');
 }
 
-const GRID_SIZE = 31;
+const GRID_SIZE = 35;
 const PARTICLE_COUNT = GRID_SIZE * GRID_SIZE;
 const CLOTH_WIDTH = 1.05;
 const CLOTH_LENGTH = 2.34;
-const FIXED_STEP = 1 / 120;
-const SOLVER_ITERATIONS = 6;
+const FIXED_STEP = 1 / 180;
+const SOLVER_ITERATIONS = 8;
 const GROUND_Y = -0.515;
-const GRAVITY = -3.8;
+const GRAVITY = -9.8;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
 
 const camera = new THREE.PerspectiveCamera(26, 1, 0.01, 20);
 camera.position.set(0, 0.035, 2.35);
@@ -29,91 +27,30 @@ camera.lookAt(0, 0.015, 0);
 const renderer = new THREE.WebGLRenderer({
   canvas,
   antialias: true,
-  alpha: false,
+  alpha: true,
+  premultipliedAlpha: true,
   powerPreference: 'high-performance'
 });
 
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
-renderer.setClearColor(0xffffff, 1);
+renderer.setClearColor(0x000000, 0);
 
 const world = new THREE.Group();
 world.position.y = -0.015;
 scene.add(world);
 
-const hemiLight = new THREE.HemisphereLight(0xfff8ef, 0x7e3342, 1.45);
+const hemiLight = new THREE.HemisphereLight(0xfffbf4, 0x5b1a29, 1.7);
 scene.add(hemiLight);
 
-const keyLight = new THREE.DirectionalLight(0xfff1d4, 2.35);
+const keyLight = new THREE.DirectionalLight(0xfff4df, 1.55);
 keyLight.position.set(-2.8, 3.5, 4);
 scene.add(keyLight);
 
-const rimLight = new THREE.DirectionalLight(0xffbac0, 1.25);
+const rimLight = new THREE.DirectionalLight(0xe9a3aa, 0.65);
 rimLight.position.set(3, 1.8, -2.4);
 scene.add(rimLight);
-
-const pmremGenerator = new THREE.PMREMGenerator(renderer);
-const roomEnvironment = new RoomEnvironment();
-const environmentTarget = pmremGenerator.fromScene(roomEnvironment, 0.04);
-scene.environment = environmentTarget.texture;
-scene.environmentIntensity = 0.9;
-roomEnvironment.dispose();
-pmremGenerator.dispose();
-
-function createShadowTexture() {
-  const shadowCanvas = document.createElement('canvas');
-  shadowCanvas.width = 256;
-  shadowCanvas.height = 128;
-  const context = shadowCanvas.getContext('2d');
-  const gradient = context.createRadialGradient(128, 64, 2, 128, 64, 112);
-  gradient.addColorStop(0, 'rgba(45, 15, 22, 0.32)');
-  gradient.addColorStop(0.38, 'rgba(45, 15, 22, 0.16)');
-  gradient.addColorStop(1, 'rgba(45, 15, 22, 0)');
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, 256, 128);
-  const texture = new THREE.CanvasTexture(shadowCanvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
-const shadow = new THREE.Mesh(
-  new THREE.PlaneGeometry(0.88, 0.42),
-  new THREE.MeshBasicMaterial({
-    map: createShadowTexture(),
-    transparent: true,
-    depthWrite: false,
-    opacity: 0.86
-  })
-);
-shadow.rotation.x = -Math.PI / 2;
-shadow.position.set(0.035, GROUND_Y + 0.003, 0.025);
-world.add(shadow);
-
-function createWeaveNormalMap() {
-  const size = 96;
-  const data = new Uint8Array(size * size * 4);
-
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      const warp = Math.sin((x / size) * Math.PI * 24);
-      const weft = Math.sin((y / size) * Math.PI * 20);
-      const diagonal = Math.sin(((x + y) / size) * Math.PI * 8);
-      const offset = (y * size + x) * 4;
-      data[offset] = 128 + Math.round(warp * 12 + diagonal * 3);
-      data[offset + 1] = 128 + Math.round(weft * 9 - diagonal * 3);
-      data[offset + 2] = 246;
-      data[offset + 3] = 255;
-    }
-  }
-
-  const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(7, 7);
-  texture.needsUpdate = true;
-  return texture;
-}
 
 class SilkCloth {
   constructor() {
@@ -123,6 +60,8 @@ class SilkCloth {
     this.coveredPositions = new Float32Array(PARTICLE_COUNT * 3);
     this.holdActive = true;
     this.grab = null;
+    this.unfold = 0;
+    this.unfoldTarget = 0;
 
     this.createCoveredShape();
     this.createConstraints();
@@ -187,15 +126,23 @@ class SilkCloth {
   createConstraints() {
     const indicesA = [];
     const indicesB = [];
-    const restLengths = [];
+    const coveredRestLengths = [];
+    const flatRestLengths = [];
     const compliances = [];
     const spacingX = CLOTH_WIDTH / (GRID_SIZE - 1);
     const spacingY = CLOTH_LENGTH / (GRID_SIZE - 1);
 
-    const addConstraint = (a, b, restLength, compliance) => {
+    const addConstraint = (a, b, flatRestLength, compliance) => {
+      const aOffset = a * 3;
+      const bOffset = b * 3;
+      const dx = this.positions[bOffset] - this.positions[aOffset];
+      const dy = this.positions[bOffset + 1] - this.positions[aOffset + 1];
+      const dz = this.positions[bOffset + 2] - this.positions[aOffset + 2];
+
       indicesA.push(a);
       indicesB.push(b);
-      restLengths.push(restLength);
+      coveredRestLengths.push(Math.hypot(dx, dy, dz));
+      flatRestLengths.push(flatRestLength);
       compliances.push(compliance);
     };
 
@@ -204,11 +151,11 @@ class SilkCloth {
         const current = this.index(x, y);
 
         if (x + 1 < GRID_SIZE) {
-          addConstraint(current, this.index(x + 1, y), spacingX, 2e-5);
+          addConstraint(current, this.index(x + 1, y), spacingX, 7e-7);
         }
 
         if (y + 1 < GRID_SIZE) {
-          addConstraint(current, this.index(x, y + 1), spacingY, 2e-5);
+          addConstraint(current, this.index(x, y + 1), spacingY, 7e-7);
         }
 
         if (x + 1 < GRID_SIZE && y + 1 < GRID_SIZE) {
@@ -217,31 +164,43 @@ class SilkCloth {
             current,
             this.index(x + 1, y + 1),
             diagonalRest,
-            5e-5
+            2e-6
           );
           addConstraint(
             this.index(x + 1, y),
             this.index(x, y + 1),
             diagonalRest,
-            5e-5
+            2e-6
           );
         }
 
         if (x + 2 < GRID_SIZE) {
-          addConstraint(current, this.index(x + 2, y), spacingX * 2, 1e-5);
+          addConstraint(
+            current,
+            this.index(x + 2, y),
+            spacingX * 2,
+            1.5e-6
+          );
         }
 
         if (y + 2 < GRID_SIZE) {
-          addConstraint(current, this.index(x, y + 2), spacingY * 2, 1e-5);
+          addConstraint(
+            current,
+            this.index(x, y + 2),
+            spacingY * 2,
+            1.5e-6
+          );
         }
       }
     }
 
     this.constraintA = new Uint16Array(indicesA);
     this.constraintB = new Uint16Array(indicesB);
-    this.restLengths = new Float32Array(restLengths);
+    this.coveredRestLengths = new Float32Array(coveredRestLengths);
+    this.flatRestLengths = new Float32Array(flatRestLengths);
+    this.restLengths = new Float32Array(coveredRestLengths);
     this.compliances = new Float32Array(compliances);
-    this.lambdas = new Float32Array(restLengths.length);
+    this.lambdas = new Float32Array(coveredRestLengths.length);
   }
 
   createMesh() {
@@ -282,19 +241,10 @@ class SilkCloth {
     this.geometry.computeVertexNormals();
     this.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 3);
 
-    this.material = new THREE.MeshPhysicalMaterial({
-      color: 0x4a0717,
+    this.material = new THREE.MeshStandardMaterial({
+      color: 0x651629,
       metalness: 0,
-      roughness: 0.42,
-      sheen: 0.62,
-      sheenColor: new THREE.Color(0xb65f6c),
-      sheenRoughness: 0.42,
-      clearcoat: 0.02,
-      clearcoatRoughness: 0.62,
-      anisotropy: 0.54,
-      anisotropyRotation: Math.PI * 0.25,
-      normalMap: createWeaveNormalMap(),
-      normalScale: new THREE.Vector2(0.1, 0.08),
+      roughness: 0.88,
       side: THREE.DoubleSide
     });
 
@@ -431,7 +381,7 @@ class SilkCloth {
       const desiredX = target.x + offsets[localOffset];
       const desiredY = target.y + offsets[localOffset + 1];
       const desiredZ = target.z + offsets[localOffset + 2];
-      const strength = 0.2 + weights[i] * 0.42;
+      const strength = 0.15 + weights[i] * 0.5;
 
       this.positions[particleOffset] +=
         (desiredX - this.positions[particleOffset]) * strength;
@@ -443,7 +393,16 @@ class SilkCloth {
   }
 
   step(dt) {
-    const damping = 0.992;
+    const damping = 0.9915;
+    this.unfold +=
+      (this.unfoldTarget - this.unfold) * Math.min(1, dt * 0.75);
+
+    for (let constraint = 0; constraint < this.restLengths.length; constraint += 1) {
+      const coveredLength = this.coveredRestLengths[constraint];
+      this.restLengths[constraint] =
+        coveredLength +
+        (this.flatRestLengths[constraint] - coveredLength) * this.unfold;
+    }
 
     for (let particle = 0; particle < PARTICLE_COUNT; particle += 1) {
       const offset = particle * 3;
@@ -481,11 +440,17 @@ class SilkCloth {
         (this.positions[offset + 2] - this.previousPositions[offset + 2]) / dt;
       const speed = Math.hypot(velocityX, velocityY, velocityZ);
 
-      if (speed > 3.2) {
-        const velocityScale = 3.2 / speed;
+      if (speed > 2.35) {
+        const velocityScale = 2.35 / speed;
         velocityX *= velocityScale;
         velocityY *= velocityScale;
         velocityZ *= velocityScale;
+      }
+
+      if (this.positions[offset + 1] <= GROUND_Y + 0.0001) {
+        velocityX *= 0.82;
+        velocityY = Math.max(0, velocityY) * 0.22;
+        velocityZ *= 0.82;
       }
 
       this.velocities[offset] = velocityX;
@@ -507,20 +472,20 @@ class SilkCloth {
     const offsets = [];
     const centerOffset = particle * 3;
 
-    for (let y = Math.max(0, centerY - 5); y <= Math.min(GRID_SIZE - 1, centerY + 5); y += 1) {
-      for (let x = Math.max(0, centerX - 5); x <= Math.min(GRID_SIZE - 1, centerX + 5); x += 1) {
+    for (let y = Math.max(0, centerY - 2); y <= Math.min(GRID_SIZE - 1, centerY + 2); y += 1) {
+      for (let x = Math.max(0, centerX - 2); x <= Math.min(GRID_SIZE - 1, centerX + 2); x += 1) {
         const gridDistance = Math.hypot(x - centerX, y - centerY);
-        if (gridDistance > 5.35) continue;
+        if (gridDistance > 2.35) continue;
 
         const nearbyParticle = this.index(x, y);
         const offset = nearbyParticle * 3;
-        const weight = Math.exp(-gridDistance * gridDistance * 0.12);
+        const weight = Math.exp(-gridDistance * gridDistance * 0.55);
         particles.push(nearbyParticle);
         weights.push(weight);
         offsets.push(
-          (this.positions[offset] - this.positions[centerOffset]) * 0.92,
-          (this.positions[offset + 1] - this.positions[centerOffset + 1]) * 0.92,
-          (this.positions[offset + 2] - this.positions[centerOffset + 2]) * 0.92
+          (this.positions[offset] - this.positions[centerOffset]) * 0.97,
+          (this.positions[offset + 1] - this.positions[centerOffset + 1]) * 0.97,
+          (this.positions[offset + 2] - this.positions[centerOffset + 2]) * 0.97
         );
       }
     }
@@ -541,8 +506,11 @@ class SilkCloth {
     this.positions.set(this.coveredPositions);
     this.velocities.fill(0);
     this.previousPositions.set(this.coveredPositions);
+    this.restLengths.set(this.coveredRestLengths);
     this.holdActive = true;
     this.grab = null;
+    this.unfold = 0;
+    this.unfoldTarget = 0;
     this.updateGeometry();
   }
 }
@@ -553,8 +521,8 @@ world.add(cloth.mesh);
 // The authored pose remains perfectly still until the first grab. This hybrid
 // approach keeps the opening composition flawless, then hands control to XPBD.
 
-let bottle = null;
-let heroReady = false;
+const bottleModel = document.getElementById('bottleModel');
+let heroReady = Boolean(bottleModel?.loaded);
 let isVisible = true;
 let hasInteracted = false;
 let accumulator = 0;
@@ -562,63 +530,13 @@ let lastTime = performance.now();
 let averageFrameMs = 0;
 let measuredFrames = 0;
 
-function dispatchProgress(progress) {
-  window.dispatchEvent(
-    new CustomEvent('golabii:hero-progress', {
-      detail: { progress }
-    })
-  );
-}
-
-function dispatchReady() {
+bottleModel?.addEventListener('load', () => {
   heroReady = true;
-  window.dispatchEvent(new CustomEvent('golabii:hero-ready'));
+}, { once: true });
+
+if (!bottleModel) {
+  heroReady = true;
 }
-
-const loader = new GLTFLoader();
-loader.load(
-  'floral-bottle.glb',
-  (gltf) => {
-    bottle = gltf.scene;
-
-    bottle.traverse((object) => {
-      if (!object.isMesh) return;
-      object.castShadow = false;
-      object.receiveShadow = false;
-
-      const materials = Array.isArray(object.material)
-        ? object.material
-        : [object.material];
-
-      materials.forEach((material) => {
-        if (!material) return;
-        material.envMapIntensity = 1.15;
-        material.needsUpdate = true;
-
-        if (material.map) {
-          material.map.anisotropy = Math.min(
-            8,
-            renderer.capabilities.getMaxAnisotropy()
-          );
-        }
-      });
-    });
-
-    world.add(bottle);
-    dispatchProgress(1);
-    dispatchReady();
-  },
-  (event) => {
-    if (event.total > 0) {
-      dispatchProgress(event.loaded / event.total);
-    }
-  },
-  (error) => {
-    console.error('Could not load the Golabii bottle model.', error);
-    container.classList.add('hero-model-error');
-    dispatchReady();
-  }
-);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -630,6 +548,7 @@ const grabStartTarget = new THREE.Vector3();
 const cameraDirection = new THREE.Vector3();
 let activePointerId = null;
 let grabReleaseAt = 0;
+let interactionCompleteAt = 0;
 let pointerDidDrag = false;
 
 function updatePointer(event) {
@@ -637,6 +556,14 @@ function updatePointer(event) {
   pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
   pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
+}
+
+function positionPincher(event) {
+  if (!pincher) return;
+
+  const bounds = container.getBoundingClientRect();
+  pincher.style.left = `${event.clientX - bounds.left}px`;
+  pincher.style.top = `${event.clientY - bounds.top}px`;
 }
 
 function nearestFaceParticle(intersection) {
@@ -678,9 +605,11 @@ function onPointerDown(event) {
   event.preventDefault();
   activePointerId = event.pointerId;
   grabReleaseAt = 0;
+  interactionCompleteAt = 0;
   pointerDidDrag = false;
   canvas.setPointerCapture(activePointerId);
   container.classList.add('is-grabbing');
+  positionPincher(event);
 
   const intersection = intersections[0];
   const particle = nearestFaceParticle(intersection);
@@ -703,6 +632,7 @@ function onPointerMove(event) {
 
   event.preventDefault();
   updatePointer(event);
+  positionPincher(event);
 
   if (!raycaster.ray.intersectPlane(dragPlane, dragPlaneHit)) return;
 
@@ -710,10 +640,17 @@ function onPointerMove(event) {
   const assistedDelta = localHit.sub(dragStartLocal);
   cloth.grab.target
     .copy(grabStartTarget)
-    .addScaledVector(assistedDelta, 1.55);
-  cloth.grab.target.y += Math.min(0.18, assistedDelta.length() * 0.14);
+    .addScaledVector(assistedDelta, 1.7);
+  cloth.grab.target.y += Math.min(0.15, assistedDelta.length() * 0.11);
 
   if (cloth.grab.target.distanceTo(grabStartTarget) > 0.045) {
+    cloth.unfoldTarget = Math.max(
+      cloth.unfoldTarget,
+      Math.min(
+        0.32,
+        cloth.grab.target.distanceTo(grabStartTarget) / 2.25
+      )
+    );
     pointerDidDrag = true;
     cloth.holdActive = false;
     hasInteracted = true;
@@ -725,9 +662,11 @@ function endPointerInteraction(event) {
   if (event.pointerId !== activePointerId) return;
 
   if (pointerDidDrag) {
-    grabReleaseAt = performance.now() + 360;
+    grabReleaseAt = performance.now() + 100;
+    interactionCompleteAt = performance.now() + 260;
   } else {
     grabReleaseAt = 0;
+    interactionCompleteAt = 0;
     cloth.reset();
     hasInteracted = false;
   }
@@ -767,8 +706,10 @@ function startKeyboardReveal() {
 
   cloth.beginGrab(particle, target);
   cloth.holdActive = false;
+  cloth.unfoldTarget = 0.32;
   cloth.grab.target.add(new THREE.Vector3(0.95, 0.72, 0.18));
   grabReleaseAt = performance.now() + 620;
+  interactionCompleteAt = performance.now() + 720;
   hasInteracted = true;
   container.classList.add('has-unveiled');
 }
@@ -782,16 +723,18 @@ canvas.addEventListener('keydown', (event) => {
 resetButton?.addEventListener('click', () => {
   cloth.reset();
   grabReleaseAt = 0;
-  world.rotation.y = 0;
+  interactionCompleteAt = 0;
   hasInteracted = false;
-  container.classList.remove('has-unveiled', 'is-grabbing');
+  container.classList.remove('has-unveiled', 'has-completed', 'is-grabbing');
 });
 
 function resizeRenderer() {
   const width = Math.max(1, container.clientWidth);
   const height = Math.max(1, container.clientHeight);
   const mobile = width < 720;
-  camera.position.z = mobile ? 2.82 : 2.35;
+  camera.position.z = mobile ? 2.55 : 2.35;
+  world.position.y = mobile ? 0.005 : -0.015;
+  world.scale.set(mobile ? 0.78 : 1, 1, mobile ? 0.78 : 1);
   camera.lookAt(0, 0.015, 0);
   renderer.setPixelRatio(
     Math.min(window.devicePixelRatio || 1, mobile ? 1.35 : 1.7)
@@ -840,8 +783,10 @@ function animate(time) {
     cloth.endGrab();
   }
 
-  // The covered pose stays composed for the reveal. Once the user has
-  // interacted, all visible movement comes from the cloth itself.
+  if (interactionCompleteAt > 0 && time >= interactionCompleteAt) {
+    interactionCompleteAt = 0;
+    container.classList.add('has-completed');
+  }
 
   cloth.updateGeometry();
   renderer.render(scene, camera);
