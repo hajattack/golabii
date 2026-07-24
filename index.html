@@ -17,8 +17,16 @@
   <!-- Preload 3D model -->
   <link rel="preload" href="floral-bottle.glb" as="fetch" crossorigin="anonymous">
   
-  <!-- Model Viewer -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+  <!-- Three.js powers the interactive bottle reveal while the rest of the site
+       remains dependency-free and statically hosted. -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
   <!-- Page Loader -->
@@ -45,28 +53,23 @@
     <!-- ===== HERO: 3D BOTTLE + TEXT OVERLAY ===== -->
     <section class="hero-model-section">
       <div class="model-viewer-container hero-model" id="modelContainer">
-        <model-viewer
-          id="bottleModel"
-          src="floral-bottle.glb"
-          alt="Golabii Floral Bottle"
-          auto-rotate
-          auto-rotate-delay="0"
-          rotation-per-second="30deg"
-          camera-controls
-          disable-zoom
-          touch-action="pan-y"
-          loading="eager"
-          reveal="auto"
-          shadow-intensity="0.8"
-          exposure="1.1"
-          camera-orbit="0deg 75deg 105%"
-          poster="logo2.jpg"
-          style="background: #ffffff;"
-        >
-          <div class="model-progress-bar" slot="progress-bar">
-            <div class="model-progress-fill"></div>
-          </div>
-        </model-viewer>
+        <canvas
+          id="bottleCanvas"
+          class="bottle-canvas"
+          role="button"
+          tabindex="0"
+          aria-label="Interactive Golabii bottle wrapped in silk. Drag the fabric to unveil the bottle."
+        ></canvas>
+        <div class="model-progress-bar" aria-hidden="true">
+          <div class="model-progress-fill"></div>
+        </div>
+        <div class="cloth-instruction" id="clothInstruction" aria-hidden="true">
+          <span class="cloth-instruction-line"></span>
+          <span>Drag the silk to unveil</span>
+        </div>
+        <button class="cloth-reset" id="clothReset" type="button" aria-label="Reset the silk cover">
+          Reset silk
+        </button>
         <!-- Text overlay on right side of bottle -->
         <div class="model-text-overlay" id="modelText">
           <h1 class="model-title">Early Access</h1>
@@ -151,6 +154,7 @@
     </div>
   </footer>
 
+  <script type="module" src="cloth-hero.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
