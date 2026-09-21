@@ -1,0 +1,214 @@
+.spatial-waitlist {
+  position: relative;
+  min-height: 680px;
+  height: min(92svh, 920px);
+  overflow: clip;
+  isolation: isolate;
+  background: #5d3240;
+  scroll-margin-top: var(--nav-height);
+}
+
+.spatial-fallback,
+#spatialCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spatial-fallback {
+  z-index: 0;
+  display: block;
+  object-fit: cover;
+  object-position: center 48%;
+  transform: scale(1.035);
+  filter: saturate(1.04);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+#spatialCanvas {
+  z-index: 1;
+  display: block;
+  opacity: 0;
+  touch-action: pan-y;
+  transition: opacity 900ms ease;
+}
+
+.spatial-waitlist.is-ready #spatialCanvas { opacity: 1; }
+.spatial-waitlist.is-ready .spatial-fallback { opacity: 0; }
+.spatial-waitlist.is-fallback .spatial-fallback { transform: scale(1.015); }
+
+.spatial-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(28, 4, 12, 0.25) 0%, transparent 38%),
+    linear-gradient(0deg, rgba(28, 4, 12, 0.84) 0%, rgba(28, 4, 12, 0.14) 64%, transparent 100%),
+    radial-gradient(115% 78% at 50% 42%, transparent 36%, rgba(34, 5, 15, 0.43) 100%);
+}
+
+.spatial-copy {
+  position: absolute;
+  z-index: 4;
+  left: clamp(24px, 7vw, 96px);
+  right: clamp(24px, 7vw, 96px);
+  bottom: max(46px, calc(env(safe-area-inset-bottom) + 32px));
+  max-width: 760px;
+  color: #fff9f0;
+  pointer-events: none;
+}
+
+.spatial-kicker {
+  margin: 0 0 12px;
+  color: #f2c47d;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 16px rgba(26, 1, 10, 0.9);
+}
+
+.spatial-title {
+  max-width: 9em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.15rem, 7.2vw, 7rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  text-shadow: 0 4px 34px rgba(29, 1, 11, 0.78);
+}
+
+.spatial-subtitle {
+  max-width: 42ch;
+  margin: 20px 0 0;
+  color: rgba(255, 249, 240, 0.82);
+  font-size: clamp(0.88rem, 1.3vw, 1rem);
+  line-height: 1.65;
+  text-shadow: 0 2px 18px rgba(29, 1, 11, 0.92);
+}
+
+.spatial-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(22px, 3vw, 32px);
+  pointer-events: auto;
+}
+
+.spatial-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 14px 26px;
+  font: 600 0.7rem/1 var(--font-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.spatial-cta:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.18) brightness(1.07);
+  box-shadow: 0 0 0 2px rgba(255, 245, 225, 0.4), 0 0 34px rgba(225, 29, 10, 0.6), 0 12px 32px rgba(34, 1, 10, 0.48);
+}
+
+.motion-toggle {
+  display: none;
+  min-height: 48px;
+  padding: 13px 18px;
+  border: 1px solid rgba(244, 214, 175, 0.46);
+  border-radius: 999px;
+  background: rgba(54, 7, 22, 0.58);
+  color: #f3cf9b;
+  font: 600 0.64rem/1 var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.spatial-hint {
+  position: absolute;
+  z-index: 4;
+  right: clamp(20px, 4vw, 52px);
+  bottom: max(30px, calc(env(safe-area-inset-bottom) + 20px));
+  color: rgba(255, 248, 236, 0.68);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(24, 0, 9, 0.9);
+  transition: opacity 260ms ease;
+  pointer-events: none;
+}
+
+.spatial-waitlist.has-input .spatial-hint { opacity: 0.2; }
+
+
+.spatial-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 238, 215, 0.65);
+  border-radius: 100px;
+  background-color: #27050a;
+  background-image:
+    linear-gradient(90deg, rgba(255, 220, 143, 0.08), rgba(120, 0, 8, 0.18) 48%, rgba(10, 0, 3, 0.18)),
+    url('red-glass-capsules.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 128% auto;
+  background-position: center, center 12%;
+  color: #fff9f0;
+  text-decoration: none;
+  text-shadow: 0 1px 7px rgba(0, 0, 0, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(255, 55, 29, 0.22),
+    0 0 20px rgba(205, 24, 9, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -10px 20px rgba(15, 0, 3, 0.45);
+  transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+}
+
+.page-loader { overflow: hidden; background: #b8759f; }
+.loader-art, #floralOpening { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.loader-art { display: block; object-fit: cover; }
+#floralOpening { opacity: 0; transition: opacity 250ms ease; }
+#floralOpening.is-ready { opacity: 1; }
+#skipOpening { position: absolute; z-index: 2; right: 24px; bottom: 24px; min-height: 44px; padding: 10px 20px; border-radius: 99px; border: 1px solid #fff5; background: #401022b8; color: #fff4e9; font: 500 13px var(--font-body); }
+.rug-experience { background: #290910; color: #f0dfc3; padding-top: 88px; transition: background 200ms, color 200ms; }
+.rug-experience[data-rug="yellow"] { background: #ecd483; color: #5b1725; }
+.rug-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 12px 32px 10px; }
+.rug-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.rug-choices button, #replayOpening { min-height: 44px; padding: 11px 18px; border: 1px solid currentColor; border-radius: 99px; background: transparent; color: inherit; font: 500 12px var(--font-body); }
+.rug-choices button { display: flex; align-items: center; gap: 9px; opacity: .65; }
+.rug-choices button[aria-pressed="true"] { opacity: 1; box-shadow: inset 0 0 0 1px currentColor; }
+.rug-swatch { width: 13px; height: 13px; border: 1px solid #fff6; border-radius: 50%; }
+.rug-swatch.burgundy { background: #74152a; }
+.rug-swatch.yellow { background: #efd17c; border-color: #755023; }
+#replayOpening { border: 0; padding-inline: 4px; text-decoration: underline; text-underline-offset: 4px; }
+#rugScene { display: block; border: 0; width: 100%; height: clamp(640px, 80svh, 850px); }
+.rug-instructions { text-align: center; padding: 8px 24px 24px; font: 400 12px/1.6 var(--font-body); opacity: .78; }
+.rug-instructions a { color: inherit; }
+button:focus-visible, a:focus-visible, .main-nav a:focus-visible { outline: 2px solid #e9bc64 !important; outline-offset: 4px; }
+.main-nav { animation-delay: 0s; }
+@media(max-width:700px) {
+  .rug-toolbar { padding: 6px 18px 10px; flex-wrap: wrap; gap: 4px; }
+  .rug-choices button { padding: 10px 13px; }
+  #rugScene { height: 640px; }
+  .rug-experience { padding-top: 76px; }
+  .spatial-waitlist { height: 86svh; min-height: 680px; }
+  .spatial-copy { left: 22px; right: 22px; bottom: max(78px, calc(env(safe-area-inset-bottom) + 62px)); }
+  .spatial-title { font-size: clamp(3.1rem, 15vw, 4.5rem); }
+  .spatial-subtitle { margin-top: 16px; }
+  .spatial-actions { align-items: flex-start; flex-direction: column; }
+  .spatial-hint { bottom: 24px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .page-loader, #floralOpening, .rug-experience { transition: none; }
+  .spatial-hint { display: none; }
+}
+

@@ -13,19 +13,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="scenes.css" />
+  <link rel="preload" href="golabii-floral-loader.png" as="image" fetchpriority="high">
+  <script src="scenes.js" defer></script>
+  <noscript><style>.page-loader{display:none}.reveal-up{opacity:1;transform:none}</style></noscript>
   
-  <!-- Preload 3D model -->
-  <link rel="preload" href="floral-bottle.glb" as="fetch" crossorigin="anonymous">
-  
-  <!-- Model Viewer -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
 </head>
 <body>
-  <!-- Page Loader -->
-  <div class="page-loader" id="pageLoader">
-    <div class="loader-content">
-      <span class="loader-brand">Golabii</span>
-    </div>
+  <!-- Original sculptural flower scene, with artwork available immediately. -->
+  <div class="page-loader" id="pageLoader" aria-label="Golabii floral opening">
+    <img src="golabii-floral-loader.png" alt="Golabii surrounded by sculptural flowers" class="loader-art" fetchpriority="high">
+    <iframe id="floralOpening" title="Golabii spatial flower opening" tabindex="-1" aria-hidden="true"></iframe>
+    <button id="skipOpening" type="button">Skip opening</button>
   </div>
 
   <!-- Navigation -->
@@ -42,37 +42,17 @@
 
   <main id="top">
 
-    <!-- ===== HERO: 3D BOTTLE + TEXT OVERLAY ===== -->
-    <section class="hero-model-section">
-      <div class="model-viewer-container hero-model" id="modelContainer">
-        <model-viewer
-          id="bottleModel"
-          src="floral-bottle.glb"
-          alt="Golabii Floral Bottle"
-          auto-rotate
-          auto-rotate-delay="0"
-          rotation-per-second="30deg"
-          camera-controls
-          disable-zoom
-          touch-action="pan-y"
-          loading="eager"
-          reveal="auto"
-          shadow-intensity="0.8"
-          exposure="1.1"
-          camera-orbit="0deg 75deg 105%"
-          poster="logo2.jpg"
-          style="background: #ffffff;"
-        >
-          <div class="model-progress-bar" slot="progress-bar">
-            <div class="model-progress-fill"></div>
-          </div>
-        </model-viewer>
-        <!-- Text overlay on right side of bottle -->
-        <div class="model-text-overlay" id="modelText">
-          <h1 class="model-title">Early Access</h1>
-          <p class="model-subtitle">coming soon...</p>
+    <section id="intro" class="rug-experience" data-rug="burgundy" aria-label="Golabii interactive rug study">
+      <div class="rug-toolbar">
+        <div class="rug-choices" role="group" aria-label="Choose your rug scene">
+          <button type="button" data-rug-choice="burgundy" aria-pressed="true"><span class="rug-swatch burgundy"></span>Burgundy velvet</button>
+          <button type="button" data-rug-choice="yellow" aria-pressed="false"><span class="rug-swatch yellow"></span>Saffron yellow</button>
         </div>
+        <button id="replayOpening" type="button">Replay floral opening</button>
       </div>
+      <iframe id="rugScene" src="scenes/rug-burgundy.html" title="Burgundy velvet rug — drag to uncover the bottle" aria-describedby="rugInstructions"></iframe>
+      <p id="rugInstructions" class="rug-instructions">Hold the rug and pull. Choose a color to explore both scenes.</p>
+      <noscript><p class="rug-instructions"><a href="scenes/rug-yellow.html">Explore the saffron yellow rug</a></p></noscript>
     </section>
 
     <!-- ===== GOLDEN FLORAL IMAGE + INGREDIENTS ===== -->
@@ -130,26 +110,35 @@
       </div>
     </section>
 
-    <section id="connect" class="content-section thank-you-section">
-      <div class="thank-you-inner reveal-up">
-        <h3 class="thank-you-heading">Thank You For Being Here</h3>
-        <p class="thank-you-sub">Your presence matters. Thank you for believing in what we're creating.</p>
-        <a href="waitlist.html" class="btn-chic large">
-          <span>Join the Waitlist</span>
-        </a>
-        <div class="rose-explosion" id="roseExplosion"></div>
+    <section id="connect" class="spatial-waitlist" aria-label="Join the Golabii waitlist">
+      <img
+        src="garden.png"
+        alt=""
+        class="spatial-fallback"
+        loading="lazy"
+        decoding="async"
+      />
+      <canvas
+        id="spatialCanvas"
+        role="img"
+        aria-label="A painted botanical Golabii garden that shifts gently in depth as you move"
+      ></canvas>
+      <div class="spatial-shade" aria-hidden="true"></div>
+
+      <div class="spatial-copy reveal-up">
+        <p class="spatial-kicker">The first pour is almost here</p>
+        <h2 class="spatial-title">A garden you can lean into.</h2>
+        <p class="spatial-subtitle">Come closer. Be first to know when Golabii is ready to pour.</p>
+        <div class="spatial-actions">
+          <a class="spatial-cta" href="waitlist.html">Join the Waitlist</a>
+          <button class="motion-toggle" id="motionToggle" type="button">Enable phone motion</button>
+        </div>
       </div>
+
+      <p class="spatial-hint" id="spatialHint">Move or drag gently</p>
     </section>
 
   </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <span class="footer-brand">Golabii</span>
-      <span class="footer-copy">&copy; 2025 Golabii. Small batch. Non-profit mission.</span>
-    </div>
-  </footer>
 
   <script src="script.js"></script>
 </body>

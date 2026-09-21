@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Golabii — Saffron yellow</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;family=DM+Sans:wght@400;500&amp;display=swap"></head><body><div id="golabii-yellow-crimson">
+  <header class="gr-masthead"><span class="gr-brand">Golabii</span><span>THE TEXTILE STUDY</span></header>
+  <div class="gr-title"><span>CRIMSON · SILK · GOLD</span><h2>An heirloom<br><em>in motion.</em></h2></div>
+  <button class="gr-stage" type="button" aria-label="Golabii bottle and predominantly crimson Persian silk rug rotating together on a warm yellow velvet floor. Hold a point and drag; rotation pauses while holding. Keyboard: Enter or Space to hold or release, arrow keys to move, Escape to release." aria-pressed="false">
+    <span class="gr-canvas"></span>
+    <span class="gr-grip" aria-hidden="true" hidden=""></span>
+    <img src="rug-yellow-poster.png" class="gr-flat" alt="Intricate crimson-and-gold Persian carpet design with a central floral medallion, curling vines, and elaborate borders" hidden="">
+    <span class="gr-loading">Preparing the silk…</span>
+  </button>
+  <footer class="gr-footer"><span class="gr-hint" aria-live="polite">Hold a point and drag</span><span class="gr-actions"><button class="gr-rotate" type="button">Pause rotation</button><button class="gr-redrape" type="button">Redrape</button></span></footer>
+</div>
+<style>
+#golabii-yellow-crimson{--gr-velvet:#ecd483;--gr-paper:#5b1725;--gr-gold:#755023;isolation:isolate;position:relative;width:100%;overflow:hidden;background:var(--gr-velvet);color:var(--gr-paper);font-family:'DM Sans',sans-serif;color-scheme:light}
+#golabii-yellow-crimson *{box-sizing:border-box}
+#golabii-yellow-crimson [hidden]{display:none!important}
+#golabii-yellow-crimson .gr-masthead{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:23px 30px 0;gap:20px}
+#golabii-yellow-crimson .gr-brand{font:500 32px/1 'Cormorant Garamond',Georgia,serif;letter-spacing:-.025em}
+#golabii-yellow-crimson .gr-masthead>span:last-child{font-size:11px;letter-spacing:.16em;color:var(--gr-gold)}
+#golabii-yellow-crimson .gr-title{position:absolute;top:91px;left:30px;z-index:2;pointer-events:none}
+#golabii-yellow-crimson .gr-title>span{font-size:11px;letter-spacing:.16em;color:var(--gr-gold)}
+#golabii-yellow-crimson h2{font:400 48px/.97 'Cormorant Garamond',Georgia,serif;margin:13px 0 0;letter-spacing:-.025em}
+#golabii-yellow-crimson h2 em{font-weight:400}
+#golabii-yellow-crimson .gr-stage{display:block;position:relative;width:100%;height:660px;background:var(--gr-velvet);border:0;border-radius:0;padding:0;margin:0;color:inherit;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+#golabii-yellow-crimson .gr-stage:active{cursor:grabbing}
+#golabii-yellow-crimson .gr-canvas{position:absolute;inset:0;display:block;pointer-events:none}
+#golabii-yellow-crimson .gr-grip{position:absolute;top:0;left:0;width:12px;height:12px;margin:-6px;border:2px solid #fff0c5;border-radius:50%;box-shadow:0 0 0 3px #5b172566;pointer-events:none}
+#golabii-yellow-crimson canvas{display:block;width:100%;height:100%}
+#golabii-yellow-crimson .gr-flat{position:absolute;width:100%;height:100%;inset:0;object-fit:contain;padding:25px}
+#golabii-yellow-crimson .gr-loading{position:absolute;left:0;right:0;top:52%;font:400 14px/1.5 'DM Sans',sans-serif;color:var(--gr-gold);pointer-events:none}
+#golabii-yellow-crimson .gr-footer{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:0 30px 24px;color:var(--gr-gold);font-size:12px}
+#golabii-yellow-crimson .gr-actions{display:flex;align-items:center;gap:24px;flex-shrink:0}
+#golabii-yellow-crimson .gr-actions button{font:inherit;color:var(--gr-paper);background:transparent;border:0;padding:12px 0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--gr-gold);text-underline-offset:5px;min-height:44px}
+@media(max-width:560px){
+ #golabii-yellow-crimson .gr-masthead{padding:19px 21px 0}
+ #golabii-yellow-crimson .gr-brand{font-size:29px}
+ #golabii-yellow-crimson .gr-masthead>span:last-child{font-size:11px;letter-spacing:.10em}
+ #golabii-yellow-crimson .gr-title{top:81px;left:21px}
+ #golabii-yellow-crimson h2{font-size:37px;margin-top:10px}
+ #golabii-yellow-crimson .gr-title>span{font-size:11px;letter-spacing:.10em}
+ #golabii-yellow-crimson .gr-stage{height:600px}
+ #golabii-yellow-crimson .gr-footer{padding:0 21px 23px;gap:15px;flex-wrap:wrap;font-size:12px}
+ #golabii-yellow-crimson .gr-actions{gap:24px}
+}
+</style>
+<script src="vendor/three.min.js"></script>
+<script src="rug-yellow.js"></script>
+
+<style>
+html,body{margin:0;height:100%;overflow:hidden}body{background:#ecd483}
+#golabii-yellow-crimson{height:100svh;display:flex;flex-direction:column}
+#golabii-yellow-crimson .gr-stage{height:auto;min-height:0;flex:1;width:calc(100% - 36px);margin:0 18px}
+#golabii-yellow-crimson .gr-masthead{flex:none}
+#golabii-yellow-crimson .gr-footer{flex:none;min-height:62px;flex-wrap:wrap}
+#golabii-yellow-crimson .gr-actions button{min-height:44px}
+#golabii-yellow-crimson .gr-stage:focus-visible,#golabii-yellow-crimson button:focus-visible{outline:2px solid var(--gr-paper);outline-offset:-4px}
+@media(max-width:560px){#golabii-yellow-crimson .gr-title{top:72px}#golabii-yellow-crimson h2{font-size:32px}}
+</style></body></html>

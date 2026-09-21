@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Golabii — Spatial flowers</title></head><body><div id="golabii-spatial-bloom">
+  <button class="gs-stage" type="button" aria-label="Golabii sculptural flower garden. Drag to look between the petals. Arrow keys move the viewpoint; Home centers it.">
+    <span class="gs-canvas"></span>
+    <img class="gs-reference" alt="Original Golabii artwork: lilac, crimson and purple flowers framed by coral and olive foliage on rose pink" src="floral-art.webp">
+    <span class="gs-loading">Opening the garden…</span>
+  </button>
+  <div class="gs-controls"><span class="gs-status" aria-live="polite">Drag to explore</span><button class="gs-tilt" type="button">Use phone tilt</button></div>
+</div>
+<style>
+#golabii-spatial-bloom{position:relative;isolation:isolate;width:100%;overflow:hidden;background:#b8759f;color:#fff0de;font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color-scheme:dark}
+#golabii-spatial-bloom *{box-sizing:border-box}
+#golabii-spatial-bloom [hidden]{display:none!important}
+#golabii-spatial-bloom .gs-stage{position:relative;display:block;width:100%;aspect-ratio:1;border:0;border-radius:0;background:transparent;color:inherit;padding:0;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+#golabii-spatial-bloom .gs-stage:active{cursor:grabbing}
+#golabii-spatial-bloom .gs-canvas,#golabii-spatial-bloom .gs-reference{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;object-fit:cover}
+#golabii-spatial-bloom canvas{display:block;width:100%;height:100%}
+#golabii-spatial-bloom .gs-loading{position:absolute;left:18px;top:18px;padding:9px 13px;border-radius:22px;background:#40102280;backdrop-filter:blur(16px);font-size:12px;letter-spacing:.02em}
+#golabii-spatial-bloom .gs-controls{position:absolute;bottom:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;pointer-events:none}
+#golabii-spatial-bloom .gs-status,#golabii-spatial-bloom .gs-tilt{font:400 12px/1.3 ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fff4e9;background:#311627ad;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid #fff0e52e;border-radius:30px;letter-spacing:.015em;box-shadow:0 4px 20px #24091c20}
+#golabii-spatial-bloom .gs-status{padding:11px 15px}
+#golabii-spatial-bloom .gs-tilt{padding:11px 16px;min-height:44px;cursor:pointer;pointer-events:auto}
+@media(max-width:420px){#golabii-spatial-bloom .gs-controls{left:12px;right:12px;bottom:12px;gap:8px}#golabii-spatial-bloom .gs-status{padding:10px 12px}#golabii-spatial-bloom .gs-tilt{padding:10px 13px}}
+</style>
+<script src="vendor/three.min.js"></script>
+<script src="floral.js"></script>
+
+<style>html,body{margin:0;height:100%;overflow:hidden}#golabii-spatial-bloom,#golabii-spatial-bloom .gs-stage{height:100svh;aspect-ratio:auto}#golabii-spatial-bloom .gs-controls{display:none}</style></body></html>
