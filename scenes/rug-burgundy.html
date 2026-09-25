@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Golabii — Burgundy velvet</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;family=DM+Sans:wght@400;500&amp;display=swap"></head><body><div id="golabii-burgundy-velvet">
-  <header class="gr-masthead"><span class="gr-brand">Golabii</span><span>THE TEXTILE STUDY</span></header>
-  <div class="gr-title"><span>CRIMSON · SILK · GOLD</span><h2>An heirloom<br><em>in motion.</em></h2></div>
-  <button class="gr-stage" type="button" aria-label="Golabii bottle and Persian silk rug rotating together on a burgundy velvet floor. Hold a point and drag; rotation pauses while holding. Keyboard: Enter or Space to hold or release, arrow keys to move, Escape to release." aria-pressed="false">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Golabii — Gold, in bloom</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;family=DM+Sans:wght@400;500&amp;display=swap"></head><body><div id="golabii-burgundy-velvet">
+  <header class="gr-masthead"><span class="gr-brand">Golabii</span><span>THE GOLDEN TIDE</span></header>
+  <div class="gr-title"><span>GOLD · ROSE · SILK</span><h2>Gold,<br><em>in bloom.</em></h2><p>Lift the silk. Let it flow.</p></div>
+  <div class="gr-modes"><button class="gr-light" type="button" aria-pressed="true">Light on</button></div>
+  <button class="gr-stage" type="button" aria-label="Glowing gold liquid with eight roses inside a French square bottle under a golden rug. Once the rug is fully removed, gold overflows and carries the roses onto a puddle. Hold a point and drag; rotation pauses while holding. Keyboard: Enter or Space to hold or release, arrow keys to move, Escape to release." aria-pressed="false">
     <span class="gr-canvas"></span>
     <span class="gr-grip" aria-hidden="true" hidden=""></span>
     <img src="rug-burgundy-poster.png" class="gr-flat" alt="Intricate crimson-and-gold Persian carpet design with a central floral medallion, curling vines, and elaborate borders" hidden="">
     <span class="gr-loading">Preparing the silk…</span>
   </button>
-  <footer class="gr-footer"><span class="gr-hint" aria-live="polite">Hold a point and drag</span><span class="gr-actions"><button class="gr-rotate" type="button">Pause rotation</button><button class="gr-redrape" type="button">Redrape</button></span></footer>
+  <footer class="gr-footer"><span class="gr-hint" aria-live="polite">Lift the silk. Let it bloom.</span><span class="gr-actions"><button class="gr-reveal" type="button">Reveal &amp; pour</button><button class="gr-rotate" type="button">Pause rotation</button><button class="gr-redrape" type="button">Redrape</button></span></footer>
 </div>
 <style>
 #golabii-burgundy-velvet{--gr-velvet:#290910;--gr-paper:#f0dfc3;--gr-gold:#cfb18a;isolation:isolate;position:relative;width:100%;overflow:hidden;background:var(--gr-velvet);color:var(--gr-paper);font-family:'DM Sans',sans-serif;color-scheme:dark}
@@ -43,8 +44,8 @@
  #golabii-burgundy-velvet .gr-actions{gap:24px}
 }
 </style>
-<script src="vendor/three.min.js"></script>
-<script src="rug-burgundy.js"></script>
+<script type="importmap">{"imports":{"three":"./vendor/gold/three.module.min.js"}}</script>
+<script type="module" src="rug-burgundy.js?v=overflow-01"></script>
 
 <style>
 html,body{margin:0;height:100%;overflow:hidden}body{background:#290910}
@@ -55,4 +56,19 @@ html,body{margin:0;height:100%;overflow:hidden}body{background:#290910}
 #golabii-burgundy-velvet .gr-actions button{min-height:44px}
 #golabii-burgundy-velvet .gr-stage:focus-visible,#golabii-burgundy-velvet button:focus-visible{outline:2px solid var(--gr-paper);outline-offset:-4px}
 @media(max-width:560px){#golabii-burgundy-velvet .gr-title{top:72px}#golabii-burgundy-velvet h2{font-size:32px}}
+
+#golabii-burgundy-velvet .gr-title p{font-size:12px;line-height:1.6;margin-top:18px;color:#cfb18a}
+#golabii-burgundy-velvet .gr-modes{position:absolute;right:30px;top:94px;z-index:3;display:flex;border:1px solid #cfb18a40;border-radius:30px;padding:4px;background:#29091080;backdrop-filter:blur(12px)}
+#golabii-burgundy-velvet .gr-modes button{background:none;border:0;color:#cfb18a;padding:10px 15px;font:11px 'DM Sans',sans-serif;cursor:pointer;border-radius:24px;min-height:38px}
+#golabii-burgundy-velvet .gr-modes button[aria-pressed=true]{background:#efcb84;color:#371017}
+#golabii-burgundy-velvet .gr-reveal{padding:10px 18px!important;border:1px solid #cfb18a70!important;border-radius:30px;text-decoration:none!important;background:#cfb18a0d!important}
+#golabii-burgundy-velvet button:disabled{cursor:default;opacity:.55}
+@media(max-width:560px){
+ #golabii-burgundy-velvet .gr-modes{top:auto;bottom:92px;left:21px;right:auto}
+ #golabii-burgundy-velvet .gr-title p{margin-top:9px;font-size:11px}
+ #golabii-burgundy-velvet .gr-modes button{padding:6px 14px;min-height:32px}
+ #golabii-burgundy-velvet .gr-footer{gap:4px;padding-bottom:12px}
+ #golabii-burgundy-velvet .gr-hint{width:100%;font-size:11px}
+ #golabii-burgundy-velvet .gr-actions{gap:20px}
+}
 </style></body></html>

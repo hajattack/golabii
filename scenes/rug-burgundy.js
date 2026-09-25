@@ -1,28 +1,25 @@
+import * as THREE from 'three';
+import { createGoldOverflow } from './gold-overflow.js';
+import { clothIsClear, smooth } from './overflow-motion.js';
+import { EffectComposer } from './vendor/gold/postprocessing/EffectComposer.js';
+import { RenderPass } from './vendor/gold/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from './vendor/gold/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from './vendor/gold/postprocessing/OutputPass.js';
 (async () => {
   'use strict';
   const root=document.getElementById('golabii-burgundy-velvet');
   if(!root||root.dataset.initialized)return;root.dataset.initialized='true';
   const $=s=>root.querySelector(s),stage=$('.gr-stage'),mount=$('.gr-canvas'),hint=$('.gr-hint');
-  // Lossless binary packaging preserves the complete rug and sharper bottle maps.
-  function toBase64(bytes){let s='';for(let i=0;i<bytes.length;i+=8192)s+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(s);}
-  let bottleData,rugData,envelope,settled;
+  let envelope,settled;
+  const rugData={albedo:'rug-gold.webp'};
   try{
-    const response=await fetch('rug-model.bin');
-    if(!response.ok)throw new Error('Rug asset unavailable');
-    const buffer=await response.arrayBuffer();
-    const bytes=new Uint8Array(buffer),length=new DataView(buffer).getUint32(0,true),data=JSON.parse(new TextDecoder().decode(bytes.subarray(4,4+length)));
-    ({bottleData,rugData,envelope}=data);let offset=4+length;
-    const parts=data.lengths.map(n=>{const part=bytes.slice(offset,offset+n);offset+=n;return part;});
-    ['positions','uv','indices','texture','normal','roughness'].forEach((key,i)=>{bottleData[key]=(i<3?'':'data:image/webp;base64,')+toBase64(parts[i]);});
-    rugData.albedo='data:image/webp;base64,'+toBase64(parts[6]);
-    envelope.radii=Float32Array.from(new Uint16Array(parts[7].buffer),v=>v/100000);
-    settled=Float32Array.from(new Int16Array(parts[8].buffer),v=>v/10000);
-  }catch(error){$('.gr-flat').hidden=false;$('.gr-loading').textContent='The interactive rug is unavailable. Please refresh to try again.';stage.disabled=true;$('.gr-redrape').disabled=true;$('.gr-rotate').disabled=true;return;}
-  // Remove the pedestal from both the visible scene and the collision surface.
-  const oldBase=envelope.base;envelope.base=0;
-  for(let i=1;i<settled.length;i+=3)settled[i]=Math.max(.025,settled[i]-oldBase);
+    const responses=await Promise.all([fetch('gold-collision.json?v=square-02'),fetch('gold-drape-small.bin?v=overflow-01')]);
+    if(responses.some(r=>!r.ok))throw new Error('Scene asset unavailable');
+    envelope=await responses[0].json();envelope.radii=Float32Array.from(envelope.radii);
+    settled=new Float32Array(await responses[1].arrayBuffer());
+  }catch(error){$('.gr-flat').hidden=false;$('.gr-loading').textContent='The interactive rug is unavailable. Please refresh to try again.';stage.disabled=true;for(const b of root.querySelectorAll('button'))b.disabled=true;return;}
   function createClothPhysics(envelope, initial, options={}) {
-  const segments=44, side=segments+1, count=side*side, size=5.65;
+  const segments=44, side=segments+1, count=side*side, size=5.085;
   const position=new Float32Array(count*3), previous=new Float32Array(count*3), inverseMass=new Float32Array(count).fill(1);
   const contact=new Float32Array(count*3), rest=size/segments;
   const ca=[],cb=[],cr=[],cc=[];
@@ -134,7 +131,7 @@
   return {segments,side,count,size,rest,position,previous,step,grab,move,release,reset,saveRest,radius,hasGrab:()=>!!handle,handle:()=>handle};
 }
 
-  function fallback(){const img=$('.gr-flat');img.src=rugData.albedo;img.hidden=false;$('.gr-loading').hidden=true;root.dataset.fallback='true';hint.textContent='3D unavailable · showing the rug flat';stage.disabled=true;$('.gr-redrape').disabled=true;$('.gr-rotate').disabled=true;$('.gr-title').hidden=true;}
+  function fallback(){const img=$('.gr-flat');img.src=rugData.albedo;img.hidden=false;$('.gr-loading').hidden=true;root.dataset.fallback='true';hint.textContent='3D unavailable · showing the rug flat';stage.disabled=true;$('.gr-redrape').disabled=true;$('.gr-rotate').disabled=true;$('.gr-title').hidden=true;$('.gr-reveal').disabled=true;$('.gr-light').disabled=true;}
   if(typeof THREE==='undefined'){fallback();return;}
   const T=THREE,v3=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -143,7 +140,7 @@
   let renderer;
   try{renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});}catch(error){fallback();return;}
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();fallback();mount.hidden=true;});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.8;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   renderer.setClearColor(0x290910);renderer.domElement.setAttribute('aria-hidden','true');mount.appendChild(renderer.domElement);
   const scene=new T.Scene();scene.background=new T.Color(0x290910);scene.fog=new T.Fog(0x290910,12,32);
   const camera=new T.PerspectiveCamera(35,1,.1,60);
@@ -151,32 +148,36 @@
   // The bottle, both fabric faces, binding and fringe share one rotating frame.
   // Physics stays in this local frame, so rotation cannot fling the fabric.
   const exhibit=new T.Group();exhibit.name='bottle-and-rug';scene.add(exhibit);
-  scene.add(new T.HemisphereLight(0xffe9c7,0x624742,1.45));
-  const key=new T.DirectionalLight(0xffe7c2,3.3);key.position.set(-3.8,7.0,5.3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-5;key.shadow.camera.right=5;key.shadow.camera.top=6;key.shadow.camera.bottom=-4;key.shadow.camera.near=.5;key.shadow.camera.far=24;key.shadow.bias=-.00012;key.shadow.normalBias=.013;key.shadow.radius=3;scene.add(key);
-  const fill=new T.DirectionalLight(0xe0e6ed,.95);fill.position.set(5,3,2);scene.add(fill);
-  const rim=new T.DirectionalLight(0xffc27e,2.5);rim.position.set(1.8,5.8,-4.5);scene.add(rim);
-  const studio=new T.Scene();studio.background=new T.Color(0x4b3932);
-  for(const p of [[-3,4,4,2,7,0xffe6c1,3],[4,2,-2,1.5,6,0xffdab0,2],[0,7,0,6,4,0xffffff,1.7]]){const m=new T.Mesh(new T.PlaneGeometry(p[3],p[4]),new T.MeshBasicMaterial({color:new T.Color(p[5]).multiplyScalar(p[6]),side:T.DoubleSide}));m.position.set(p[0],p[1],p[2]);m.lookAt(0,1,0);studio.add(m);}
-  const pmrem=new T.PMREMGenerator(renderer),environment=pmrem.fromScene(studio,.08);scene.environment=environment.texture;pmrem.dispose();studio.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});
+  scene.add(new T.HemisphereLight(0xffe9c7,0x3d2429,.20));
+  const key=new T.DirectionalLight(0xffe7c2,.8);key.position.set(-3.8,7.0,5.3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-5;key.shadow.camera.right=5;key.shadow.camera.top=6;key.shadow.camera.bottom=-4;key.shadow.camera.near=.5;key.shadow.camera.far=24;key.shadow.bias=-.00012;key.shadow.normalBias=.013;key.shadow.radius=3;scene.add(key);
+  const fill=new T.DirectionalLight(0xe0e6ed,.28);fill.position.set(5,3,2);scene.add(fill);
+  const rim=new T.DirectionalLight(0xffc27e,.85);rim.position.set(1.8,5.8,-4.5);scene.add(rim);
+  const studio=new T.Scene();studio.background=new T.Color(0x241a1c);
+  for(const p of [[-3,4,4,2,7,0xffe6c1,3],[4,2,-2,1.5,6,0xffdab0,2],[0,7,0,6,4,0xffffff,1.7],[-1,2.8,5,.65,4.5,0xfff6dc,4.5],[2,2,4,.3,3.6,0xffffff,3]]){const m=new T.Mesh(new T.PlaneGeometry(p[3],p[4]),new T.MeshBasicMaterial({color:new T.Color(p[5]).multiplyScalar(p[6]),side:T.DoubleSide}));m.position.set(p[0],p[1],p[2]);m.lookAt(0,1,0);studio.add(m);}
+  const pmrem=new T.PMREMGenerator(renderer),environment=pmrem.fromScene(studio,.025);scene.environment=environment.texture;pmrem.dispose();studio.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});
   // Fine unpatterned velvet pile: diffuse burgundy, soft grazing sheen, no motif.
   const pileSize=128,pileBytes=new Uint8Array(pileSize*pileSize*4);
   for(let y=0;y<pileSize;y++)for(let x=0;x<pileSize;x++){const i=(y*pileSize+x)*4,a=Math.sin(x*127.1+y*311.7)*43758.5453,b=Math.sin(x*269.5+y*183.3)*43758.5453;pileBytes[i]=128+Math.round(((a-Math.floor(a))-.5)*8);pileBytes[i+1]=128+Math.round(((b-Math.floor(b))-.5)*15);pileBytes[i+2]=255;pileBytes[i+3]=255;}
   const pile=new T.DataTexture(pileBytes,pileSize,pileSize,T.RGBAFormat);pile.wrapS=pile.wrapT=T.RepeatWrapping;pile.repeat.set(180,180);pile.generateMipmaps=true;pile.minFilter=T.LinearMipmapLinearFilter;pile.magFilter=T.LinearFilter;pile.anisotropy=Math.min(16,renderer.capabilities.getMaxAnisotropy());pile.needsUpdate=true;
-  const floorMat=new T.MeshPhysicalMaterial({color:0x4c0c1b,roughness:.96,metalness:0,sheen:1,sheenColor:0x963049,sheenRoughness:.82,specularIntensity:.22,envMapIntensity:.45,normalMap:pile,normalScale:new T.Vector2(.4,.4)});
+  const floorMat=new T.MeshPhysicalMaterial({color:0x4c121d,roughness:.96,metalness:0,sheen:1,sheenColor:0x963049,sheenRoughness:.82,specularIntensity:.22,envMapIntensity:.12,normalMap:pile,normalScale:new T.Vector2(.4,.4)});
   const floor=new T.Mesh(new T.PlaneGeometry(120,120),floorMat);floor.name='burgundy-velvet-floor';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
-  function decode(b,Type){const str=atob(b),bytes=new Uint8Array(str.length);for(let i=0;i<str.length;i++)bytes[i]=str.charCodeAt(i);return new Type(bytes.buffer);}
-  function texture(src,color=false){const tex=new T.Texture();tex.flipY=false;tex.anisotropy=Math.min(16,renderer.capabilities.getMaxAnisotropy());if(color)tex.colorSpace=T.SRGBColorSpace;const img=new Image();img.onload=()=>{tex.image=img;tex.needsUpdate=true;if(state.ready)draw();};img.src=src;return tex;}
-  const bottleGeo=new T.BufferGeometry();bottleGeo.setAttribute('position',new T.BufferAttribute(Float32Array.from(decode(bottleData.positions,Int16Array),v=>v/bottleData.positionScale),3));bottleGeo.setAttribute('uv',new T.BufferAttribute(Float32Array.from(decode(bottleData.uv,Uint16Array),v=>v/65535),2));bottleGeo.setIndex(new T.BufferAttribute(decode(bottleData.indices,Uint16Array),1));bottleGeo.computeVertexNormals();
-  // Keep normals continuous across duplicated vertices at texture-island seams.
-  const bp=bottleGeo.attributes.position,bn=bottleGeo.attributes.normal,normalGroups=new Map(),normalKeys=[];
-  for(let i=0;i<bp.count;i++){const key=[bp.getX(i),bp.getY(i),bp.getZ(i)].map(v=>Math.round(v*bottleData.positionScale)).join(',');normalKeys.push(key);if(!normalGroups.has(key))normalGroups.set(key,v3());normalGroups.get(key).add(v3(bn.getX(i),bn.getY(i),bn.getZ(i)));}
-  for(const value of normalGroups.values())value.normalize();for(let i=0;i<bp.count;i++){const n=normalGroups.get(normalKeys[i]);bn.setXYZ(i,n.x,n.y,n.z);}bn.needsUpdate=true;
-  // GLTFLoader flips the normal-map Y axis when deriving tangents from UVs.
-  // Maps remain opaque, base color is sRGB, and material data stays linear.
-  const bottleMat=new T.MeshStandardMaterial({map:texture(bottleData.texture,true),normalMap:texture(bottleData.normal),roughnessMap:texture(bottleData.roughness),roughness:1,metalness:1,normalScale:new T.Vector2(.65,-.65),envMapIntensity:.82,fog:false});bottleMat.metalnessMap=bottleMat.roughnessMap;
-  bottleGeo.computeBoundingBox();const bottle=new T.Mesh(bottleGeo,bottleMat);bottle.scale.setScalar(2.4);bottle.position.y=-bottleGeo.boundingBox.min.y*2.4;bottle.castShadow=true;bottle.receiveShadow=true;exhibit.add(bottle);
-  const rugMat=new T.MeshPhysicalMaterial({color:0x851c29,roughness:.48,metalness:.03,sheen:1,sheenColor:0xffd7aa,sheenRoughness:.46,anisotropy:.78,anisotropyRotation:Math.PI/2,clearcoat:0,side:T.FrontSide,envMapIntensity:.82,specularIntensity:.8});
+  let gold;
+  try { gold=await createGoldOverflow(exhibit); }
+  catch(error){fallback();hint.textContent='The bottle could not load. Refresh to try again.';return;}
+  const composer=new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene,camera));
+  const bloom=new UnrealBloomPass(new T.Vector2(512,512),.15,.55,1.1);
+  composer.addPass(bloom);composer.addPass(new OutputPass());
+  let goldClock=0,lightOn=true,clearFor=0,lastPhase='covered';
+  root.dataset.flowPhase='covered';root.dataset.flowers='8';
+  $('.gr-light').addEventListener('click',()=>{
+    lightOn=!lightOn;gold.setPower(lightOn?1:0);
+    $('.gr-light').setAttribute('aria-pressed',String(lightOn));
+    $('.gr-light').textContent=lightOn?'Light on':'Light off';root.dataset.light=String(lightOn);draw();
+  });
+  const rugMat=new T.MeshPhysicalMaterial({color:0x851c29,roughness:.48,metalness:.03,sheen:1,sheenColor:0xffd7aa,sheenRoughness:.46,anisotropy:.78,anisotropyRotation:Math.PI/2,clearcoat:0,side:T.FrontSide,envMapIntensity:.42,specularIntensity:.8});
   const reverseMat=new T.MeshPhysicalMaterial({color:0x9b7358,roughness:.84,metalness:.01,sheen:.4,sheenColor:0xe8c392,sheenRoughness:.7,side:T.BackSide});
+  gold.illuminateFabric(rugMat);gold.illuminateFabric(reverseMat);
   // The artwork is a single complete rug, never a repeated wallpaper tile.
   const rugImage=new Image();rugImage.onload=()=>{
     if(!root.isConnected)return;
@@ -212,7 +213,7 @@
   }
     // Silk warp fringes: small gravity-driven chains anchored to the rug's two ends.
   function makeFringe(parent=scene){
-    const bundles=112,ends=2,nodes=6,strands=3,sides=4,total=bundles*ends,spacing=.032;
+    const bundles=112,ends=2,nodes=6,strands=3,sides=4,total=bundles*ends,spacing=.0288;
     const pos=new Float32Array(total*nodes*3),prev=new Float32Array(pos.length),seed=new Float32Array(total),rootPoint=new T.Vector3(),innerPoint=new T.Vector3();
     const dummyA=new T.Vector3(),dummyB=new T.Vector3(),tangent=new T.Vector3(),normal=new T.Vector3(),binormal=new T.Vector3(),vertical=new T.Vector3(0,1,0);
     const verts=new Float32Array(total*strands*nodes*sides*3),normals=new Float32Array(verts.length),colors=new Float32Array(verts.length),indices=[];
@@ -243,36 +244,82 @@
   }
 
   updateRug();const fringe=makeFringe(exhibit);
-  function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;const narrow=w<560,azimuth=.26,polar=1.17,radius=narrow?11.0:8.5;const target=v3(narrow?0:-.25,narrow?1.15:1.12,0);camera.position.set(target.x+radius*Math.sin(polar)*Math.sin(azimuth),target.y+radius*Math.cos(polar),target.z+radius*Math.sin(polar)*Math.cos(azimuth));camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();draw();}
-  function draw(){if(!root.isConnected)return;renderer.render(scene,camera);const grip=$('.gr-grip');grip.hidden=!state.drag;if(state.drag&&physical.handle()){const h=physical.handle(),point=exhibit.localToWorld(v3(h[0],h[1],h[2]).sub(state.drag.offset)).project(camera);grip.style.transform=`translate(${(point.x*.5+.5)*stage.clientWidth}px,${(-point.y*.5+.5)*stage.clientHeight}px)`;}}
-  function redrape(){endGrab();physical.reset();updateRug();fringe.reset();fringe.update();state.simulating=!reduced;state.turnDelay=.75;state.turnSpeed=0;hint.textContent='Hold a point and drag';draw();}
+  function updateCamera(){
+    const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;
+    const narrow=w<560,base=narrow?11:8.5,t=smooth(0,4,Math.max(0,gold.time));
+    const fit=7.1/(2*Math.tan(35*Math.PI/360)*(w/h));
+    const radius=base+(Math.max(base+1,fit)-base)*t,azimuth=.26,polar=1.17-.17*t;
+    const target=v3((narrow?0:-.25)*(1-t)+.40*t,(narrow?1.15:1.12)*(1-t)+.72*t,.10*t);
+    camera.position.set(target.x+radius*Math.sin(polar)*Math.sin(azimuth),target.y+radius*Math.cos(polar),target.z+radius*Math.sin(polar)*Math.cos(azimuth));
+    camera.lookAt(target);camera.updateMatrixWorld();
+  }
+  function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);composer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();updateCamera();draw();}
+
+  function draw(){if(!root.isConnected)return;composer.render();const grip=$('.gr-grip');grip.hidden=!state.drag;if(state.drag&&physical.handle()){const h=physical.handle(),point=exhibit.localToWorld(v3(h[0],h[1],h[2]).sub(state.drag.offset)).project(camera);grip.style.transform=`translate(${(point.x*.5+.5)*stage.clientWidth}px,${(-point.y*.5+.5)*stage.clientHeight}px)`;}}
+  function redrape(){cancelReveal();endGrab();gold.reset();clearFor=0;lastPhase='covered';root.dataset.flowPhase='covered';root.dataset.flowTime='-1';updateCamera();physical.reset();updateRug();fringe.reset();fringe.update();state.simulating=!reduced;state.turnDelay=.75;state.turnSpeed=0;hint.textContent='Lift the silk. Let it bloom.';draw();}
   const raycaster=new T.Raycaster(),pointer=new T.Vector2(),plane=new T.Plane(),hit=v3();
   function ray(e){exhibit.updateMatrixWorld(true);const r=stage.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);}
-  function beginGrab(worldPoint,id){const point=exhibit.worldToLocal(worldPoint.clone());let nearest=0,distance=Infinity;for(let i=0;i<physical.count;i++){const k=i*3,d=(physical.position[k]-point.x)**2+(physical.position[k+1]-point.y)**2+(physical.position[k+2]-point.z)**2;if(d<distance){distance=d;nearest=i;}}
+  function beginGrab(worldPoint,id){cancelReveal();const point=exhibit.worldToLocal(worldPoint.clone());let nearest=0,distance=Infinity;for(let i=0;i<physical.count;i++){const k=i*3,d=(physical.position[k]-point.x)**2+(physical.position[k+1]-point.y)**2+(physical.position[k+2]-point.z)**2;if(d<distance){distance=d;nearest=i;}}
     physical.grab(nearest);const offset=v3(...physical.handle()).sub(point);state.drag={id,offset,target:v3(...physical.handle())};plane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(v3()),worldPoint);state.simulating=true;state.turnSpeed=0;stage.setAttribute('aria-pressed','true');hint.textContent='Holding · rotation paused';draw();
   }
-  function endGrab(){const d=state.drag;if(!d)return;state.drag=null;physical.release();state.turnDelay=.75;stage.setAttribute('aria-pressed','false');if(typeof d.id==='number'&&stage.hasPointerCapture(d.id))stage.releasePointerCapture(d.id);hint.textContent='Hold a point and drag';draw();}
+  function endGrab(){const d=state.drag;if(!d)return;state.drag=null;physical.release();state.turnDelay=.75;stage.setAttribute('aria-pressed','false');if(typeof d.id==='number'&&stage.hasPointerCapture(d.id))stage.releasePointerCapture(d.id);hint.textContent='Lift the silk. Let it bloom.';draw();}
   stage.addEventListener('pointerdown',e=>{if(!state.ready||state.drag||e.button!==0)return;ray(e);const hits=raycaster.intersectObjects([front,back],false);if(!hits.length)return;e.preventDefault();beginGrab(hits[0].point,e.pointerId);stage.setPointerCapture(e.pointerId);});
   stage.addEventListener('pointermove',e=>{const d=state.drag;if(!d||d.id!==e.pointerId)return;e.preventDefault();ray(e);if(raycaster.ray.intersectPlane(plane,hit)){d.target.copy(exhibit.worldToLocal(hit)).add(d.offset);physical.move(d.target.toArray());}});
   function release(e){if(state.drag?.id===e.pointerId)endGrab();}
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);stage.addEventListener('lostpointercapture',release);stage.addEventListener('contextmenu',e=>e.preventDefault());
-  // A tap never starts choreography, snaps the rug back, or changes the camera.
+  // Dragging stays direct; the separate Reveal button runs the guided cloth pull.
   stage.addEventListener('click',e=>e.preventDefault());
   stage.addEventListener('keydown',e=>{if(!state.ready)return;if(e.key==='Escape'){e.preventDefault();endGrab();return;}if(e.key==='Enter'||e.key===' '){e.preventDefault();if(e.repeat)return;if(state.drag?.id==='keyboard')endGrab();else if(!state.drag){const k=(28*physical.side+22)*3;beginGrab(exhibit.localToWorld(v3(physical.position[k],physical.position[k+1],physical.position[k+2])),'keyboard');}return;}
     const d=state.drag;if(d?.id!=='keyboard'||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const inverse=exhibit.getWorldQuaternion(new T.Quaternion()).invert(),right=v3(1,0,0).applyQuaternion(camera.quaternion).applyQuaternion(inverse),up=v3(0,1,0).applyQuaternion(camera.quaternion).applyQuaternion(inverse),amount=e.shiftKey?.16:.075;d.target.addScaledVector(e.key==='ArrowLeft'||e.key==='ArrowRight'?right:up,e.key==='ArrowLeft'||e.key==='ArrowDown'?-amount:amount);physical.move(d.target.toArray());
   });
   stage.addEventListener('blur',()=>{if(state.drag?.id==='keyboard')endGrab();});
+  let guidedReveal=null;
+  function cancelReveal(){if(guidedReveal){physical.release();guidedReveal=null;}$('.gr-reveal').disabled=false;$('.gr-reveal').textContent='Reveal & pour';}
+  function revealGold(){
+    if(gold.time>=0)redrape();
+    endGrab();cancelReveal();state.turning=false;state.turnSpeed=0;$('.gr-rotate').textContent='Rotate';
+    if(reduced){
+      for(let j=0;j<physical.side;j++)for(let i=0;i<physical.side;i++){
+        const k=(j*physical.side+i)*3;physical.position[k]=(i/physical.segments-.5)*physical.size+4.1;physical.position[k+1]=.03;physical.position[k+2]=(j/physical.segments-.5)*physical.size;
+      }
+      physical.previous.set(physical.position);updateRug();fringe.reset();fringe.update();gold.start(true,0);gold.update(22,0,true);root.dataset.flowPhase=gold.phase;root.dataset.flowTime='22';updateCamera();hint.textContent='Gold, in bloom.';draw();return;
+    }
+    let nearest=0,best=Infinity;
+    for(let i=0;i<physical.count;i++){const k=i*3;const score=physical.position[k]**2+physical.position[k+2]**2+(physical.position[k+1]-2.4)**2;if(score<best){best=score;nearest=i;}}
+    physical.grab(nearest);const pullDirection=v3(1,0,0).applyQuaternion(camera.quaternion).applyQuaternion(exhibit.getWorldQuaternion(new T.Quaternion()).invert());pullDirection.y=0;pullDirection.normalize();guidedReveal={time:0,start:v3(...physical.handle()),direction:pullDirection};state.simulating=true;
+    $('.gr-reveal').disabled=true;$('.gr-reveal').textContent='Unveiling…';hint.textContent='Lift the silk. Let it bloom.';
+  }
+  function advanceReveal(dt){
+    if(!guidedReveal)return;const r=guidedReveal;r.time+=dt;
+    const ease=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+    const a=r.start,b=r.direction.clone().multiplyScalar(.9).setY(4.25),c=r.direction.clone().multiplyScalar(2.9).setY(2.7),d=r.direction.clone().multiplyScalar(2.9).setY(.12);
+    const target=r.time<2.6?a.clone().lerp(b,ease(r.time/2.6)):r.time<5.8?b.lerp(c,ease((r.time-2.6)/3.2)):c.lerp(d,ease((r.time-5.8)/2.6));
+    physical.move(target.toArray());
+    if(r.time>8.8){cancelReveal();if(gold.time<0)hint.textContent='The silk is clear.';}
+  }
+  $('.gr-reveal').addEventListener('click',()=>{if(state.ready)revealGold();});
   $('.gr-redrape').addEventListener('click',()=>{if(state.ready)redrape();});
   $('.gr-rotate').addEventListener('click',()=>{if(!state.ready)return;state.turning=!state.turning;if(!state.turning)state.turnSpeed=0;$('.gr-rotate').textContent=state.turning?'Pause rotation':'Rotate';});
-  let hostVisible=true;window.addEventListener('message',e=>{if(e.source===parent&&e.origin===location.origin&&e.data?.type==='scene-visibility'){hostVisible=!!e.data.visible;if(!hostVisible)endGrab();}});
-  const onBlur=()=>endGrab(),onHidden=()=>{if(document.hidden)endGrab();};window.addEventListener('blur',onBlur);document.addEventListener('visibilitychange',onHidden);
+  let hostVisible=true;window.addEventListener('message',e=>{if(e.source===parent&&e.origin===location.origin&&e.data?.type==='scene-visibility'){hostVisible=!!e.data.visible;if(!hostVisible){cancelReveal();endGrab();}}});
+  const onBlur=()=>endGrab(),onHidden=()=>{if(document.hidden){cancelReveal();endGrab();}};window.addEventListener('blur',onBlur);document.addEventListener('visibilitychange',onHidden);
   const observer=new ResizeObserver(resize);observer.observe(stage);const visibility=new IntersectionObserver(entries=>{state.visible=entries[0].isIntersecting;if(!state.visible)endGrab();},{threshold:.01});visibility.observe(root);
   let last=0,debt=0,disposed=false;
-  function dispose(){if(disposed)return;disposed=true;observer.disconnect();visibility.disconnect();window.removeEventListener('blur',onBlur);document.removeEventListener('visibilitychange',onHidden);scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material]){for(const key of ['map','normalMap','roughnessMap','metalnessMap'])m[key]?.dispose();m.dispose();}}});environment.dispose();renderer.dispose();}
+  function dispose(){if(disposed)return;disposed=true;observer.disconnect();visibility.disconnect();window.removeEventListener('blur',onBlur);document.removeEventListener('visibilitychange',onHidden);scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material]){for(const key of ['map','normalMap','roughnessMap','metalnessMap'])m[key]?.dispose();m.dispose();}}});environment.dispose();for(const pass of composer.passes)pass.dispose?.();composer.dispose();renderer.dispose();}
   function frame(now){if(!root.isConnected){dispose();return;}requestAnimationFrame(frame);if(!state.ready||!state.visible||!hostVisible||document.hidden){last=now;debt=0;return;}if(now-last<14)return;const dt=Math.min(.05,(now-last)/1000||.016);last=now;
-    let changed=false;
+    let changed=false;advanceReveal(dt);
     if(state.simulating&&(!reduced||state.drag)){debt+=dt;let count=0;while(debt>=1/90&&count<5){physical.step(1/90,0);fringe.step(1/90);debt-=1/90;count++;}if(count===5)debt=0;updateRug();fringe.update();changed=true;}
-    if(!state.drag){state.turnDelay=Math.max(0,state.turnDelay-dt);if(state.turning&&state.turnDelay===0){state.turnSpeed+=(.20-state.turnSpeed)*(1-Math.exp(-2.5*dt));exhibit.rotation.y=(exhibit.rotation.y+state.turnSpeed*dt)%(Math.PI*2);changed=true;}}
+    if(!state.drag&&!guidedReveal){state.turnDelay=Math.max(0,state.turnDelay-dt);if(state.turning&&state.turnDelay===0){state.turnSpeed+=(.20-state.turnSpeed)*(1-Math.exp(-2.5*dt));exhibit.rotation.y=(exhibit.rotation.y+state.turnSpeed*dt)%(Math.PI*2);changed=true;}}
+    if(gold.time<0){
+      clearFor=clothIsClear(physical.position)?clearFor+dt:0;
+      if(clearFor>.75){let cx=0,cz=0;for(let k=0;k<physical.position.length;k+=3){cx+=physical.position[k];cz+=physical.position[k+2];}gold.start(reduced,Math.atan2(cz,cx));state.turning=false;state.turnSpeed=0;$('.gr-rotate').textContent='Rotate';}
+    }
+    if(!reduced||changed){goldClock+=dt;gold.update(goldClock,dt,reduced);changed=true;}
+    if(gold.time>=0){updateCamera();root.dataset.flowTime=gold.time.toFixed(2);}
+    if(gold.phase!==lastPhase){
+      lastPhase=gold.phase;root.dataset.flowPhase=lastPhase;
+      hint.textContent=({rising:'The gold is rising.',pouring:'Gold, flowing into bloom.',drifting:'Roses on a golden tide.',settled:'Gold, in bloom.'})[lastPhase]||'Lift the silk. Let it bloom.';
+      if(lastPhase==='settled')$('.gr-reveal').textContent='Replay';
+    }
     if(changed)draw();
   }
   resize();rugImage.src=rugData.albedo;requestAnimationFrame(frame);

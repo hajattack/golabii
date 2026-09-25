@@ -1,0 +1,8 @@
+{
+  "linear_scale": 0.9,
+  "previous_width_scene_units": 5.65,
+  "new_width_scene_units": 5.085,
+  "cloth_nodes": 2025,
+  "all_finite": true,
+  "no_floor_or_bottle_penetrations_at_nodes": true
+}

@@ -1,0 +1,14 @@
+{
+  "full_sequence_observed": true,
+  "partial_keyboard_grab_kept_covered_phase": true,
+  "light_toggle_checked": true,
+  "redrape_clears_flow_and_restores_contents": true,
+  "replay_checked": true,
+  "phone_viewport": [
+    390,
+    844
+  ],
+  "phone_horizontal_overflow": false,
+  "new_console_errors_or_warnings": 0,
+  "not_deployed": true
+}

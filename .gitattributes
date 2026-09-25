@@ -1,0 +1,2 @@
+# Preserve the supplied Wavefront asset byte-for-byte, including original line endings.
+design/gold-overflow/flower-1.obj -text -diff

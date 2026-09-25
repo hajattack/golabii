@@ -79,7 +79,7 @@
       for (const option of choices) option.setAttribute('aria-pressed', String(option === button));
       rug.title = `${choice === 'yellow' ? 'Saffron yellow' : 'Burgundy velvet'} rug — drag to uncover the bottle`;
       // One iframe at a time: switching colors releases the previous simulation.
-      rug.src = `scenes/rug-${choice}.html`;
+      rug.src = `scenes/rug-${choice}.html${choice === 'burgundy' ? '?v=overflow-01' : ''}`;
     });
   }
   rug.addEventListener('load', sendVisibility);

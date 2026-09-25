@@ -1,0 +1,11 @@
+{
+  "flower_count": 8,
+  "rug_linear_scale": 0.9,
+  "prepared_rug_blocks_overflow": true,
+  "overhead_and_side_cloth_blocks": true,
+  "puddle_starts_after_cascade": true,
+  "finite_paths": true,
+  "flowers_remain_on_puddle": true,
+  "flowers_avoid_displaced_rug": true,
+  "final_flowers_separated": true
+}
