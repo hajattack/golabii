@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),dir=path.join(root,'memorial');
+const data=JSON.parse(fs.readFileSync(path.join(dir,'data/names.json'),'utf8'));
+const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+const ids=new Set();
+const names=data.records.map(r=>{if(ids.has(r.id)||r.status!=='documented'||!r.sources.length)throw Error('Invalid record');ids.add(r.id);if(r.age!==null&&(!Number.isInteger(r.age)||r.age<=0||r.age>120))throw Error('Invalid age');const n=r.name_en||r.name_fa,lang=r.name_en?'en':'fa';return '<span class="n" role="button" tabindex="0" lang="'+lang+'" dir="'+(lang==='fa'?'rtl':'ltr')+'" data-record="'+r.id+'" data-name="'+esc(n)+'" aria-label="'+esc(n)+(r.age?', age '+r.age:'')+', view sources">'+esc(n)+(r.age?'<i class="a">'+r.age+'</i>':'')+'</span>';}).join(' ');
+let fragment=fs.readFileSync(path.join(dir,'template.html'),'utf8').replace('<!--NAMES-->',names).replace(/[\d,]+ memorial entries/,data.records.length.toLocaleString('en-US')+' memorial entries');
+let home=fs.readFileSync(path.join(root,'index.html'),'utf8');
+home=home.replace(/<!-- GOLABII_MEMORIAL_START -->[\s\S]*?<!-- GOLABII_MEMORIAL_END -->/,'<!-- GOLABII_MEMORIAL_START -->\n'+fragment.replaceAll('<!--DATA_PREFIX-->','memorial/')+'\n<!-- GOLABII_MEMORIAL_END -->');
+fs.writeFileSync(path.join(root,'index.html'),home);
+fs.writeFileSync(path.join(dir,'index.html'),'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>In pursuit of freedom — Golabii memorial</title><link rel="stylesheet" href="memorial.css"><style>body{margin:0;background:#f1ece4}</style><script src="memorial.js" defer></script></head><body>'+fragment.replaceAll('<!--DATA_PREFIX-->','')+'</body></html>');
+const q=v=>'"'+String(v??'').replaceAll('"','""')+'"';
+const rows=[['Record ID','English name','Persian name','Age','Age disputed','Reported date','Date disputed','Reported location','Partial identity','Source URLs','Source organizations'],...data.records.map(r=>[r.id,r.name_en,r.name_fa,r.age,r.age_conflict,r.date,r.date_conflict,r.location,r.partial_name,r.sources.map(s=>s.url).join(' | '),[...new Set(r.sources.map(s=>s.publisher))].join(' | ')])];
+fs.writeFileSync(path.join(dir,'data/names.csv'),'\ufeff'+rows.map(row=>row.map(q).join(',')).join('\r\n')+'\r\n');
+console.log('Rendered '+data.records.length+' documented memorial entries.');
