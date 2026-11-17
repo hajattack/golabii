@@ -13,20 +13,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="scenes.css" />
+  <link rel="stylesheet" href="scenes.css?v=floral-20261117" />
+  <link rel="stylesheet" href="floral-spatial.css?v=20261117" />
   <link rel="stylesheet" href="courtyard.css?v=20261001" />
-  <link rel="preload" href="golabii-floral-loader.png" as="image" fetchpriority="high">
-  <script src="scenes.js" defer></script>
+  <link rel="preload" href="assets/floral-spatial/original.webp" as="image" fetchpriority="high">
+  <script src="floral-spatial.js?v=20261117" defer></script>
+  <script src="scenes.js?v=floral-20261117" defer></script>
   <noscript><style>.page-loader{display:none}.reveal-up{opacity:1;transform:none}</style></noscript>
   
 
 </head>
 <body>
-  <!-- Original sculptural flower scene, with artwork available immediately. -->
-  <div class="page-loader" id="pageLoader" aria-label="Golabii floral opening">
-    <img src="golabii-floral-loader.png" alt="Golabii surrounded by sculptural flowers" class="loader-art" fetchpriority="high">
-    <iframe id="floralOpening" title="Golabii spatial flower opening" tabindex="-1" aria-hidden="true"></iframe>
-    <button id="skipOpening" type="button">Skip opening</button>
+  <!-- One original artwork, progressively enhanced in place with spatial depth. -->
+  <div class="page-loader" id="pageLoader" role="dialog" aria-modal="true" aria-label="Golabii floral opening" data-spatial-state="loading">
+    <img src="assets/floral-spatial/original.webp" alt="Golabii surrounded by sculptural flowers" class="loader-art" width="1254" height="1254" fetchpriority="high">
+    <canvas id="floralCanvas" aria-hidden="true"></canvas>
+    <div class="opening-atmosphere" aria-hidden="true"></div>
+    <div class="opening-footer">
+      <p id="openingHint">A garden in motion</p>
+      <div class="opening-actions">
+        <button id="tiltOpening" type="button" aria-pressed="false" hidden>Enable tilt</button>
+        <button id="skipOpening" type="button">Enter Golabii <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
   </div>
 
   <!-- Navigation -->
@@ -51,7 +60,7 @@
         </div>
         <button id="replayOpening" type="button">Replay floral opening</button>
       </div>
-      <iframe id="rugScene" src="scenes/rug-burgundy.html" title="Burgundy velvet rug — drag to uncover the bottle" aria-describedby="rugInstructions"></iframe>
+      <iframe id="rugScene" data-src="scenes/rug-burgundy.html" title="Burgundy velvet rug — drag to uncover the bottle" aria-describedby="rugInstructions"></iframe>
       <p id="rugInstructions" class="rug-instructions">Hold the rug and pull. Choose a color to explore both scenes.</p>
       <noscript><p class="rug-instructions"><a href="scenes/rug-yellow.html">Explore the saffron yellow rug</a></p></noscript>
     </section>

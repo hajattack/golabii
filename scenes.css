@@ -174,10 +174,8 @@
 }
 
 .page-loader { overflow: hidden; background: #b8759f; }
-.loader-art, #floralOpening { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.loader-art { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .loader-art { display: block; object-fit: cover; }
-#floralOpening { opacity: 0; transition: opacity 250ms ease; }
-#floralOpening.is-ready { opacity: 1; }
 #skipOpening { position: absolute; z-index: 2; right: 24px; bottom: 24px; min-height: 44px; padding: 10px 20px; border-radius: 99px; border: 1px solid #fff5; background: #401022b8; color: #fff4e9; font: 500 13px var(--font-body); }
 .rug-experience { background: #290910; color: #f0dfc3; padding-top: 88px; transition: background 200ms, color 200ms; }
 .rug-experience[data-rug="yellow"] { background: #ecd483; color: #5b1725; }
@@ -208,7 +206,7 @@ button:focus-visible, a:focus-visible, .main-nav a:focus-visible { outline: 2px 
   .spatial-hint { bottom: 24px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .page-loader, #floralOpening, .rug-experience { transition: none; }
+  .page-loader, .rug-experience { transition: none; }
   .spatial-hint { display: none; }
 }
 
