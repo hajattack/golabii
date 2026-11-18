@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golabii — want to know our secret?</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #050b08; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; touch-action: none; }
+  #veil { position: fixed; inset: 0; background: #050b08; display: grid; place-items: center; transition: opacity 0.9s ease;
+    color: rgba(255,255,255,.55); font: 500 11px/1 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif; letter-spacing: .2em; text-transform: uppercase; }
+  #veil.off { opacity: 0; pointer-events: none; }
+  #replay { position: fixed; right: max(14px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+    font: 500 10px/1 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif; letter-spacing: .18em; text-transform: uppercase;
+    color: rgba(255,250,240,.62); background: rgba(14,12,8,.26); border: 1px solid rgba(255,245,225,.16); border-radius: 999px;
+    padding: 8px 13px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 1s ease, color .2s, background .2s; }
+  #replay.on { opacity: 1; pointer-events: auto; }
+  #replay:hover, #replay:focus-visible { color: #fff; background: rgba(14,12,8,.5); outline: none; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<button id="replay" type="button" aria-label="Play the pour again">Replay</button>
+<div id="veil">Golabii</div>
+<script type="module">
+import * as THREE from './three.module.min.js';
+import GLYPHS from './gloock-paths.js';
+
+const canvas = document.getElementById('c');
+const veil = document.getElementById('veil');
+const DEBUG = location.hash.slice(1);
+
+/* ---------- seeded random ---------- */
+let seed = 91173;
+const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+const rr = (a, b) => a + (b - a) * rnd();
+const pick = a => a[Math.floor(rnd() * a.length)];
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+/* =====================================================================
+   RENDERER
+   ===================================================================== */
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
+} catch (e) { veil.textContent = 'This piece needs WebGL2'; throw e; }
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;   // the glass pass tone-maps and encodes
+renderer.toneMapping = THREE.NoToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = false;
+renderer.autoClear = false;
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+
+const CAM_Z = 3.2, FOV = 34;
+const camera = new THREE.PerspectiveCamera(FOV, 1, 0.4, 14);
+const scene = new THREE.Scene();
+
+/* =====================================================================
+   TEXTURES — photo-scanned branch cards (ez-tree, MIT), with a relief map derived from them
+   ===================================================================== */
+function loadImage(url) {
+  return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('image ' + url)); im.src = url; });
+}
+function branchTextures(img, hueShift) {
+  const S = img.width, c = document.createElement('canvas'); c.width = c.height = S;
+  const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0);
+  const id = x.getImageData(0, 0, S, S), d = id.data, lum = new Float32Array(S * S);
+  for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+    let r = d[i], g = d[i + 1], b = d[i + 2];
+    if (hueShift) {                       // autumn aspen -> spring green, keeping its shading
+      const l = 0.3 * r + 0.6 * g + 0.1 * b, wood = r > g * 1.15 && l < 110 ? 1 : 0;
+      if (!wood) { const k = l / 255; r = 255 * k * (0.50 + 0.22 * k); g = 255 * k * (0.98 + 0.05 * k); b = 255 * k * (0.26 + 0.10 * k); r = Math.min(255, r * 1.02); g = Math.min(255, g * 1.0); }
+      d[i] = r; d[i + 1] = g; d[i + 2] = b;
+    }
+    lum[p] = (0.3 * r + 0.6 * g + 0.1 * b) / 255;
+  }
+  x.putImageData(id, 0, 0);
+  const map = new THREE.CanvasTexture(c); map.colorSpace = THREE.SRGBColorSpace; map.anisotropy = Math.min(8, maxAniso);
+  // relief from luminance: veins and leaf edges catch the light
+  const n = document.createElement('canvas'); n.width = n.height = S;
+  const nx = n.getContext('2d'), nd = nx.createImageData(S, S), o = nd.data;
+  for (let yy = 0; yy < S; yy++) for (let xx = 0; xx < S; xx++) {
+    const p = yy * S + xx, xl = lum[yy * S + Math.max(0, xx - 1)], xr = lum[yy * S + Math.min(S - 1, xx + 1)];
+    const yu = lum[Math.max(0, yy - 1) * S + xx], yd = lum[Math.min(S - 1, yy + 1) * S + xx];
+    let dx = (xl - xr) * 2.2, dy = (yd - yu) * 2.2; const il = 1 / Math.hypot(dx, dy, 1);
+    o[p * 4] = (dx * il * 0.5 + 0.5) * 255; o[p * 4 + 1] = (dy * il * 0.5 + 0.5) * 255; o[p * 4 + 2] = (il * 0.5 + 0.5) * 255; o[p * 4 + 3] = 255;
+  }
+  nx.putImageData(nd, 0, 0);
+  const normalMap = new THREE.CanvasTexture(n); normalMap.anisotropy = Math.min(4, maxAniso);
+  return { map, normalMap };
+}
+
+/* =====================================================================
+   MATERIALS — wind in the vertex stage, lamp light glowing through leaves and petals
+   ===================================================================== */
+const shared = { uTime: { value: 0 }, uLampView: { value: new THREE.Vector3() }, uLampCol: { value: new THREE.Color() } };
+function windy(sh) {
+  sh.uniforms.uTime = shared.uTime;
+  sh.vertexShader = 'uniform float uTime;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+    { float wh = clamp(position.y, 0.0, 1.0); wh = wh * wh * (1.4 - 0.4 * wh);
+      vec3 wo = modelMatrix[3].xyz; float ph = wo.x * 3.1 + wo.y * 2.3 + wo.z * 5.3;
+      float gust = sin(uTime * 0.23 + wo.x * 0.7) * 0.5 + 0.5;                       // one slow breath across the whole case
+      transformed.x += (gust * 0.050 + sin(uTime * 0.8 + ph) * 0.016 + sin(uTime * 0.33 + ph * 1.7) * 0.022) * wh;
+      transformed.z += cos(uTime * 0.5 + ph) * 0.012 * wh; }`);
+}
+function shadowMat(map) {                      // depth material that sways with the plant, so shadows on the wall move too
+  const m = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, map: map || null, alphaTest: map ? 0.42 : 0, side: THREE.DoubleSide });
+  m.onBeforeCompile = windy; return m;
+}
+function living(mat, tint) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.uTime = shared.uTime; sh.uniforms.uLampView = shared.uLampView; sh.uniforms.uLampCol = shared.uLampCol;
+    sh.uniforms.uTransTint = { value: tint };
+    windy(sh);
+    sh.fragmentShader = 'uniform vec3 uLampView; uniform vec3 uLampCol; uniform vec3 uTransTint;\n' + sh.fragmentShader.replace('#include <opaque_fragment>', `
+      { vec3 Lv = uLampView + vViewPosition; float dl = dot(Lv, Lv); vec3 Ld = Lv * inversesqrt(dl);
+        float back = max(dot(-normal, Ld), 0.0);
+        outgoingLight += diffuseColor.rgb * uTransTint * uLampCol * (back / (1.0 + dl * 1.2)) * 0.8; }
+      #include <opaque_fragment>`);
+  };
+  return mat;
+}
+const floraMat = living(new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, sheen: 0.22, sheenRoughness: 0.6,
+  sheenColor: new THREE.Color(0xffffff), side: THREE.DoubleSide }), new THREE.Color(0.9, 0.82, 0.8));
+let cardMats = {}, cardDepth = {};
+const floraDepth = shadowMat(null);
+
+/* =====================================================================
+   GEOMETRY HELPERS
+   ===================================================================== */
+const C = hex => new THREE.Color(hex);
+function mergeGeos(list) {
+  let nv = 0, ni = 0;
+  for (const g of list) { nv += g.attributes.position.count; ni += g.index ? g.index.count : g.attributes.position.count; }
+  const pos = new Float32Array(nv * 3), nor = new Float32Array(nv * 3), col = new Float32Array(nv * 3), idx = new Uint32Array(ni);
+  let vo = 0, io = 0;
+  for (const g of list) {
+    const n = g.attributes.position.count;
+    pos.set(g.attributes.position.array, vo * 3); nor.set(g.attributes.normal.array, vo * 3);
+    if (g.attributes.color) col.set(g.attributes.color.array, vo * 3); else col.fill(1, vo * 3, (vo + n) * 3);
+    if (g.index) { for (let i = 0; i < g.index.count; i++) idx[io++] = g.index.array[i] + vo; } else { for (let i = 0; i < n; i++) idx[io++] = vo + i; }
+    vo += n;
+  }
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.BufferAttribute(pos, 3)); out.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  out.setAttribute('color', new THREE.BufferAttribute(col, 3)); out.setIndex(new THREE.BufferAttribute(idx, 1));
+  return out;
+}
+function paint(g, fn) {                     // per-vertex colour from a callback (x, y, z, i) -> THREE.Color
+  const p = g.attributes.position, c = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) { const k = fn(p.getX(i), p.getY(i), p.getZ(i), i); c[i * 3] = k.r; c[i * 3 + 1] = k.g; c[i * 3 + 2] = k.b; }
+  g.setAttribute('color', new THREE.BufferAttribute(c, 3)); return g;
+}
+const tmpC = new THREE.Color();
+const mixC = (a, b, t) => tmpC.copy(a).lerp(b, Math.min(1, Math.max(0, t)));
+/* tapered tube along a list of points */
+function tube(pts, r0, r1, c0, c1, radial = 6) {
+  const curve = new THREE.CatmullRomCurve3(pts), segs = Math.max(6, pts.length * 4);
+  const fr = curve.computeFrenetFrames(segs, false), pos = [], nor = [], col = [], idx = [];
+  for (let i = 0; i <= segs; i++) {
+    const t = i / segs, p = curve.getPointAt(t), r = lerp(r0, r1, t), cc = mixC(c0, c1, t).clone();
+    for (let j = 0; j < radial; j++) {
+      const a = j / radial * Math.PI * 2, nx = Math.cos(a), ny = Math.sin(a);
+      const n = new THREE.Vector3().addScaledVector(fr.normals[i], nx).addScaledVector(fr.binormals[i], ny);
+      pos.push(p.x + n.x * r, p.y + n.y * r, p.z + n.z * r); nor.push(n.x, n.y, n.z);
+      const sh = 0.8 + 0.2 * nx; col.push(cc.r * sh, cc.g * sh, cc.b * sh);
+    }
+  }
+  for (let i = 0; i < segs; i++) for (let j = 0; j < radial; j++) {
+    const a = i * radial + j, b = i * radial + (j + 1) % radial, c = a + radial, d = b + radial; idx.push(a, c, b, b, c, d);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.setIndex(idx);
+  g.userData.curve = curve; return g;
+}
+/* a stem that wanders upward from the origin to (roughly) y = len */
+function stemPoints(len, bendX, bendZ, wob, n = 9, x0 = 0, y0 = 0, z0 = 0, ang = 0) {
+  const pts = []; let x = x0, y = y0, z = z0; const ph = rnd() * 6.28;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n; pts.push(new THREE.Vector3(x, y, z));
+    const a = ang + bendX * t + wob * Math.sin(t * 5 + ph);
+    x += Math.sin(a) * len / n; y += Math.cos(a) * len / n; z += (bendZ * t + wob * 0.6 * Math.cos(t * 4 + ph)) * len / n;
+  }
+  return pts;
+}
+
+/* ---------- a single soft leaflet (for rose leaves and small bracts) ---------- */
+function leaflet(len, wid, c0, c1, fold = 0.35) {
+  const g = new THREE.PlaneGeometry(1, 1, 4, 6), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const u = p.getX(i) * 2, v = p.getY(i) + 0.5;
+    const w = wid * 0.5 * Math.pow(Math.sin(Math.PI * Math.pow(v, 0.75)), 0.8);
+    p.setXYZ(i, u * w, v * len, Math.abs(u) * w * fold - len * 0.18 * v * v);
+  }
+  g.computeVertexNormals();
+  return paint(g, (x, y) => mixC(c0, c1, y / len + Math.abs(x) / wid * 0.3).clone());
+}
+function place(g, pos, rx, ry, rz, s = 1) {   // orient a +Y part and move it into the plant
+  const m = new THREE.Matrix4().compose(pos, new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz, 'ZYX')), new THREE.Vector3(s, s, s));
+  g.applyMatrix4(m); return g;
+}
+
+/* ---------- rose: thirty-odd cupped petals on a golden-angle spiral ---------- */
+const ROSE_PALS = [
+  [C(0x3a0614), C(0x96102e), C(0xd24a66)],     // wine
+  [C(0x48081a), C(0xb81436), C(0xe65a72)],     // crimson
+  [C(0x4a0c2e), C(0xac1c60), C(0xdc6690)],     // deep magenta rose
+  [C(0x560c16), C(0xc21e32), C(0xee6a74)],     // garnet
+  [C(0x40142c), C(0x962856), C(0xcc6c8c)],     // mulberry
+];
+function roseHead(R, pal) {
+  // Petals are wrapped around the flower's axis (not flat cards): the heart is a tight scroll,
+  // the middle rows form the cup, and the outer rows open wide with their rims rolled back.
+  const parts = [], N = 24;
+  for (let i = 0; i < N; i++) {
+    const t = i / (N - 1), tt = Math.pow(t, 1.35), a0 = i * 2.5133 + rr(-0.22, 0.22);            // 144 degrees apart: five-fold whorls
+    const s = R * lerp(1.0, 1.3, t) * rr(0.94, 1.06);
+    const r0 = R * lerp(0.015, 0.16, t), rTop = R * lerp(0.07, 0.80, tt);
+    const wrap = lerp(2.1, 0.80, Math.pow(t, 0.65)) * rr(0.92, 1.08);
+    const hk = lerp(1.0, 0.74, Math.pow(t, 1.5)), reflexK = R * lerp(0.01, 0.24, tt) * rr(0.7, 1.25), lift = R * 0.20 * (1 - t);
+    const g = new THREE.PlaneGeometry(1, 1, 9, 8), p = g.attributes.position, cols = new Float32Array(p.count * 3);
+    for (let k = 0; k < p.count; k++) {
+      const u = p.getX(k) * 2, v = p.getY(k) + 0.5;
+      const wp = 0.22 + 0.78 * Math.pow(Math.sin(Math.PI * 0.5 * Math.min(1, v * 1.4)), 0.85);
+      const phi = u * wrap * wp;
+      const yv = v - 0.15 * u * u * u * u * v * v;                                              // rounded shoulders
+      const rfx = Math.pow(sstep(0.58, 1, v), 1.5) * (0.55 + 0.45 * u * u) * reflexK;                           // rim rolls outward and down
+      const rad = r0 + (rTop - r0) * Math.pow(Math.sin(v * Math.PI * 0.5), 0.9) + rfx;        // walls rise like a cup, then the rim turns out
+      p.setXYZ(k, Math.sin(a0 + phi) * rad, s * yv * hk - rfx * 0.30 + lift, Math.cos(a0 + phi) * rad);
+      const c = mixC(pal[0], pal[1], sstep(0.05, 0.75, v)).clone().lerp(pal[2], sstep(0.74, 1.0, v) * (0.22 + 0.55 * t))
+        .multiplyScalar(lerp(0.58, 1.0, sstep(0.0, 0.7, v)) * lerp(0.76, 1.0, t));               // dark down in the cup, light on the rims
+      cols[k * 3] = c.r; cols[k * 3 + 1] = c.g; cols[k * 3 + 2] = c.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(cols, 3)); g.computeVertexNormals(); parts.push(g);
+  }
+  const sg0 = C(0x1f4a1c), sg1 = C(0x4f8a35);
+  for (let i = 0; i < 5; i++) parts.push(place(leaflet(R * 1.0, R * 0.28, sg0, sg1, 0.2), new THREE.Vector3(0, R * 0.04, 0), 2.0, i / 5 * 6.283 + 0.3, 0));
+  const hip = new THREE.SphereGeometry(R * 0.2, 8, 6); hip.scale(1, 1.25, 1); hip.translate(0, -R * 0.08, 0);
+  parts.push(paint(hip, () => C(0x3d6e2c)));
+  return mergeGeos(parts);
+}
+function roseBud(R, pal) {
+  const parts = [];
+  for (let i = 0; i < 5; i++) {
+    const g = new THREE.PlaneGeometry(1, 1, 4, 5), p = g.attributes.position, a = i * 2.4;
+    for (let k = 0; k < p.count; k++) {
+      const u = p.getX(k) * 2, v = p.getY(k) + 0.5, w = R * 0.42 * Math.sin(Math.PI * Math.pow(v, 0.7)) * 0.5 + R * 0.02;
+      const x = u * w, z = R * 0.2 * Math.sin(Math.PI * v) * (1 - v * 0.6) - u * u * w * 1.3 + R * 0.02;
+      p.setXYZ(k, x * Math.cos(a) + z * Math.sin(a), v * R * 1.5, -x * Math.sin(a) + z * Math.cos(a));
+    }
+    g.computeVertexNormals(); parts.push(paint(g, (x, y) => mixC(pal[0], pal[1], y / (R * 1.5)).clone()));
+  }
+  const sg0 = C(0x1f4a1c), sg1 = C(0x5a9438);
+  for (let i = 0; i < 5; i++) parts.push(place(leaflet(R * 1.1, R * 0.26, sg0, sg1, 0.3), new THREE.Vector3(0, 0, 0), 0.38, i / 5 * 6.283, 0));
+  return mergeGeos(parts);
+}
+
+/* ---------- chicory: strap petals with five-toothed tips ---------- */
+const CHIC = {
+  blue: [[C(0xc9d6ff), C(0x6e8df2), C(0x8fa8ff), C(0x26348f)], [C(0xd4dcff), C(0x7f97f5), C(0xa3b6ff), C(0x2c3a9c)], [C(0xcdd0ff), C(0x7a7cf0), C(0x9aa0ff), C(0x2e2a8c)]],
+  pink: [[C(0xffe1f0), C(0xea6aa9), C(0xff9ecb), C(0x8a1f58)], [C(0xffe8f2), C(0xf288b8), C(0xffb6d6), C(0x9a2c66)], [C(0xffdce8), C(0xe85c93), C(0xff93b8), C(0x8c1f4c)]],
+};
+function chicoryHead(R, pal) {
+  const parts = [], n = 16 + Math.floor(rnd() * 4), off = rnd() * 6.283;
+  for (let layer = 0; layer < 2; layer++) for (let i = 0; i < n; i++) {
+    const a = off + (i + layer * 0.5) / n * 6.283 + rr(-0.06, 0.06), len = R * rr(0.86, 1) * (layer ? 0.9 : 1);
+    const droop = rr(0.10, 0.34) + layer * 0.18, g = new THREE.PlaneGeometry(1, 1, 6, 5), p = g.attributes.position, cols = new Float32Array(p.count * 3);
+    for (let k = 0; k < p.count; k++) {
+      const uj = Math.round((p.getX(k) + 0.5) * 6), u = p.getX(k) * 2, v = p.getY(k) + 0.5;
+      const w = R * (0.035 + 0.085 * Math.pow(v, 0.8));
+      let rad = R * 0.07 + v * len; if (v > 0.99) rad += (uj % 2 ? R * 0.055 : 0) - R * 0.02;
+      const x = u * w, y = R * 0.03 - droop * R * v * v + R * 0.02 * (1 - u * u) + layer * R * 0.012;
+      p.setXYZ(k, x * Math.cos(a) + rad * Math.sin(a), y, -x * Math.sin(a) + rad * Math.cos(a));
+      const c = mixC(pal[0], pal[1], sstep(0.0, 0.55, v)).clone().lerp(pal[2], sstep(0.6, 1, v) * 0.6).multiplyScalar(0.93 + 0.07 * (1 - u * u));
+      cols[k * 3] = c.r; cols[k * 3 + 1] = c.g; cols[k * 3 + 2] = c.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(cols, 3)); g.computeVertexNormals(); parts.push(g);
+  }
+  for (let i = 0; i < 11; i++) {                 // stamens
+    const a = rnd() * 6.283, l = R * rr(0.16, 0.3), lean = rr(0.15, 0.6);
+    const g = new THREE.CylinderGeometry(R * 0.012, R * 0.02, l, 4, 1); g.translate(0, l / 2, 0);
+    paint(g, (x, y) => mixC(pal[3], pal[0], sstep(0.75, 1, y / l)).clone());
+    parts.push(place(g, new THREE.Vector3(Math.sin(a) * R * 0.03, R * 0.03, Math.cos(a) * R * 0.03), lean, a, 0));
+  }
+  const cup = new THREE.ConeGeometry(R * 0.16, R * 0.34, 7, 1, true); cup.rotateX(Math.PI); cup.translate(0, -R * 0.13, 0);
+  parts.push(paint(cup, () => C(0x4a7a3a)));
+  return mergeGeos(parts);
+}
+
+/* ---------- saffron crocus: six lilac tepals in a goblet, three red stigmas, three yellow stamens ---------- */
+const CROC = [[C(0xf3ecff), C(0xae86f2), C(0x7440cc)], [C(0xf6eeff), C(0x9c6ee8), C(0x6032b8)], [C(0xefe6ff), C(0xbc98f6), C(0x8050d8)]];
+function crocusHead(L, pal, open) {
+  const parts = [];
+  for (let i = 0; i < 6; i++) {
+    const inner = i % 2, a0 = i / 6 * 6.283 + rr(-0.08, 0.08), len = L * (inner ? 0.9 : 1) * rr(0.94, 1.05), op = open * (inner ? 0.8 : 1) * rr(0.85, 1.15);
+    const g = new THREE.PlaneGeometry(1, 1, 6, 8), p = g.attributes.position, cols = new Float32Array(p.count * 3);
+    for (let k = 0; k < p.count; k++) {
+      const u = p.getX(k) * 2, v = p.getY(k) + 0.5;
+      const wp = Math.pow(Math.sin(Math.PI * Math.pow(v, 0.72)), 0.8);                            // pointed oval
+      const rad = len * (0.045 + 0.34 * op * Math.pow(v, 1.25) + 0.05 * Math.sin(Math.PI * v) - (inner ? 0.02 : 0));
+      const phi = u * (len * 0.24 * wp) / Math.max(rad, len * 0.10);
+      p.setXYZ(k, Math.sin(a0 + phi) * rad, len * v * (1 - 0.22 * op * v), Math.cos(a0 + phi) * rad);
+      const c = mixC(pal[0], pal[1], sstep(0.06, 0.5, v)).clone().lerp(pal[2], sstep(0.55, 1, v) * 0.7)
+        .multiplyScalar(1 - 0.20 * Math.pow(Math.abs(Math.sin(u * 7.0)), 3) * sstep(0.1, 0.5, v));  // darker veins
+      cols[k * 3] = c.r; cols[k * 3 + 1] = c.g; cols[k * 3 + 2] = c.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(cols, 3)); g.computeVertexNormals(); parts.push(g);
+  }
+  const red0 = C(0xb01004), red1 = C(0xff3606);
+  for (let i = 0; i < 3; i++) {                                    // the saffron threads, spilling out past the petals
+    const a = i / 3 * 6.283 + rr(-0.45, 0.45), out = rr(0.34, 0.60) * L, pts = [];
+    for (let j = 0; j <= 5; j++) { const q = j / 5; pts.push(new THREE.Vector3(Math.sin(a) * out * q * q, L * (0.12 + 0.80 * q - 0.62 * q * q * q), Math.cos(a) * out * q * q)); }
+    parts.push(tube(pts, L * 0.010, L * 0.024, red0, red1, 5));
+  }
+  for (let i = 0; i < 3; i++) {
+    const a = i / 3 * 6.283 + 1.0, g = new THREE.CylinderGeometry(L * 0.024, L * 0.018, L * 0.30, 5); g.translate(0, L * 0.15, 0);
+    parts.push(place(paint(g, () => C(0xf4c21a)), new THREE.Vector3(Math.sin(a) * L * 0.03, L * 0.22, Math.cos(a) * L * 0.03), 0.22, a, 0));
+  }
+  return mergeGeos(parts);
+}
+function crocusPlant() {                       // a clump: grassy blades with a pale midrib, flowers on slender lilac tubes
+  const parts = [], nF = 3 + Math.floor(rnd() * 3), b0 = C(0x1f4d22), b1 = C(0x5c9a48);
+  for (let i = 0; i < 11; i++) {
+    const l = rr(0.5, 1.0);
+    parts.push(place(leaflet(l, l * rr(0.03, 0.045), b0, b1, 0.5), new THREE.Vector3(rr(-0.06, 0.06), 0, rr(-0.04, 0.04)), rr(-0.25, 0.3), rr(0, 6.283), rr(-0.5, 0.5)));
+  }
+  const t0 = C(0xe4d9f2), t1 = C(0xb79be0);
+  for (let f = 0; f < nF; f++) {
+    const lean = rr(-0.38, 0.38), h = rr(0.34, 0.66);
+    const pts = stemPoints(h, lean * 0.5, rr(-0.04, 0.08), 0.02, 5, rr(-0.13, 0.13), 0, rr(-0.06, 0.06), lean * 0.6);
+    parts.push(tube(pts, 0.010, 0.013, t0, t1, 5));
+    parts.push(place(crocusHead(rr(0.17, 0.22), pick(CROC), rr(0.45, 1.0)), pts[5].clone(), rr(-0.05, 0.6), 0, -lean * 0.9));
+  }
+  return mergeGeos(parts);
+}
+
+/* ---------- pussy willow catkin ---------- */
+function catkin(s) {
+  const g = new THREE.SphereGeometry(1, 14, 12), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), z = p.getZ(i), j = 1 + rr(-0.06, 0.06);
+    const taper = 1 - 0.28 * Math.max(0, y);
+    p.setXYZ(i, x * 0.40 * s * j * taper, (y + 1) * 0.5 * s * 2.15, z * 0.40 * s * j * taper);
+  }
+  g.computeVertexNormals();
+  const w0 = C(0xb9c2c0), w1 = C(0xffffff);
+  paint(g, (x, y, z) => mixC(w0, w1, 0.35 + 0.65 * sstep(0, s * 0.9, y) + rr(-0.08, 0.08)).clone());
+  const sc = new THREE.ConeGeometry(s * 0.30, s * 0.55, 6, 1); sc.rotateX(Math.PI); sc.translate(0, s * 0.16, 0);
+  return mergeGeos([g, paint(sc, () => C(0x2a1710))]);
+}
+
+/* =====================================================================
+   PLANT PROTOTYPES (unit height, growing +Y, flowers turned toward the glass)
+   ===================================================================== */
+const gCol = { stem0: C(0x3f6a2c), stem1: C(0x6f9c45), wil0: C(0x5a2a18), wil1: C(0xa0522e), leaf0: C(0x2c6428), leaf1: C(0x5e9a42), leaf2: C(0x86b85a) };
+function faceGlass(g, tiltX = 0, tiltY = 0) { g.rotateX(Math.PI / 2 + tiltX); g.rotateY(tiltY); return g; }
+
+function roseStem(pal, o = {}) {              // one stem with leaves, a head at the tip and side shoots carrying more heads or buds
+  const parts = [], len = o.len || 0.9, pts = stemPoints(len, o.bend ?? rr(-0.4, 0.4), o.bz ?? rr(-0.05, 0.05), 0.05, 9, o.x || 0, 0, o.z || 0, o.ang || 0);
+  const th = o.thick || 1, lk = o.leafK || 1;
+  const stem = tube(pts, 0.011 * th, 0.0065 * th, gCol.stem0, gCol.stem1); parts.push(stem);
+  const curve = stem.userData.curve; let side = rnd() < 0.5 ? 1 : -1;
+  const leafTs = o.leaves || [0.18, 0.32, 0.46, 0.60];
+  for (const t of leafTs) {                                                   // compound leaves, five leaflets each
+    const p = curve.getPointAt(t), tan = curve.getTangentAt(t), base = Math.atan2(tan.x, tan.y);
+    const ang = base + side * rr(0.85, 1.2), L = rr(0.12, 0.16) * len * lk;
+    const pet = stemPoints(L, -side * 0.3, rr(-0.15, -0.03), 0.02, 4, p.x, p.y, p.z, ang);
+    parts.push(tube(pet, 0.004, 0.0025, gCol.stem0, gCol.stem1, 4));
+    const dir = new THREE.Vector3().subVectors(pet[4], pet[3]).normalize(), rz = -Math.atan2(dir.x, dir.y);
+    const c0 = gCol.leaf0.clone().offsetHSL(rr(-0.02, 0.02), 0, rr(-0.02, 0.03)), c1 = gCol.leaf1.clone().offsetHSL(rr(-0.02, 0.02), 0, rr(-0.03, 0.04));
+    for (const k of [1, 2, 3]) for (const s2 of [-1, 1]) {
+      if (k === 3 && s2 === 1) continue;
+      const q = pet[Math.min(4, k + 1)], l = (k === 3 ? 0.085 : rr(0.062, 0.075)) * (0.6 + 0.4 * len) * lk;
+      parts.push(place(leaflet(l, l * 0.55, c0, c1), q.clone(), rr(-0.5, 0.1), rr(-0.4, 0.4), rz + (k === 3 ? 0 : s2 * rr(0.8, 1.1))));
+    }
+    side = -side;
+  }
+  for (let t = 0.1; t < 0.8; t += rr(0.08, 0.13)) {                              // thorns
+    const p = curve.getPointAt(t), g = new THREE.ConeGeometry(0.0045, 0.02, 4); g.translate(0, 0.01, 0);
+    parts.push(place(paint(g, () => C(0x6a2a1a)), p, rr(-0.6, 0.6), 0, (rnd() < 0.5 ? 1 : -1) * 1.35));
+  }
+  const tip = curve.getPointAt(1), R0 = o.R || rr(0.070, 0.086);
+  parts.push(faceGlass(roseHead(R0, pal), rr(-0.95, -0.30), rr(-0.5, 0.5)).translate(tip.x, tip.y, tip.z + 0.02));
+  const shoots = o.shoots ?? 0; let sd = rnd() < 0.5 ? 1 : -1;
+  for (let k = 0; k < shoots; k++) {
+    const t = lerp(o.t0 ?? 0.42, o.t1 ?? 0.84, (k + rr(0.2, 0.8)) / shoots), p = curve.getPointAt(t), tan = curve.getTangentAt(t), base = Math.atan2(tan.x, tan.y);
+    const tw = stemPoints(rr(0.15, 0.26) * len * (o.twigK || 1), -sd * 0.45, rr(-0.1, 0.1), 0.03, 4, p.x, p.y, p.z, base + sd * rr(0.5, 0.8));
+    parts.push(tube(tw, 0.006 * th, 0.0042 * th, gCol.stem0, gCol.stem1, 5));
+    const e = tw[4];
+    if (rnd() < 0.28) parts.push(place(roseBud(o.sR ? o.sR * 0.6 : 0.03, pal), e.clone(), rr(-0.2, 0.3), 0, -sd * 0.5));
+    else parts.push(faceGlass(roseHead(o.sR ? o.sR * rr(0.85, 1.15) : rr(0.050, 0.064), pal), rr(-1.0, -0.25), rr(-0.6, 0.6)).translate(e.x, e.y, e.z + 0.015));
+    sd = -sd;
+  }
+  return parts;
+}
+function roseStrand(pal, R) { return mergeGeos(roseStem(pal, { len: 0.9, shoots: 2 + Math.floor(rnd() * 3), R, sR: R ? R * 0.72 : 0 })); }
+function roseClimber(pal) {                        // a long bough that arcs across the frame, small roses strung along it
+  return mergeGeos(roseStem(pal, { len: 1, bend: 1.75, ang: -0.32, bz: -0.02, thick: 0.5, leafK: 0.42, twigK: 0.35, shoots: 8, t0: 0.22, t1: 0.97, sR: 0.021, R: 0.024,
+    leaves: [0.10, 0.18, 0.26, 0.34, 0.42, 0.50, 0.58, 0.66, 0.74, 0.82, 0.90] }));
+}
+const ROSE_BLUSH = [[C(0x8c2f52), C(0xe77fa0), C(0xffd3df)], [C(0xa04460), C(0xf09ab0), C(0xffe2e8)]];
+function roseBouquet(palA, palB, Rk = 1) {                 // several stems gathered at the foot, heads massed at the top
+  const parts = [], n = 6 + Math.floor(rnd() * 2);
+  for (let i = 0; i < n; i++) {
+    const u = (i + rr(0.2, 0.8)) / n - 0.5;
+    parts.push(...roseStem(rnd() < 0.7 ? palA : palB, { len: rr(0.74, 0.97), ang: u * 0.62, bend: u * rr(0.2, 0.6), z: rr(-0.07, 0.0), bz: rr(-0.10, 0.02),
+      leaves: [rr(0.3, 0.42), rr(0.52, 0.66)], shoots: rnd() < 0.35 ? 1 : 0, R: rr(0.064, 0.080) * Rk }));
+  }
+  return mergeGeos(parts);
+}
+function chicoryPlant(pals) {
+  const parts = [], pts = stemPoints(0.95, rr(-0.35, 0.35), rr(-0.04, 0.04), 0.11, 10);
+  const stem = tube(pts, 0.0075, 0.004, gCol.stem0, gCol.stem1, 5); parts.push(stem);
+  const stems = [stem.userData.curve];
+  for (let k = 0; k < 1 + (rnd() < 0.6 ? 1 : 0); k++) {
+    const p = stems[0].getPointAt(rr(0.28, 0.6)), sd = k % 2 ? 1 : -1;
+    const tw = tube(stemPoints(rr(0.22, 0.32), -sd * 0.25, rr(-0.1, 0.1), 0.08, 5, p.x, p.y, p.z, sd * rr(0.4, 0.62)), 0.0045, 0.003, gCol.stem0, gCol.stem1, 4);
+    parts.push(tw); stems.push(tw.userData.curve);
+  }
+  stems.forEach((cv, si) => {
+    let side = rnd() < 0.5 ? 1 : -1; const L = cv.getLength();
+    for (let d = (si ? 0.09 : 0.2); d < L - 0.02; d += rr(0.105, 0.15)) {
+      const p = cv.getPointAt(d / L);
+      parts.push(place(leaflet(rr(0.05, 0.08), 0.012, gCol.leaf0, gCol.leaf2, 0.2), p.clone(), rr(-0.4, 0.2), 0, -side * rr(0.5, 0.9)));
+      if (rnd() < 0.68) {
+        const R = rr(0.040, 0.050);
+        parts.push(faceGlass(chicoryHead(R, pick(pals)), rr(-0.4, 0.25), rr(-0.45, 0.45)).translate(p.x + side * R * 0.35, p.y, p.z + 0.012));
+      } else {
+        const b = new THREE.SphereGeometry(0.009, 6, 5); b.scale(1, 1.8, 1); b.translate(0, 0.014, 0);
+        parts.push(place(paint(b, (x, y) => mixC(C(0x3f6a30), pick(pals)[1], sstep(0.018, 0.03, y)).clone()), p.clone(), 0, 0, -side * 0.6));
+      }
+      side = -side;
+    }
+    const e = cv.getPointAt(1), R = rr(0.042, 0.052);
+    parts.push(faceGlass(chicoryHead(R, pick(pals)), rr(-0.5, 0.1), rr(-0.4, 0.4)).translate(e.x, e.y, e.z + 0.012));
+  });
+  return mergeGeos(parts);
+}
+function willowPlant() {
+  const parts = [], pts = stemPoints(0.97, rr(-0.55, 0.55), rr(-0.05, 0.05), 0.04, 10);
+  const stem = tube(pts, 0.0085, 0.003, gCol.wil0, gCol.wil1, 6); parts.push(stem);
+  const stems = [stem.userData.curve];
+  for (let k = 0; k < 1 + (rnd() < 0.7 ? 1 : 0); k++) {
+    const p = stems[0].getPointAt(rr(0.2, 0.52)), sd = k % 2 ? 1 : -1;
+    const tw = tube(stemPoints(rr(0.28, 0.4), -sd * 0.2, rr(-0.12, 0.12), 0.03, 6, p.x, p.y, p.z, sd * rr(0.32, 0.5)), 0.005, 0.0025, gCol.wil0, gCol.wil1, 5);
+    parts.push(tw); stems.push(tw.userData.curve);
+  }
+  stems.forEach((cv, si) => {
+    let side = rnd() < 0.5 ? 1 : -1; const L = cv.getLength();
+    for (let d = (si ? 0.06 : 0.1); d < L; d += rr(0.055, 0.075)) {
+      const t = d / L, p = cv.getPointAt(t), tan = cv.getTangentAt(t), rz = -Math.atan2(tan.x, tan.y);
+      parts.push(place(catkin(0.030 * (1 - 0.3 * t) * rr(0.85, 1.15)), p.clone(), rr(-0.35, 0.5), 0, rz - side * rr(0.3, 0.6)));
+      side = -side;
+    }
+  });
+  return mergeGeos(parts);
+}
+function cardGeo(_, i) {
+  const flatCard = i >= 8;                          // a branch card: bowed, cupped and twisted so it is never a flat plane
+  const g = new THREE.PlaneGeometry(1, 1, 6, 12); g.translate(0, 0.5, 0);
+  const p = g.attributes.position, bow = flatCard ? rr(-0.07, 0.0) : rr(-0.22, 0.06), cup = flatCard ? rr(-0.08, 0.08) : rr(-0.25, 0.25), tw = flatCard ? rr(-0.12, 0.12) : rr(-0.5, 0.5), s = rr(0, 6.28);
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), a = tw * y;
+    const z = bow * y * y + cup * x * x * (0.4 + y) + 0.018 * Math.sin(x * 9 + s) * y + 0.014 * Math.sin(y * 11 + s);
+    p.setXYZ(i, x * Math.cos(a) - z * Math.sin(a), y, x * Math.sin(a) + z * Math.cos(a));
+  }
+  g.computeVertexNormals(); return g;
+}
+
+/* =====================================================================
+   THE TERRARIUM
+   ===================================================================== */
+const SLICES = [0, 0.035, 0.08, 0.15, 0.26, 0.42, 0.68, 1.1, 2.7];     // distance behind the glass
+const NS = SLICES.length - 1;
+const garden = new THREE.Group(); scene.add(garden);
+let plants = [], builtAsp = 0, proto = null;
+
+function buildPrototypes() {
+  seed = 20261110;
+  const P = ROSE_PALS;
+  proto = {
+    card: Array.from({ length: 14 }, cardGeo),
+    strand: [0, 1, 2, 3, 4].map(i => roseStrand(P[i])),
+    bouquet: [roseBouquet(P[0], P[3]), roseBouquet(P[1], P[4]), roseBouquet(P[2], P[0])],
+    blush: [roseStrand(ROSE_BLUSH[0], 0.092), roseStrand(ROSE_BLUSH[1], 0.086)],
+    blushBouquet: [roseBouquet(ROSE_BLUSH[0], ROSE_BLUSH[1], 1.18)],
+    climber: [roseClimber(P[1])],
+    pink: [0, 1].map(() => chicoryPlant(CHIC.pink)),
+    blue: [0, 1, 2, 3].map(() => chicoryPlant(CHIC.blue)),
+    crocus: [0, 1, 2, 3, 4].map(() => crocusPlant()),
+    willow: [willowPlant(), willowPlant()],
+  };
+}
+function buildGarden(asp) {
+  builtAsp = asp; seed = 777;
+  for (const m of plants) garden.remove(m);
+  plants = [];
+  const addMesh = (geo, mat, depthMat, x, y, z, rz, rx, ry, len) => {
+    const m = new THREE.Mesh(geo, mat); m.customDepthMaterial = depthMat;
+    m.position.set(x, y, z); m.rotation.set(rx, ry, rz, 'ZYX'); m.scale.setScalar(len);
+    m.castShadow = true; m.receiveShadow = true; m.updateMatrixWorld(true);
+    const bb = new THREE.Box3().setFromObject(m);
+    if (bb.max.z > -0.015) { m.position.z -= bb.max.z + 0.015; m.updateMatrixWorld(true); bb.setFromObject(m); }   // nothing pokes through the pane
+    m.userData.z0 = -bb.max.z - 0.07; m.userData.z1 = -bb.min.z + 0.07;
+    garden.add(m); plants.push(m); return m;
+  };
+  if (DEBUG.includes('rose')) {                 // close-up study of the flower heads
+    const heads = [roseHead(0.07, ROSE_PALS[0]), roseHead(0.07, ROSE_PALS[1]), roseHead(0.07, ROSE_PALS[3]), crocusHead(0.2, CROC[0], 0.8), crocusHead(0.2, CROC[1], 0.5)];
+    heads.forEach((g, i) => { const m = addMesh(g, floraMat, floraDepth, (-1.6 + i * 0.8) * asp / 1.6, i > 2 ? -0.35 : -0.1, -0.5, 0, i > 2 ? 0.25 : [1.45, 0.85, 0.2][i], 0.3 * (i - 1), i > 2 ? 2.6 : 3.4); });
+    return;
+  }
+  const leafKinds = ['oak', 'ash', 'aspen'];
+  /* Composition, not scatter:
+     - one focal mass (deep red roses) on the right-hand third, in the sharpest layer
+     - a quieter answer (blush roses) high on the left third, further back
+     - blue chicory planted as a single drift stepping down toward the focal mass
+     - saffron as a broken ribbon along the ground in three groups, heaviest under the focal mass
+     - one climbing bough and two willow wands as the only long lines, crossing once
+     - foliage held to the edges as a frame; the upper centre and the lamp corner stay open
+     Each entry: kind, x (fraction of half-width), depth behind the pane, height, lean. */
+  const plan = [
+    ['leaf', -1.02, 1.30, 2.35, 0.14], ['leaf', -0.84, 1.00, 1.90, 0.04], ['leaf', -0.60, 1.42, 1.45, -0.10],
+    ['leaf', 1.02, 1.22, 2.40, -0.14], ['leaf', 0.86, 0.96, 2.05, -0.04], ['leaf', 0.68, 1.45, 1.60, 0.10],
+    ['leaf', -0.18, 1.34, 1.05, 0.05], ['leaf', 0.24, 1.44, 1.15, -0.05],
+    ['blushBouquet', -0.50, 0.86, 1.82, 0.06], ['blush', -0.68, 0.72, 1.52, 0.10], ['pink', -0.82, 0.52, 1.22, 0.10], ['pink', -0.36, 0.66, 1.18, -0.04],
+    ['willow', 0.20, 0.84, 2.08, 0.26], ['willow', 0.33, 1.02, 1.84, 0.30], ['climber', -0.90, 0.40, 3.05, 0.0],
+    ['bouquet', 0.50, 0.30, 1.58, -0.04], ['strand', 0.67, 0.42, 1.88, -0.10], ['strand', 0.35, 0.52, 1.34, 0.08], ['strand', 0.83, 0.09, 1.30, -0.12],
+    ['blue', -0.34, 0.56, 1.72, 0.10], ['blue', -0.20, 0.44, 1.46, 0.03], ['blue', -0.05, 0.34, 1.20, -0.05], ['blue', -0.44, 0.10, 1.12, 0.08],
+    ['crocus', -0.90, 0.05, 0.90, 0.06], ['crocus', -0.76, 0.12, 1.12, 0.0], ['crocus', -0.63, 0.06, 0.84, -0.06],
+    ['crocus', -0.10, 0.13, 0.80, 0.04], ['crocus', 0.05, 0.05, 0.96, -0.03],
+    ['crocus', 0.33, 0.06, 1.00, 0.05], ['crocus', 0.47, 0.13, 1.22, 0.0], ['crocus', 0.61, 0.05, 1.04, -0.04], ['crocus', 0.75, 0.14, 0.88, -0.08],
+    ['leaf', -1.04, 0.45, 1.50, -0.20], ['leaf', 1.05, 0.50, 1.60, 0.20], ['leaf', -1.0, 0.07, 0.95, -0.1], ['leaf', 0.98, 0.10, 0.92, 0.1],
+  ];
+  let li = 0;
+  for (const [kind, xn, d, h, lean] of plan) {
+    const f = (CAM_Z + d) / CAM_Z, x = xn * asp * f, y = -1.16 * f, len = h * f * rr(0.97, 1.03);
+    const rz = lean + rr(-0.03, 0.03), rx = rr(-0.08, 0.02), ry = rr(-0.2, 0.2);
+    if (kind === 'leaf') {
+      const k = leafKinds[li++ % 3];
+      for (let c = 0; c < 2; c++) addMesh(proto.card[Math.floor(rnd() * 8)], cardMats[k], cardDepth[k], x + c * rr(-0.08, 0.08), y, -d - c * 0.05, rz + c * rr(-0.3, 0.3), rx, ry + c * rr(-0.6, 0.6), len * (c ? 0.8 : 1.05));
+    } else addMesh(pick(proto[kind]), floraMat, floraDepth, x, y, -d, rz, kind === 'climber' ? 0 : rx, kind === 'climber' ? 0 : ry, len);
+  }
+  for (const [jx, jy, d, rz, k] of [[1.12, 1.05, 0.9, 2.3, 'oak'], [-1.12, 0.22, 1.1, -1.25, 'ash']]) {
+    const f = (CAM_Z + d) / CAM_Z;
+    for (let c = 0; c < 2; c++) addMesh(proto.card[Math.floor(rnd() * 8)], cardMats[k], cardDepth[k], jx * asp * f, jy * f, -d - c * 0.06, rz + rr(-0.25, 0.25), rr(-0.2, 0.2), rr(-0.4, 0.4), rr(1.0, 1.4) * f);
+  }
+}
+
+/* ---------- the wall behind: soft pastel yellow plaster, lit only by the lamp ---------- */
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(16, 10), new THREE.MeshStandardMaterial({ color: 0xb4c8a8, roughness: 0.96, metalness: 0 }));
+wall.position.set(0, 0, -2.3); wall.receiveShadow = true; scene.add(wall);
+
+/* ---------- light: a lamp tucked into the upper-left corner of the case ---------- */
+const lampPos = new THREE.Vector3(), lampCol = new THREE.Color(1.0, 0.92, 0.78);
+const lamp = new THREE.SpotLight(lampCol, 30, 0, 1.25, 1.0, 1.7);
+lamp.castShadow = true; lamp.shadow.mapSize.set(2048, 2048); lamp.shadow.bias = -0.0012; lamp.shadow.normalBias = 0.014; lamp.shadow.radius = 4;
+lamp.shadow.camera.near = 0.12; lamp.shadow.camera.far = 9;
+scene.add(lamp, lamp.target);
+scene.add(new THREE.HemisphereLight(0xcfe0e6, 0x2a3a26, 1.05));
+const fill = new THREE.DirectionalLight(0xe4ecf0, 0.95); fill.position.set(0.8, 0.6, 3); scene.add(fill);
+
+/* =====================================================================
+   POST — depth slices, per-slice frost, haze, glass
+   ===================================================================== */
+const quadScene = new THREE.Scene(), quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), null); quad.frustumCulled = false; quadScene.add(quad);
+const quadVS = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+function pass(mat, target) { quad.material = mat; renderer.setRenderTarget(target); renderer.render(quadScene, quadCam); }
+
+const blurMat = new THREE.ShaderMaterial({ depthTest: false, depthWrite: false, vertexShader: quadVS,
+  uniforms: { uTex: { value: null }, uDir: { value: new THREE.Vector2() }, uSigma: { value: 1 } },
+  fragmentShader: `uniform sampler2D uTex; uniform vec2 uDir; uniform float uSigma; varying vec2 vUv;
+  void main() { vec4 acc = vec4(0.0); float ws = 0.0;
+    for (int i = -6; i <= 6; i++) { float x = float(i), w = exp(-x * x / (2.0 * uSigma * uSigma)); acc += texture2D(uTex, vUv + uDir * x) * w; ws += w; }
+    gl_FragColor = acc / ws; }` });
+
+const RAY = `
+  uniform mat4 uInvPV; uniform vec3 uCam;
+  vec3 rayDir(vec2 uv) { vec4 p = uInvPV * vec4(uv * 2.0 - 1.0, 1.0, 1.0); return normalize(p.xyz / p.w - uCam); }`;
+
+const compMat = new THREE.ShaderMaterial({ depthTest: false, depthWrite: false, vertexShader: quadVS,
+  uniforms: { uL0: { value: null }, uL1: { value: null }, uL2: { value: null }, uL3: { value: null }, uL4: { value: null }, uL5: { value: null }, uL6: { value: null }, uL7: { value: null },
+    uPeb: { value: null }, uTitle: { value: null }, uD: { value: new Array(NS).fill(0) }, uDz: { value: new Array(NS).fill(0) }, uInvPV: { value: new THREE.Matrix4() }, uCam: { value: new THREE.Vector3() },
+    uLamp: { value: lampPos }, uLampCol: { value: new THREE.Color() }, uRes: { value: new THREE.Vector2() }, uPebScale: { value: 1 }, uFlat: { value: 0 } },
+  fragmentShader: `
+  uniform sampler2D uL0, uL1, uL2, uL3, uL4, uL5, uL6, uL7, uPeb, uTitle;
+  uniform float uD[${NS}], uDz[${NS}]; uniform vec3 uLamp, uLampCol; uniform vec2 uRes; uniform float uPebScale, uFlat;
+  varying vec2 vUv; ${RAY}
+  void main() {
+    vec3 rd = rayDir(vUv); vec3 G = uCam + rd * (-uCam.z / rd.z);                     // where this pixel's ray meets the pane
+    vec2 n = texture2D(uPeb, G.xy * uPebScale).xy * 2.0 - 1.0;
+    vec2 wav = texture2D(uPeb, G.xy * uPebScale * 0.06 + 0.37).xy * 2.0 - 1.0;         // slow waviness of the sheet
+    vec2 refr = (n * 0.30 + wav * 0.9) * vec2(uRes.y / uRes.x, 1.0) * (1.0 - uFlat);
+    vec3 fogBase = vec3(0.050, 0.080, 0.058);
+    vec3 col;
+    { vec3 P = uCam + rd * ((-3.2 - uCam.z) / rd.z); vec3 dl = P - uLamp; col = fogBase + uLampCol * (0.25 / (1.0 + dot(dl, dl) * 1.5)); }
+    #define SLICE(T, i) { float d = uD[i]; vec3 P = uCam + rd * ((-d - uCam.z) / rd.z); vec3 dl = P - uLamp; \\
+      vec3 fog = fogBase + uLampCol * (0.95 / (1.0 + dot(dl, dl) * 3.6)); col = mix(fog, col, exp(-0.36 * uDz[i])); \\
+      vec4 s = texture2D(T, vUv + refr * (0.0030 + 0.012 * d)); col = col * (1.0 - s.a) + s.rgb; }
+    SLICE(uL7, 7) SLICE(uL6, 6) SLICE(uL5, 5) SLICE(uL4, 4) SLICE(uL3, 3) SLICE(uL2, 2) SLICE(uL1, 1)
+    { float ts = 0.0; for (int i = 0; i < 8; i++) { float a = float(i) * 2.399963, r = sqrt((float(i) + 0.5) / 8.0);
+        ts += texture2D(uTitle, vUv + (vec2(4.0, -6.0) + vec2(cos(a), sin(a)) * r * 7.0) / uRes).a; }
+      col *= 1.0 - 0.30 * ts / 8.0;
+      vec4 tt = texture2D(uTitle, vUv + refr * 0.0015); col = col * (1.0 - tt.a) + tt.rgb; }   // the question, a few centimetres behind the glass
+    SLICE(uL0, 0)
+    gl_FragColor = vec4(col, 1.0);
+  }` });
+
+const FLOW = { field: null, mask: null, rect: new THREE.Vector4(0, 0, 1, 1), texel: new THREE.Vector2(1, 1) };
+const glassMat = new THREE.ShaderMaterial({ depthTest: false, depthWrite: false, vertexShader: quadVS,
+  uniforms: { uC: { value: null }, uPeb: { value: null }, uField: { value: null }, uObs: { value: null }, uTextRT: { value: null },
+    uFR: { value: FLOW.rect }, uObsTexel: { value: FLOW.texel }, uPx: { value: new THREE.Vector2() }, uInvPV: { value: new THREE.Matrix4() }, uCam: { value: new THREE.Vector3() },
+    uLamp: { value: lampPos }, uLampCol: { value: new THREE.Color() }, uPebScale: { value: 1 }, uAsp: { value: 1 },
+    uTime: { value: 0 }, uFlat: { value: 0 }, uFall: { value: 1 }, uTau: { value: -1 }, uSurge: { value: 0 }, uFlow: { value: 0 } },
+  fragmentShader: `
+  uniform sampler2D uC, uPeb, uField, uObs, uTextRT;
+  uniform vec4 uFR; uniform vec2 uObsTexel, uPx; uniform vec3 uLamp, uLampCol;
+  uniform float uPebScale, uTime, uFlat, uFall, uAsp, uTau, uSurge, uFlow;
+  varying vec2 vUv; ${RAY}
+  float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+  vec3 room(vec3 r) {                                             // what the pane reflects: a dim room with one soft window
+    vec3 c = mix(vec3(0.010, 0.012, 0.014), vec3(0.05, 0.06, 0.07), smoothstep(-0.3, 0.9, r.y));
+    c += vec3(1.0, 0.95, 0.88) * smoothstep(0.80, 0.99, dot(r, normalize(vec3(0.58, 0.42, 0.70)))) * 0.9;
+    c += vec3(0.8, 0.9, 1.0) * smoothstep(0.93, 0.99, dot(r, normalize(vec3(-0.5, 0.2, 0.84)))) * 0.5;
+    return c;
+  }
+  float nz(vec2 p) { return texture2D(uPeb, p).a; }
+  vec3 aces(vec3 x) { return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0); }
+  // The syrup on the pane. The pour is solved once for the layout (computeFlow): r = when the syrup first
+  // reaches this point, g = which stream it belongs to (so its streaks bend around the letters with it),
+  // b = depth of the settled sheet (negative where it pools inside a letter), a = what backs up on top of a block.
+  float syrup(vec2 p, out float s, out float pool) {
+    vec2 fuv = (p - uFR.xy) * uFR.zw;
+    vec4 f = texture2D(uField, fuv);
+    float T = f.r + (nz(p * vec2(1.7, 0.9) + 0.17) - 0.5) * 0.020;          // a slightly ragged contact line
+    s = uTau - T;
+    pool = step(f.b, -0.0001);
+    float hs = abs(f.b) * (1.0 + 0.45 * smoothstep(0.20, 0.90, p.y)), X = f.g, fl = uFlow * (1.0 - 0.92 * pool);   // heavier near the top, where it pours in
+    float a = nz(vec2(X * 0.12 + 0.13, T * 0.020 - fl * 0.0050));          // curtains, streams and ripples, carried at the local speed
+    float b = nz(vec2(X * 0.40 + 0.41, T * 0.050 - fl * 0.0180));
+    float c = nz(vec2(X * 1.30 + 0.77, T * 0.160 - fl * 0.0700));
+    float det = smoothstep(0.22, 0.86, a * 0.58 + b * 0.32 + c * 0.10);
+    float sr = max(s, 0.0) / 0.05, ridge = sr * exp(1.0 - sr);             // the heavy, rounded head of the pour
+    float g1 = (uSurge - T) * 0.62 + (nz(vec2(X * 0.10, 0.3)) - 0.5) * 0.30, f1 = fract(g1);
+    float sg = smoothstep(0.0, 0.05, f1) * pow(1.0 - f1, 2.4) * step(0.0, uSurge - T);
+    float g2 = (uSurge * 1.4 - T) * 0.95 + (nz(vec2(X * 0.07 + 0.5, 0.9)) - 0.5) * 0.45, f2 = fract(g2);
+    sg += smoothstep(0.0, 0.05, f2) * pow(1.0 - f2, 3.2) * 0.6 * step(0.0, uSurge * 1.4 - T);   // later pours, layered over the first
+    sg *= smoothstep(0.4, 1.0, s) * (1.0 - pool);
+    float bead = smoothstep(0.0, 0.5, textureLod(uObs, fuv, 1.4).r) * 0.45; // syrup beads up against every block
+    float h = hs * (0.38 + 0.62 * det) + ridge * 0.80 + sg * 0.55 + bead;
+    return h * smoothstep(0.0, 0.012, s) + f.a * smoothstep(0.0, 0.3, s);
+  }
+  void main() {
+    vec3 rd = rayDir(vUv); vec3 G = uCam + rd * (-uCam.z / rd.z); vec3 V = -rd;
+    vec4 pb = texture2D(uPeb, G.xy * uPebScale); vec2 n = pb.xy * 2.0 - 1.0;
+    vec2 fuv = (G.xy - uFR.xy) * uFR.zw;
+    float om = smoothstep(0.32, 0.68, texture2D(uObs, fuv).r);              // the hidden letters: hydrophobic, so always dry
+
+    // syrup depth and slope (the slope ignores the hard edge of a letter; that edge is drawn on its own below)
+    float s, pool, s1, p1, e = 0.0032;
+    float h0 = syrup(G.xy, s, pool);
+    vec2 wg = vec2(syrup(G.xy + vec2(e, 0.0), s1, p1) - h0, syrup(G.xy + vec2(0.0, e), s1, p1) - h0) / e;
+    wg /= 1.0 + length(wg) * 0.035;
+    if (uFlat > 0.5) { h0 = 0.0; wg = vec2(0.0); }
+    float wh = h0 * (1.0 - om), wet = smoothstep(0.02, 0.18, wh);
+    vec2 off = -wg * 0.0011 * (1.0 - om) * vec2(1.0 / uAsp, 1.0);           // the syrup bends what is behind it
+    vec3 col = texture2D(uC, vUv + off).rgb;
+    if (uFlat > 0.5) { gl_FragColor = vec4(pow(aces(col * 1.32), vec3(1.0 / 2.2)), 1.0); return; }
+    col = mix(col, textureLod(uC, vUv + off * 1.6, 3.8).rgb, (1.0 - exp(-wh * 1.15)) * 0.86);   // and clouds it: the deeper, the less shows through
+
+    vec3 N = normalize(vec3(n * 0.6, 1.0));
+    vec3 ldir = normalize(uLamp - uCam); vec2 Lg = (uCam + ldir * (-uCam.z / ldir.z)).xy;
+    vec2 toL = Lg - G.xy; float rg = length(toL); vec2 l2 = toL / max(rg, 1e-4);
+    float glare = exp(-rg * rg * 1.05 * uFall) + 0.20 * exp(-rg * 1.35 * sqrt(uFall));
+    float th = atan(toL.y, toL.x);
+    float rays = 0.5 + 0.5 * sin(th * 9.0 + 1.3) * sin(th * 23.0 + uTime * 0.06);        // faint shafts fanning out from the lamp
+
+    vec3 bloom = textureLod(uC, vUv, 5.0).rgb * 0.6 + textureLod(uC, vUv, 7.0).rgb * 0.4;
+    col = mix(col, bloom, 0.10);                                             // light bleeding sideways inside the frost
+    col *= vec3(0.84, 0.92, 1.0);                                            // blue glass body
+    float grain = hash(floor(G.xy * 900.0)) * 0.6 + hash(floor(G.xy * 2300.0) + 3.0) * 0.4;
+    float relief = max(dot(n, l2), 0.0);
+    vec3 milk = vec3(0.30, 0.50, 0.90) * (0.13 + 0.05 * grain) + uLampCol * glare * (0.62 + 0.30 * pb.a + 0.55 * relief);
+    vec2 ev = (vUv - 0.5) * vec2(1.0, 1.15);
+    float frost = 0.15 + 0.22 * smoothstep(0.12, 0.66, dot(ev, ev) * 2.4), filled = smoothstep(0.0, 0.5, wh);
+    col = mix(col, milk, frost * (1.0 - 0.75 * filled) * 0.8);              // syrup fills the texture, so wet glass is clearer
+    col += uLampCol * glare * (0.16 + 0.14 * pb.a + 0.34 * relief) * (0.85 + 0.30 * rays) * (1.0 - 0.5 * filled);
+    col += uLampCol * rays * 0.035 * exp(-rg * 0.9);
+    vec3 Lt = normalize(uLamp - G); vec3 dl = uLamp - G;
+    float sp = pow(max(dot(N, normalize(vec3(Lt.xy, -Lt.z) + V)), 0.0), 180.0);
+    col += uLampCol * sp * 0.9 / (1.0 + dot(dl, dl) * 1.5) * (1.0 - wet);   // glints where a dry pebble bends the lamp toward you
+    float F = 0.04 + 0.96 * pow(1.0 - max(dot(N, V), 0.0), 5.0);
+    col += room(reflect(rd, N)) * F * 0.18 * (1.0 - wet);
+
+    // saffron: colour by depth (thin = pale gold, deep = amber), a glow where the lamp is behind it, light on its surface
+    {
+      col *= mix(vec3(1.0), exp(-wh * vec3(0.05, 0.60, 2.3) * 1.3), 0.95);
+      col = mix(col, vec3(0.98, 0.64, 0.18) * (0.26 + 0.9 * glare), (1.0 - exp(-wh * 0.5)) * 0.30);   // light scattered inside the syrup veils what is behind it
+      col += vec3(1.0, 0.50, 0.06) * wh * (0.05 + 0.11 * glare);
+      vec3 Nw = normalize(vec3(-wg * 0.20, 1.0));
+      float spw = pow(max(dot(Nw, normalize(vec3(Lt.xy, -Lt.z) + V)), 0.0), 70.0);
+      col += uLampCol * spw * (0.10 + 0.9 * glare) * wet;
+      float Fw = 0.02 + 0.98 * pow(1.0 - max(dot(Nw, V), 0.0), 5.0);
+      col += room(reflect(rd, Nw)) * Fw * 0.6 * wet;
+      float head = smoothstep(0.0, 0.010, s) * (1.0 - smoothstep(0.012, 0.05, s)) * (1.0 - pool) * (1.0 - om);
+      col += (vec3(1.0, 0.82, 0.48) * 0.12 + uLampCol * glare * 0.4) * head;   // the bright lip along the front of the pour
+    }
+
+    // the hidden letters: invisible on dry glass; once syrup is around them they read as dry, raised blocks
+    {
+      float rv = smoothstep(0.0, 0.35, s);
+      vec2 ot = uObsTexel * 2.2;
+      float mL = textureLod(uObs, fuv, 1.0).r;
+      vec2 gb = vec2(textureLod(uObs, fuv + vec2(ot.x, 0.0), 2.0).r - textureLod(uObs, fuv - vec2(ot.x, 0.0), 2.0).r,
+                     textureLod(uObs, fuv + vec2(0.0, ot.y), 2.0).r - textureLod(uObs, fuv - vec2(0.0, ot.y), 2.0).r);   // points into the letter
+      float edge = clamp(length(gb) * 1.8, 0.0, 1.0), facing = dot(-gb / max(length(gb), 1e-4), l2);
+      col = mix(col, col * 1.05 + vec3(0.010, 0.012, 0.011), om * rv);
+      col += (uLampCol * (0.30 + 1.2 * glare) + vec3(0.14, 0.12, 0.09)) * max(facing, 0.0) * edge * om * rv * 0.9;   // bevel toward the lamp
+      col *= 1.0 - max(-facing, 0.0) * edge * om * rv * 0.40;                                                   // bevel in shade
+      float shd = textureLod(uObs, fuv + l2 * 0.018 * uFR.zw, 2.6).r;
+      col *= 1.0 - 0.36 * shd * (1.0 - om) * rv;                                                                // the block's shadow on the syrup
+      float rim = (1.0 - om) * smoothstep(0.06, 0.45, mL) * rv;
+      col += (uLampCol * (0.16 + glare) * 0.6 + vec3(0.12, 0.08, 0.03)) * rim * max(facing + 0.25, 0.0) * 0.9;  // meniscus where syrup meets the block
+      col *= 1.0 - rim * max(-facing, 0.0) * 0.28;
+    }
+
+    // the lettering standing in front of the pane, and its shadow on the glass
+    {
+      vec4 tx = texture2D(uTextRT, vUv); float sh = 0.0;
+      for (int i = 0; i < 10; i++) { float a = float(i) * 2.399963, r = sqrt((float(i) + 0.5) / 10.0);
+        sh += texture2D(uTextRT, vUv + (vec2(5.0, -9.0) + vec2(cos(a), sin(a)) * r * 9.0) * uPx).a; }
+      col *= 1.0 - 0.42 * (sh / 10.0) * (1.0 - tx.a);
+      col = col * (1.0 - tx.a) + tx.rgb;
+    }
+
+    vec2 v = vUv - 0.5; col *= 1.0 - dot(v, v) * 0.5;
+    col = pow(aces(col * 1.32), vec3(1.0 / 2.2));
+    col = mix(vec3(dot(col, vec3(0.3, 0.6, 0.1))), col, 1.22);
+    col += (hash(vUv * 913.0 + uTime) - 0.5) * 0.012;
+    gl_FragColor = vec4(col, 1.0);
+  }` });
+
+/* ---------- pebbled-glass relief: tileable height field -> normal map (xy) + height (a) ---------- */
+function pebbleTexture() {
+  const S = 512, h = new Float32Array(S * S);
+  const layer = (cells, amp) => {
+    const gsz = cells, grid = new Float32Array(gsz * gsz); for (let i = 0; i < grid.length; i++) grid[i] = rnd();
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      const fx = x / S * gsz, fy = y / S * gsz, ix = Math.floor(fx), iy = Math.floor(fy);
+      let ux = fx - ix, uy = fy - iy; ux = ux * ux * ux * (ux * (ux * 6 - 15) + 10); uy = uy * uy * uy * (uy * (uy * 6 - 15) + 10);
+      const a = grid[(iy % gsz) * gsz + ix % gsz], b = grid[(iy % gsz) * gsz + (ix + 1) % gsz], c = grid[((iy + 1) % gsz) * gsz + ix % gsz], d = grid[((iy + 1) % gsz) * gsz + (ix + 1) % gsz];
+      h[y * S + x] += amp * (a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy);
+    }
+  };
+  layer(22, 0.72); layer(45, 0.28);
+  const data = new Uint8Array(S * S * 4), k = 30 * 1.25;
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const xl = h[y * S + (x + S - 1) % S], xr = h[y * S + (x + 1) % S], yd = h[((y + S - 1) % S) * S + x], yu = h[((y + 1) % S) * S + x];
+    const dx = (xl - xr) * 0.5 * S / 30 * k / 30, dy = (yd - yu) * 0.5 * S / 30 * k / 30, i = (y * S + x) * 4;
+    data[i] = Math.max(0, Math.min(255, (dx * 0.5 + 0.5) * 255)); data[i + 1] = Math.max(0, Math.min(255, (dy * 0.5 + 0.5) * 255));
+    data[i + 2] = 255; data[i + 3] = Math.max(0, Math.min(255, h[y * S + x] * 255));
+  }
+  const t = new THREE.DataTexture(data, S, S, THREE.RGBAFormat);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+  t.generateMipmaps = true; t.anisotropy = Math.min(8, maxAniso); t.needsUpdate = true; return t;
+}
+/* ---------- lettering: Gloock outlines extruded into real geometry ---------- */
+function letterGeo(key, em) {
+  const { w, d } = GLYPHS[key], k = em / 1000, sp = new THREE.ShapePath(), re = /([MLQCZ])([^MLQCZ]*)/g;
+  let m, area = 0, done = false, px = 0, py = 0;
+  while ((m = re.exec(d))) {
+    const a = m[2].trim().split(/\s+/).filter(Boolean).map(v => +v * k), n = a.length;
+    if (m[1] === 'M') sp.moveTo(a[0], a[1]); else if (m[1] === 'L') sp.lineTo(a[0], a[1]);
+    else if (m[1] === 'Q') sp.quadraticCurveTo(a[0], a[1], a[2], a[3]); else if (m[1] === 'C') sp.bezierCurveTo(a[0], a[1], a[2], a[3], a[4], a[5]);
+    if (m[1] === 'Z') { done = true; continue; }
+    if (!done && m[1] !== 'M') area += px * a[n - 1] - a[n - 2] * py;
+    px = a[n - 2]; py = a[n - 1];
+  }
+  const g = new THREE.ExtrudeGeometry(sp.toShapes(area > 0), { depth: em * 0.10, bevelEnabled: true, bevelThickness: em * 0.020, bevelSize: em * 0.012, bevelSegments: 3, curveSegments: 7 });
+  g.translate(-w * k / 2, 0, 0); return { g, width: w * k };
+}
+/* =====================================================================
+   LAYOUT — the question behind the glass, the hidden words on it, the mark and the call in front of it
+   ===================================================================== */
+const gw = k => GLYPHS[k].w / 1000;                 // advance width in ems
+function layout(asp) {
+  const L = { title: [], hidden: [], dots: [], mark: null, cta: null };
+  const avail = 2 * 0.98 * asp * (asp >= 1.05 ? 0.86 : 0.88);
+  if (asp >= 1.05) {
+    const emT = Math.min(0.155, avail * 0.92 / gw('Want to know our secret?'));
+    L.title.push({ key: 'Want to know our secret?', em: emT, x: 0, y: 0.47 });
+    const emA = Math.min(0.185, avail / gw('premium ingredients')), yA = 0.12, yB = yA - emA * 1.42;
+    L.hidden.push({ key: 'premium ingredients', em: emA, x: 0, y: yA }, { key: 'good humans', em: emA, x: 0, y: yB });
+    const parts = ['gifts for you', 'major events', 'charity'], gap = 1.2;
+    const wEm = parts.reduce((a, k) => a + gw(k), 0) + gap * 2, emC = Math.min(0.125, avail / wEm), yC = yB - emA * 0.30 - emC * 1.25;
+    let x = -wEm * emC / 2;
+    parts.forEach((k, i) => { const w = gw(k) * emC; L.hidden.push({ key: k, em: emC, x: x + w / 2, y: yC }); x += w;
+      if (i < 2) { L.dots.push({ x: x + gap * emC / 2, y: yC + 0.30 * emC, r: 0.11 * emC }); x += gap * emC; } });
+    L.mark = { em: 0.105, y: 0.78 };
+    L.cta = { em: 0.085, y: yC - 0.30 };
+  } else {                                           // phones: everything stacked
+    const emT = Math.min(0.13, avail / gw('Want to know'));
+    L.title.push({ key: 'Want to know', em: emT, x: 0, y: 0.57 }, { key: 'our secret?', em: emT, x: 0, y: 0.57 - emT * 1.22 });
+    const rows = ['premium', 'ingredients', 'good humans', 'gifts for you', 'major events', 'charity'];
+    const em = Math.min(0.13, avail / Math.max(...rows.map(gw)));
+    rows.forEach((k, i) => L.hidden.push({ key: k, em, x: 0, y: 0.22 - i * em * 1.32 }));
+    L.mark = { em: 0.09, y: 0.83 };
+    L.cta = { em: 0.075, y: 0.22 - 5 * em * 1.32 - 0.21 };
+  }
+  return L;
+}
+const PATHS = {};
+function drawHidden(ctx, L, X0, Y1, sx, sy) {       // the hidden words into a canvas covering [X0, ...] x [..., Y1] on the pane
+  ctx.fillStyle = '#fff';
+  for (const it of L.hidden) {
+    const k = it.em / 1000, path = PATHS[it.key] || (PATHS[it.key] = new Path2D(GLYPHS[it.key].d));
+    ctx.setTransform(sx * k, 0, 0, -sy * k, (it.x - gw(it.key) * it.em / 2 - X0) * sx, (Y1 - it.y) * sy);
+    ctx.fill(path);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  for (const d of L.dots) { ctx.beginPath(); ctx.ellipse((d.x - X0) * sx, (Y1 - d.y) * sy, d.r * sx, d.r * sy, 0, 0, 6.2832); ctx.fill(); }
+}
+
+/* =====================================================================
+   THE POUR — a sheet of syrup released along the top edge, solved row by row down the pane.
+   Thicker syrup runs faster, so the front breaks into rounded fingers. Syrup that meets a hidden
+   letter dams up on top of it, is turned aside to the nearest edge and runs down the gaps; below the
+   letter the sheet creeps sideways and closes the dry wake. The result is stored per point on the
+   pane: arrival time, stream, settled depth, and the dam on top of each block.
+   ===================================================================== */
+function computeFlow(asp, L) {
+  const tStart = performance.now();
+  const X1 = 1.17 * asp + 0.05, X0 = -X1, Y1 = 1.10, Y0 = -1.22, Wd = X1 - X0, Hd = Y1 - Y0;
+  const c0 = Math.max(0.0024, Math.sqrt(Wd * Hd / 640000));
+  const NX = Math.round(Wd / c0), NY = Math.round(Hd / c0), cx = Wd / NX, cy = Hd / NY, N = NX * NY;
+  const gc = document.createElement('canvas'); gc.width = NX; gc.height = NY;
+  const gx = gc.getContext('2d', { willReadFrequently: true });
+  gx.fillStyle = '#000'; gx.fillRect(0, 0, NX, NY); drawHidden(gx, L, X0, Y1, NX / Wd, NY / Hd);
+  const gd = gx.getImageData(0, 0, NX, NY).data, blocked = new Uint8Array(N);
+  for (let k = 0; k < N; k++) blocked[k] = gd[k * 4] > 90 ? 1 : 0;
+
+  const INF = 1e9, q = new Float32Array(NX), T = new Float32Array(NX), lab = new Float32Array(NX), tmp = new Float32Array(NX);
+  const oT = new Float32Array(N).fill(INF), oL = new Float32Array(N), oH = new Float32Array(N), oP = new Float32Array(N);
+  const speed = v => Math.pow(Math.min(Math.max(v, 0.25), 4.0), 0.5);   // syrup: deeper runs a little faster, not a lot
+  let rs = 20261118; const rand = () => (rs = (rs * 1664525 + 1013904223) >>> 0) / 4294967296;
+  for (let i = 0; i < NX; i++) {                     // the release: uneven, so the front fingers as it falls
+    const x = X0 + (i + 0.5) * cx;
+    const lobe = Math.pow(0.5 + 0.5 * Math.sin(x * 22.4 + 1.3), 2.2) * 0.8 + Math.pow(0.5 + 0.5 * Math.sin(x * 51.7 + 4.1), 3.0) * 0.35;
+    q[i] = 0.86 + 0.34 * lobe * (0.7 + 0.3 * Math.sin(x * 6.3 + 0.5));
+    lab[i] = x;
+  }
+  for (let j = 0; j < NY; j++) {
+    const row = j * NX;
+    // 1. syrup that runs into a block dams up on top of it and is turned aside to the nearest edge
+    for (let i = 0; i < NX;) {
+      if (!blocked[row + i]) { i++; continue; }
+      const a = i; while (i < NX && blocked[row + i]) i++;
+      const b = i - 1, mid = (a + b) / 2, half = Math.max((b - a + 1) / 2, 1), widthK = Math.min(1, (b - a + 1) * cx / 0.025);
+      for (let k = a; k <= b; k++) {
+        const qk = q[k]; q[k] = 0; if (qk <= 1e-4) continue;
+        let d = k <= mid ? a - 1 : b + 1; if (d < 0) d = b + 1; if (d >= NX) d = a - 1;
+        if (d < 0 || d >= NX) continue;
+        const tArr = T[k] + Math.abs(k - d) * cx / 0.55, qd = q[d];
+        lab[d] = qd > 1e-4 ? (lab[d] * qd + lab[k] * qk) / (qd + qk) : lab[k];
+        T[d] = qd > 1e-4 ? Math.min(T[d], tArr) : tArr;
+        q[d] = qd + qk;
+        const pile = Math.min(1.5, 0.6 * Math.sqrt(qk) * (0.4 + 0.6 * Math.min(k - a + 1, b - k + 1) / half) * widthK);
+        for (let up = 1; up <= 8 && j - up >= 0; up++) {
+          const o = (j - up) * NX + k; if (blocked[o]) break;
+          const v = pile * Math.exp(-(up - 1) * cy / 0.009); if (v > oP[o]) oP[o] = v;
+        }
+      }
+    }
+    // 2. down one row; deeper syrup runs faster
+    for (let i = 0; i < NX; i++) if (q[i] > 1e-4 && !blocked[row + i]) T[i] += cy / speed(q[i]);
+    // 3. the sheet creeps sideways into dry glass (closing the wake under a letter); neighbouring streams even out
+    for (let pass = 0; pass < 2; pass++) {
+      const dir = (j + pass) & 1 ? 1 : -1;
+      for (let n = 0; n < NX; n++) {
+        const i = dir > 0 ? n : NX - 1 - n, nb = i - dir;
+        if (nb < 0 || nb >= NX || blocked[row + i] || blocked[row + nb] || q[i] > 1e-4 || q[nb] <= 2e-3 || rand() > 0.80) continue;
+        const mv = q[nb] * 0.22; q[nb] -= mv; q[i] = mv; T[i] = T[nb] + cx / 0.6; lab[i] = X0 + (i + 0.5) * cx; n++;
+      }
+    }
+    tmp.set(q);
+    for (let i = 1; i < NX - 1; i++) {
+      if (tmp[i] <= 1e-4 || blocked[row + i]) continue;
+      let f = 0;
+      if (tmp[i - 1] > 1e-4 && !blocked[row + i - 1]) f += tmp[i - 1] - tmp[i];
+      if (tmp[i + 1] > 1e-4 && !blocked[row + i + 1]) f += tmp[i + 1] - tmp[i];
+      q[i] = tmp[i] + 0.16 * f;
+    }
+    // 4. record the row
+    for (let i = 0; i < NX; i++) {
+      const o = row + i; oL[o] = lab[i];
+      if (blocked[o] || q[i] <= 1e-4) continue;
+      oT[o] = T[i]; oH[o] = Math.cbrt(Math.min(q[i], 12));
+    }
+  }
+  // letters (and the closed counters inside them) get the time the syrup first reaches them, spreading inward
+  const need = new Uint8Array(N); for (let k = 0; k < N; k++) need[k] = oT[k] >= INF ? 1 : 0;
+  const s1 = cx / 0.7, s2 = s1 * 1.4142;
+  for (let it = 0; it < 2; it++) {
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
+      const k = j * NX + i; if (!need[k]) continue; let t = oT[k];
+      if (i > 0 && oT[k - 1] + s1 < t) t = oT[k - 1] + s1;
+      if (j > 0) { if (oT[k - NX] + s1 < t) t = oT[k - NX] + s1; if (i > 0 && oT[k - NX - 1] + s2 < t) t = oT[k - NX - 1] + s2; if (i < NX - 1 && oT[k - NX + 1] + s2 < t) t = oT[k - NX + 1] + s2; }
+      oT[k] = t;
+    }
+    for (let j = NY - 1; j >= 0; j--) for (let i = NX - 1; i >= 0; i--) {
+      const k = j * NX + i; if (!need[k]) continue; let t = oT[k];
+      if (i < NX - 1 && oT[k + 1] + s1 < t) t = oT[k + 1] + s1;
+      if (j < NY - 1) { if (oT[k + NX] + s1 < t) t = oT[k + NX] + s1; if (i < NX - 1 && oT[k + NX + 1] + s2 < t) t = oT[k + NX + 1] + s2; if (i > 0 && oT[k + NX - 1] + s2 < t) t = oT[k + NX - 1] + s2; }
+      oT[k] = t;
+    }
+  }
+  for (let k = 0; k < N; k++) if (need[k] && !blocked[k]) { oH[k] = -0.62; oT[k] += 0.10; }   // a counter (inside an o, a, e…) fills as a still pool
+  // pack: half floats, bottom row first
+  const data = new Uint16Array(N * 4), toH = THREE.DataUtils.toHalfFloat;
+  for (let j = 0; j < NY; j++) {
+    const r = (NY - 1 - j) * NX;
+    for (let i = 0; i < NX; i++) { const k = j * NX + i, o = (r + i) * 4;
+      data[o] = toH(Math.min(oT[k], 60)); data[o + 1] = toH(oL[k]); data[o + 2] = toH(oH[k]); data[o + 3] = toH(oP[k]); }
+  }
+  if (FLOW.field) FLOW.field.dispose();
+  FLOW.field = new THREE.DataTexture(data, NX, NY, THREE.RGBAFormat, THREE.HalfFloatType);
+  FLOW.field.minFilter = FLOW.field.magFilter = THREE.LinearFilter; FLOW.field.needsUpdate = true;
+  // the same words, sharp, for drawing their edges
+  const mw = Math.min(2048, NX * 2), mh = Math.round(mw * Hd / Wd), mc = document.createElement('canvas'); mc.width = mw; mc.height = mh;
+  const mx = mc.getContext('2d'); mx.fillStyle = '#000'; mx.fillRect(0, 0, mw, mh); drawHidden(mx, L, X0, Y1, mw / Wd, mh / Hd);
+  if (FLOW.mask) FLOW.mask.dispose();
+  FLOW.mask = new THREE.CanvasTexture(mc); FLOW.mask.minFilter = THREE.LinearMipmapLinearFilter; FLOW.mask.magFilter = THREE.LinearFilter;
+  FLOW.mask.generateMipmaps = true; FLOW.mask.anisotropy = Math.min(4, maxAniso);
+  FLOW.rect.set(X0, Y0, 1 / Wd, 1 / Hd); FLOW.texel.set(1 / mw, 1 / mh);
+  if (DEBUG) console.log('pour solved', NX + 'x' + NY, Math.round(performance.now() - tStart) + ' ms');
+}
+
+/* ---------- lettering in front of the pane (the mark, the call) and behind it (the question) ---------- */
+const textScene = new THREE.Scene(), textGroup = new THREE.Group(), markGroup = new THREE.Group(), ctaGroup = new THREE.Group();
+textScene.add(textGroup); textGroup.add(markGroup, ctaGroup);
+{ const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.position.set(-2.2, 2.6, 3.2); textScene.add(key);
+  const rim = new THREE.DirectionalLight(0xffb040, 1.5); rim.position.set(3, -1.2, 1.5); textScene.add(rim);
+  textScene.add(new THREE.HemisphereLight(0xffffff, 0xd9a05a, 1.25)); }
+const ivory = new THREE.MeshPhysicalMaterial({ color: 0xfff6e8, roughness: 0.30, metalness: 0, clearcoat: 0.7, clearcoatRoughness: 0.25 });
+const gold = new THREE.MeshPhysicalMaterial({ color: 0xf0a01c, roughness: 0.32, metalness: 0.55, clearcoat: 0.5 });
+const ivoryCta = ivory.clone(), goldCta = gold.clone(); ivoryCta.transparent = goldCta.transparent = true;
+const titleScene = new THREE.Scene(), titleGroup = new THREE.Group(); titleScene.add(titleGroup);
+{ const key = new THREE.DirectionalLight(0xfff0dc, 2.3); key.position.set(-2.4, 2.4, 3.0); titleScene.add(key);
+  const rim = new THREE.DirectionalLight(0xffc070, 1.1); rim.position.set(2.6, -1.0, 1.4); titleScene.add(rim);
+  titleScene.add(new THREE.HemisphereLight(0xfffaf0, 0xc89a60, 1.15)); }
+const titleMat = new THREE.MeshPhysicalMaterial({ color: 0x6a1630, roughness: 0.36, metalness: 0, clearcoat: 0.8, clearcoatRoughness: 0.22, sheen: 0.4, sheenColor: new THREE.Color(0xffc6d0) });
+let textAsp = 0, LAY = null;
+function clearGroup(g) { for (const c of [...g.children]) { g.remove(c); c.geometry.dispose(); } }
+function buildText(asp, L) {
+  textAsp = asp;
+  clearGroup(markGroup); clearGroup(ctaGroup); clearGroup(titleGroup);
+  const add = (grp, geo, mat, x, y) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, 0); grp.add(m); return m; };
+  add(markGroup, letterGeo('Golabii', L.mark.em).g, ivory, 0, L.mark.y);
+  const cta = letterGeo('find out', L.cta.em);
+  add(ctaGroup, cta.g, ivoryCta, 0, L.cta.y);
+  add(ctaGroup, new THREE.BoxGeometry(cta.width * 1.02, L.cta.em * 0.055, L.cta.em * 0.08), goldCta, 0, L.cta.y - L.cta.em * 0.20).position.z = L.cta.em * 0.05;
+  for (const it of L.title) add(titleGroup, letterGeo(it.key, it.em).g, titleMat, it.x, it.y);
+  titleGroup.position.z = -0.075;                     // a few centimetres behind the glass
+}
+let textRT = null, titleRT = null;
+/* ---------- render targets ---------- *//* ---------- render targets ---------- */
+const slices = Array.from({ length: NS }, (_, i) => ({ d: (SLICES[i] + SLICES[i + 1]) / 2, rt: null, tmp: null, sig: 1,
+  near: new THREE.Plane(new THREE.Vector3(0, 0, -1), -SLICES[i]), far: new THREE.Plane(new THREE.Vector3(0, 0, 1), SLICES[i + 1]) }));
+let compRT = null, W = 0, H = 0, pxCap = 2.6e6, slow = 0, lastT = 0;
+function resize() {
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const cw = canvas.clientWidth, ch = canvas.clientHeight, px = cw * ch * dpr * dpr;
+  if (px > pxCap) dpr *= Math.sqrt(pxCap / px);
+  const w = Math.max(2, Math.round(cw * dpr)), h = Math.max(2, Math.round(ch * dpr));
+  if (w === W && h === H) return false;
+  W = w; H = h; renderer.setPixelRatio(1); renderer.setSize(w, h, false);
+  const asp = w / h; camera.aspect = asp; camera.updateProjectionMatrix();
+  for (const s of slices) {
+    const sFrac = DEBUG.includes('rose') ? 0.0003 : 0.0010 + 0.0085 * s.d;                                   // thick frost: soft even at the pane, softer with distance                                   // frost radius grows with distance from the pane
+    const sh = Math.max(64, Math.min(h, Math.round(2.0 / sFrac))), sw = Math.max(64, Math.round(sh * asp));
+    s.sig = Math.max(0.4, sFrac * sh);
+    if (s.rt) { s.rt.dispose(); s.tmp.dispose(); }
+    const opts = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true };
+    s.rt = new THREE.WebGLRenderTarget(sw, sh, { ...opts, samples: s.d < 0.2 ? 4 : 0 });
+    s.tmp = new THREE.WebGLRenderTarget(sw, sh, { ...opts, depthBuffer: false });
+  }
+  if (textRT) { textRT.dispose(); titleRT.dispose(); }
+  const txo = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, samples: 4, depthBuffer: true };
+  textRT = new THREE.WebGLRenderTarget(w, h, txo); titleRT = new THREE.WebGLRenderTarget(w, h, txo);
+  if (Math.abs(asp - textAsp) / asp > 0.03) { LAY = layout(asp); buildText(asp, LAY); computeFlow(asp, LAY); }
+  if (compRT) compRT.dispose();
+  compRT = new THREE.WebGLRenderTarget(w, h, { type: THREE.HalfFloatType, minFilter: THREE.LinearMipmapLinearFilter, magFilter: THREE.LinearFilter, generateMipmaps: true, depthBuffer: false });
+  if (proto && Math.abs(asp - builtAsp) / asp > 0.06) { buildGarden(asp); renderer.shadowMap.needsUpdate = true; }
+  return true;
+}
+
+/* ---------- looking around ---------- */
+const look = { x: 0, y: 0, tx: 0, ty: 0 }; let lastMove = -1e9, hinted = false;
+function onPoint(ev) {
+  const r = canvas.getBoundingClientRect();
+  look.tx = (ev.clientX - r.left) / r.width * 2 - 1; look.ty = -((ev.clientY - r.top) / r.height * 2 - 1);
+  lastMove = performance.now();
+}
+const replayEl = document.getElementById('replay');
+canvas.addEventListener('pointermove', onPoint); canvas.addEventListener('pointerdown', onPoint);
+const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pv = new THREE.Matrix4(), tmpV = new THREE.Vector3();
+let firstFrame = true, frameNo = 0, t0 = -1;
+const AT = (DEBUG.match(/at([0-9.]+)/) || [])[1];      // #still-at6.5 freezes the pour at 6.5 s, for checking
+const WATER_AT = 2.3;                                  // a clear view of the glass first
+function pour(tl) {                                    // slow, syrupy start, then gathering speed as it falls
+  const tw = tl - WATER_AT;
+  return { tau: tw <= 0 ? -1 : 0.16 * tw + 0.0035 * tw * tw * tw, surge: Math.max(0, tw - 3.6) * 0.42 };
+}
+replayEl.addEventListener('click', () => { t0 = performance.now(); replayEl.classList.remove('on'); });
+
+function frame(now) {
+  const dt = now - lastT; lastT = now;
+  if (frameNo > 20 && dt > 34 && dt < 2000) { if (++slow > 45 && pxCap > 0.5e6) { pxCap *= 0.62; slow = 0; W = 0; } } else if (dt < 26) slow = Math.max(0, slow - 1);
+  resize();
+  if (t0 < 0) t0 = now;
+  const t = now / 1000, asp = W / H, tl = AT !== undefined ? +AT : reduce ? 30 : (now - t0) / 1000, P = pour(tl);
+  const drift = reduce ? 0 : sstep(11, 16, tl);         // the camera holds still while the pour plays
+  if (now - lastMove > 4000) { look.tx = 0.5 * drift * Math.sin(t * 0.21); look.ty = 0.38 * drift * Math.sin(t * 0.29 + 1.1); }
+  look.x += (look.tx - look.x) * 0.055; look.y += (look.ty - look.y) * 0.055;
+  const yaw = look.x * 0.26, pitch = look.y * 0.17;
+  camera.position.set(Math.sin(yaw) * Math.cos(pitch) * CAM_Z, Math.sin(pitch) * CAM_Z, Math.cos(yaw) * Math.cos(pitch) * CAM_Z);
+  camera.lookAt(0, 0, 0); camera.updateMatrixWorld(true);
+
+  const fall = Math.pow(Math.max(1, 1.3 / asp), 1.2);
+  lampPos.set(-asp * 0.98, asp < 1 ? 0.98 : 0.80, -0.42);
+  lamp.position.copy(lampPos); lamp.target.position.set(asp * 0.35, -0.45, -1.0); lamp.target.updateMatrixWorld();
+  shared.uTime.value = reduce ? 0 : t;
+  shared.uLampView.value.copy(lampPos).applyMatrix4(camera.matrixWorldInverse);
+  shared.uLampCol.value.copy(lampCol).multiplyScalar(2.4);
+
+  // 1. the garden, one pass per depth slice (clipped by planes parallel to the pane)
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.needsUpdate = true;
+  for (let i = 0; i < NS; i++) {
+    const s = slices[i], all = renderer.shadowMap.needsUpdate;
+    for (const m of plants) m.visible = all || (m.userData.z1 > SLICES[i] && m.userData.z0 < SLICES[i + 1]);
+    renderer.clippingPlanes = [s.near, s.far];
+    renderer.setRenderTarget(s.rt); renderer.clear(); renderer.render(scene, camera);
+  }
+  renderer.clippingPlanes = [];
+
+  // 2. frost: each slice is blurred by its distance from the pane
+  for (const s of slices) {
+    blurMat.uniforms.uSigma.value = s.sig;
+    blurMat.uniforms.uTex.value = s.rt.texture; blurMat.uniforms.uDir.value.set(1 / s.rt.width, 0); pass(blurMat, s.tmp);
+    blurMat.uniforms.uTex.value = s.tmp.texture; blurMat.uniforms.uDir.value.set(0, 1 / s.rt.height); pass(blurMat, s.rt);
+  }
+
+  // 3. haze + slices through the pebbled sheet, then the surface of the glass
+  pv.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse).invert();
+  const flat = DEBUG.includes('raw') ? 1 : 0, cu = compMat.uniforms, gu = glassMat.uniforms;
+  for (let i = 0; i < NS; i++) { cu['uL' + i].value = slices[i].rt.texture; cu.uD.value[i] = slices[i].d; cu.uDz.value[i] = i < NS - 1 ? slices[i + 1].d - slices[i].d : 0.8; }
+  cu.uInvPV.value.copy(pv); cu.uCam.value.copy(camera.position); cu.uRes.value.set(W, H); cu.uFlat.value = flat;
+  cu.uLampCol.value.copy(lampCol).multiplyScalar(1 / fall);
+  renderer.setClearColor(0x000000, 0); renderer.setRenderTarget(titleRT); renderer.clear(); renderer.render(titleScene, camera);
+  cu.uTitle.value = titleRT.texture;
+  pass(compMat, compRT);
+  gu.uC.value = compRT.texture; gu.uInvPV.value.copy(pv); gu.uCam.value.copy(camera.position);
+  gu.uLampCol.value.copy(lampCol); gu.uTime.value = t % 100; gu.uFlat.value = flat; gu.uFall.value = fall;
+  // lettering in front of the pane -> its own target; the call fades up once the words are out
+  const ctaIn = sstep(9.4, 10.8, tl);
+  ivoryCta.opacity = goldCta.opacity = ctaIn; ctaGroup.visible = ctaIn > 0.002; ctaGroup.position.y = (1 - ctaIn) * -0.03;
+  textGroup.position.set(0, reduce ? 0 : Math.sin(t * 0.55) * 0.006, 0.10);
+  renderer.setClearColor(0x000000, 0); renderer.setRenderTarget(textRT); renderer.clear(); renderer.render(textScene, camera);
+  gu.uTextRT.value = textRT.texture; gu.uPx.value.set(1 / W, 1 / H); gu.uAsp.value = asp;
+  gu.uField.value = FLOW.field; gu.uObs.value = FLOW.mask; gu.uTau.value = P.tau; gu.uSurge.value = P.surge; gu.uFlow.value = tl;
+  pass(glassMat, null);
+  replayEl.classList.toggle('on', AT === undefined && !reduce && tl > 11);
+
+  if (firstFrame) { firstFrame = false; veil.classList.add('off'); window.__ready = true; }
+  frameNo++; window.__frames = frameNo;
+  if (DEBUG.includes('still') && frameNo >= 3) return;
+  requestAnimationFrame(frame);
+}
+
+/* ---------- boot ---------- */
+(async () => {
+  try {
+    const [ash, aspen, oak] = await Promise.all(['ash', 'aspen', 'oak'].map(n => loadImage(`./tex/${n}.png`)));
+    const tint = new THREE.Color(0.95, 1.0, 0.42);
+    for (const [name, img, hue] of [['ash', ash, false], ['aspen', aspen, true], ['oak', oak, false]]) {
+      const { map, normalMap } = branchTextures(img, hue);
+      cardDepth[name] = shadowMat(map);
+      cardMats[name] = living(new THREE.MeshStandardMaterial({ map, normalMap, normalScale: new THREE.Vector2(0.9, 0.9), alphaTest: 0.42, alphaToCoverage: true,
+        side: THREE.DoubleSide, roughness: 0.52, metalness: 0 }), tint);
+    }
+    const peb = pebbleTexture(); compMat.uniforms.uPeb.value = peb; glassMat.uniforms.uPeb.value = peb;
+    compMat.uniforms.uPebScale.value = glassMat.uniforms.uPebScale.value = 1 / 0.46;
+    buildPrototypes(); resize(); buildGarden(W / H);
+    requestAnimationFrame(frame);
+  } catch (err) { console.error(err); veil.textContent = 'Could not load the garden'; }
+})();
+</script>
+</body>
+</html>
