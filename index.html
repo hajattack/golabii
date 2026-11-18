@@ -10,12 +10,13 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&family=Gloock&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="scenes.css?v=floral-20261117" />
   <link rel="stylesheet" href="floral-spatial.css?v=20261117" />
   <link rel="stylesheet" href="courtyard.css?v=20261001" />
+  <link rel="stylesheet" href="saffron-map.css?v=20261118" />
   <link rel="preload" href="assets/floral-spatial/original.webp" as="image" fetchpriority="high">
   <script src="floral-spatial.js?v=20261117" defer></script>
   <script src="scenes.js?v=floral-20261117" defer></script>
@@ -119,6 +120,165 @@
       </div>
     </section>
 
+    <!-- ===== SAFFRON DROPS MAP: Persian student communities, one saffron drop per school ===== -->
+    <section id="our-people" class="saffron-map" aria-labelledby="smTitle">
+      <div class="sm-head">
+        <p class="sm-kicker">Persian student communities</p>
+        <h2 class="sm-title" id="smTitle">Where our people are</h2>
+      </div>
+      <div class="sm-map" id="smMap">
+        <video id="smVideo" muted playsinline preload="none" data-poster="assets/saffron-map/poster.jpg" aria-hidden="true">
+          <source src="assets/saffron-map/drops.webm?v=20261118" type="video/webm">
+          <source src="assets/saffron-map/drops.mp4?v=20261118" type="video/mp4">
+        </video>
+        <img class="sm-still" data-src="assets/saffron-map/final.jpg?v=20261118" alt="Map of the United States and southern Canada outlined in saffron threads, with a golden saffron-water drop at each university with a Persian student community" decoding="async">
+        <button class="sm-spot" style="left:29.125%;top:14.157%" aria-label="University of Alberta, Alberta" tabindex="-1"></button>
+        <button class="sm-spot" style="left:27.369%;top:19.451%" aria-label="University of Calgary, Alberta" tabindex="-1"></button>
+        <button class="sm-spot" style="left:36.109%;top:18.751%" aria-label="University of Saskatchewan, Saskatchewan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:15.795%;top:20.030%" aria-label="University of British Columbia, British Columbia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:16.976%;top:19.624%" aria-label="Simon Fraser University, British Columbia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:15.636%;top:21.616%" aria-label="University of Victoria, British Columbia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:37.992%;top:23.063%" aria-label="University of Regina, Saskatchewan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:16.169%;top:24.369%" aria-label="University of Washington, Washington" tabindex="-1"></button>
+        <button class="sm-spot" style="left:46.688%;top:25.113%" aria-label="University of Manitoba, Manitoba" tabindex="-1"></button>
+        <button class="sm-spot" style="left:78.651%;top:27.094%" aria-label="Université Laval, Quebec" tabindex="-1"></button>
+        <button class="sm-spot" style="left:84.661%;top:26.848%" aria-label="University of New Brunswick, New Brunswick" tabindex="-1"></button>
+        <button class="sm-spot" style="left:89.267%;top:28.227%" aria-label="Dalhousie University, Nova Scotia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:21.600%;top:28.675%" aria-label="Washington State University, Washington" tabindex="-1"></button>
+        <button class="sm-spot" style="left:13.956%;top:29.553%" aria-label="Portland State University, Oregon" tabindex="-1"></button>
+        <button class="sm-spot" style="left:76.446%;top:30.460%" aria-label="Concordia University, Quebec" tabindex="-1"></button>
+        <button class="sm-spot" style="left:79.638%;top:30.011%" aria-label="Université de Sherbrooke, Quebec" tabindex="-1"></button>
+        <button class="sm-spot" style="left:13.008%;top:30.882%" aria-label="Oregon State University, Oregon" tabindex="-1"></button>
+        <button class="sm-spot" style="left:57.382%;top:31.258%" aria-label="Michigan Technological University, Michigan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:73.556%;top:31.382%" aria-label="University of Ottawa, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:77.620%;top:31.079%" aria-label="McGill University, Quebec" tabindex="-1"></button>
+        <button class="sm-spot" style="left:75.894%;top:31.878%" aria-label="Polytechnique Montréal, Quebec" tabindex="-1"></button>
+        <button class="sm-spot" style="left:12.633%;top:32.614%" aria-label="University of Oregon, Oregon" tabindex="-1"></button>
+        <button class="sm-spot" style="left:73.884%;top:33.035%" aria-label="Carleton University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.841%;top:35.681%" aria-label="Queen&#x27;s University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:81.033%;top:36.211%" aria-label="Harvard University, Massachusetts" tabindex="-1"></button>
+        <button class="sm-spot" style="left:82.273%;top:36.019%" aria-label="Massachusetts Institute of Technology, Massachusetts" tabindex="-1"></button>
+        <button class="sm-spot" style="left:51.622%;top:37.189%" aria-label="University of Minnesota, Minnesota" tabindex="-1"></button>
+        <button class="sm-spot" style="left:69.306%;top:36.945%" aria-label="York University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:70.711%;top:36.906%" aria-label="Toronto Metropolitan University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:79.821%;top:37.349%" aria-label="University of Massachusetts Amherst, Massachusetts" tabindex="-1"></button>
+        <button class="sm-spot" style="left:70.101%;top:38.348%" aria-label="University of Toronto, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.941%;top:38.388%" aria-label="Syracuse University, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:81.094%;top:37.933%" aria-label="University of Connecticut, Connecticut" tabindex="-1"></button>
+        <button class="sm-spot" style="left:82.310%;top:37.735%" aria-label="Boston University, Massachusetts" tabindex="-1"></button>
+        <button class="sm-spot" style="left:68.603%;top:38.730%" aria-label="University of Waterloo, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.687%;top:38.816%" aria-label="University of Rochester, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:82.009%;top:39.364%" aria-label="Brown University, Rhode Island" tabindex="-1"></button>
+        <button class="sm-spot" style="left:83.214%;top:39.079%" aria-label="Northeastern University, Massachusetts" tabindex="-1"></button>
+        <button class="sm-spot" style="left:65.159%;top:40.137%" aria-label="University of Windsor, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:68.062%;top:40.259%" aria-label="Western University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:69.616%;top:39.903%" aria-label="McMaster University, Ontario" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.047%;top:40.240%" aria-label="University at Buffalo, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.848%;top:40.144%" aria-label="Cornell University, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:79.970%;top:40.543%" aria-label="Yale University, Connecticut" tabindex="-1"></button>
+        <button class="sm-spot" style="left:56.995%;top:41.848%" aria-label="University of Wisconsin–Madison, Wisconsin" tabindex="-1"></button>
+        <button class="sm-spot" style="left:63.641%;top:42.456%" aria-label="Michigan State University, Michigan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:79.441%;top:42.055%" aria-label="Columbia University, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:80.742%;top:42.118%" aria-label="Stony Brook University, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:59.461%;top:43.058%" aria-label="Northwestern University, Illinois" tabindex="-1"></button>
+        <button class="sm-spot" style="left:64.803%;top:43.409%" aria-label="University of Michigan, Michigan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:66.098%;top:43.164%" aria-label="Wayne State University, Michigan" tabindex="-1"></button>
+        <button class="sm-spot" style="left:68.317%;top:44.434%" aria-label="Case Western Reserve University, Ohio" tabindex="-1"></button>
+        <button class="sm-spot" style="left:78.968%;top:43.624%" aria-label="Rutgers University, New Jersey" tabindex="-1"></button>
+        <button class="sm-spot" style="left:80.228%;top:43.653%" aria-label="New York University, New York" tabindex="-1"></button>
+        <button class="sm-spot" style="left:51.238%;top:45.075%" aria-label="Iowa State University, Iowa" tabindex="-1"></button>
+        <button class="sm-spot" style="left:59.116%;top:44.757%" aria-label="University of Illinois Chicago, Illinois" tabindex="-1"></button>
+        <button class="sm-spot" style="left:62.069%;top:44.911%" aria-label="University of Notre Dame, Indiana" tabindex="-1"></button>
+        <button class="sm-spot" style="left:73.741%;top:44.979%" aria-label="Penn State University, Pennsylvania" tabindex="-1"></button>
+        <button class="sm-spot" style="left:79.636%;top:45.233%" aria-label="Princeton University, New Jersey" tabindex="-1"></button>
+        <button class="sm-spot" style="left:10.299%;top:46.380%" aria-label="University of California, Davis, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:25.288%;top:45.901%" aria-label="University of Utah, Utah" tabindex="-1"></button>
+        <button class="sm-spot" style="left:54.251%;top:45.923%" aria-label="University of Iowa, Iowa" tabindex="-1"></button>
+        <button class="sm-spot" style="left:59.949%;top:46.149%" aria-label="University of Chicago, Illinois" tabindex="-1"></button>
+        <button class="sm-spot" style="left:77.211%;top:45.527%" aria-label="Drexel University, Pennsylvania" tabindex="-1"></button>
+        <button class="sm-spot" style="left:70.372%;top:46.784%" aria-label="University of Pittsburgh, Pennsylvania" tabindex="-1"></button>
+        <button class="sm-spot" style="left:71.627%;top:46.620%" aria-label="Carnegie Mellon University, Pennsylvania" tabindex="-1"></button>
+        <button class="sm-spot" style="left:76.579%;top:47.003%" aria-label="University of Delaware, Delaware" tabindex="-1"></button>
+        <button class="sm-spot" style="left:77.913%;top:47.221%" aria-label="University of Pennsylvania, Pennsylvania" tabindex="-1"></button>
+        <button class="sm-spot" style="left:11.009%;top:47.737%" aria-label="Sacramento State, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:34.931%;top:47.881%" aria-label="Colorado State University, Colorado" tabindex="-1"></button>
+        <button class="sm-spot" style="left:46.901%;top:48.453%" aria-label="University of Nebraska–Lincoln, Nebraska" tabindex="-1"></button>
+        <button class="sm-spot" style="left:8.299%;top:48.529%" aria-label="University of California, Berkeley, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:34.186%;top:49.421%" aria-label="University of Colorado Boulder, Colorado" tabindex="-1"></button>
+        <button class="sm-spot" style="left:61.388%;top:48.853%" aria-label="Purdue University, Indiana" tabindex="-1"></button>
+        <button class="sm-spot" style="left:66.808%;top:48.871%" aria-label="The Ohio State University, Ohio" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.928%;top:49.157%" aria-label="Johns Hopkins University, Maryland" tabindex="-1"></button>
+        <button class="sm-spot" style="left:8.240%;top:50.354%" aria-label="Stanford University, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:59.122%;top:49.883%" aria-label="University of Illinois Urbana-Champaign, Illinois" tabindex="-1"></button>
+        <button class="sm-spot" style="left:73.756%;top:50.346%" aria-label="George Mason University, Virginia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:76.110%;top:50.214%" aria-label="University of Maryland, Maryland" tabindex="-1"></button>
+        <button class="sm-spot" style="left:9.439%;top:50.793%" aria-label="San José State University, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:34.355%;top:51.231%" aria-label="Colorado School of Mines, Colorado" tabindex="-1"></button>
+        <button class="sm-spot" style="left:75.003%;top:51.007%" aria-label="Georgetown University, Washington, D.C." tabindex="-1"></button>
+        <button class="sm-spot" style="left:8.348%;top:52.156%" aria-label="University of California, Santa Cruz, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:62.022%;top:52.148%" aria-label="Indiana University Bloomington, Indiana" tabindex="-1"></button>
+        <button class="sm-spot" style="left:64.946%;top:51.568%" aria-label="University of Cincinnati, Ohio" tabindex="-1"></button>
+        <button class="sm-spot" style="left:76.195%;top:52.062%" aria-label="George Washington University, Washington, D.C." tabindex="-1"></button>
+        <button class="sm-spot" style="left:47.357%;top:53.160%" aria-label="Kansas State University, Kansas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:48.669%;top:53.597%" aria-label="University of Kansas, Kansas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:53.394%;top:53.601%" aria-label="University of Missouri, Missouri" tabindex="-1"></button>
+        <button class="sm-spot" style="left:56.470%;top:54.217%" aria-label="Washington University in St. Louis, Missouri" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.355%;top:54.204%" aria-label="University of Virginia, Virginia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:65.375%;top:54.971%" aria-label="University of Kentucky, Kentucky" tabindex="-1"></button>
+        <button class="sm-spot" style="left:75.555%;top:55.276%" aria-label="Virginia Commonwealth University, Virginia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:9.091%;top:56.313%" aria-label="Cal Poly, San Luis Obispo, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:71.824%;top:55.812%" aria-label="Virginia Tech, Virginia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:17.936%;top:57.529%" aria-label="University of Nevada, Las Vegas, Nevada" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.519%;top:58.280%" aria-label="Duke University, North Carolina" tabindex="-1"></button>
+        <button class="sm-spot" style="left:9.000%;top:59.806%" aria-label="University of California, Santa Barbara, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:11.449%;top:59.929%" aria-label="California State University, Northridge, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.105%;top:60.045%" aria-label="University of North Carolina at Chapel Hill, North Carolina" tabindex="-1"></button>
+        <button class="sm-spot" style="left:75.588%;top:59.525%" aria-label="NC State University, North Carolina" tabindex="-1"></button>
+        <button class="sm-spot" style="left:12.117%;top:61.457%" aria-label="University of Southern California, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:62.411%;top:60.853%" aria-label="Vanderbilt University, Tennessee" tabindex="-1"></button>
+        <button class="sm-spot" style="left:66.979%;top:60.658%" aria-label="University of Tennessee, Tennessee" tabindex="-1"></button>
+        <button class="sm-spot" style="left:10.792%;top:61.825%" aria-label="University of California, Los Angeles, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:14.116%;top:62.493%" aria-label="University of California, Riverside, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:46.045%;top:62.329%" aria-label="Oklahoma State University, Oklahoma" tabindex="-1"></button>
+        <button class="sm-spot" style="left:50.747%;top:62.084%" aria-label="University of Arkansas, Arkansas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:11.468%;top:63.358%" aria-label="University of California, Irvine, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:12.797%;top:62.987%" aria-label="California State University, Fullerton, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:30.675%;top:63.638%" aria-label="University of New Mexico, New Mexico" tabindex="-1"></button>
+        <button class="sm-spot" style="left:45.582%;top:64.272%" aria-label="University of Oklahoma, Oklahoma" tabindex="-1"></button>
+        <button class="sm-spot" style="left:69.341%;top:63.511%" aria-label="Clemson University, South Carolina" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.414%;top:65.453%" aria-label="University of South Carolina, South Carolina" tabindex="-1"></button>
+        <button class="sm-spot" style="left:12.231%;top:66.628%" aria-label="University of California, San Diego, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:13.479%;top:67.118%" aria-label="San Diego State University, California" tabindex="-1"></button>
+        <button class="sm-spot" style="left:21.388%;top:66.774%" aria-label="Arizona State University, Arizona" tabindex="-1"></button>
+        <button class="sm-spot" style="left:67.503%;top:66.774%" aria-label="Emory University, Georgia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:68.835%;top:67.009%" aria-label="University of Georgia, Georgia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:66.358%;top:67.697%" aria-label="Georgia Institute of Technology, Georgia" tabindex="-1"></button>
+        <button class="sm-spot" style="left:37.986%;top:69.175%" aria-label="Texas Tech University, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:62.010%;top:69.817%" aria-label="University of Alabama, Alabama" tabindex="-1"></button>
+        <button class="sm-spot" style="left:22.369%;top:70.773%" aria-label="University of Arizona, Arizona" tabindex="-1"></button>
+        <button class="sm-spot" style="left:45.681%;top:70.505%" aria-label="University of North Texas, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:46.865%;top:71.444%" aria-label="University of Texas at Dallas, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:65.641%;top:71.177%" aria-label="Auburn University, Alabama" tabindex="-1"></button>
+        <button class="sm-spot" style="left:45.724%;top:72.557%" aria-label="University of Texas at Arlington, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:68.464%;top:77.519%" aria-label="Florida State University, Florida" tabindex="-1"></button>
+        <button class="sm-spot" style="left:47.056%;top:78.702%" aria-label="Texas A&amp;M University, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:56.657%;top:79.464%" aria-label="Louisiana State University, Louisiana" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.207%;top:79.325%" aria-label="University of Florida, Florida" tabindex="-1"></button>
+        <button class="sm-spot" style="left:44.373%;top:80.311%" aria-label="University of Texas at Austin, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:57.982%;top:80.371%" aria-label="Tulane University, Louisiana" tabindex="-1"></button>
+        <button class="sm-spot" style="left:43.270%;top:81.780%" aria-label="University of Texas at San Antonio, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:48.243%;top:82.128%" aria-label="Rice University, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:49.595%;top:81.705%" aria-label="University of Houston, Texas" tabindex="-1"></button>
+        <button class="sm-spot" style="left:74.767%;top:82.132%" aria-label="University of Central Florida, Florida" tabindex="-1"></button>
+        <button class="sm-spot" style="left:72.820%;top:84.421%" aria-label="University of South Florida, Florida" tabindex="-1"></button>
+        <button class="sm-spot" style="left:77.157%;top:90.755%" aria-label="Florida International University, Florida" tabindex="-1"></button>
+        <button class="sm-spot" style="left:78.560%;top:91.247%" aria-label="University of Miami, Florida" tabindex="-1"></button>
+        <div class="sm-loupe" id="smLoupe" aria-hidden="true"><div class="sm-glass" id="smGlass"></div></div>
+        <div class="sm-hint" id="smHint">Move over the map to look closer</div>
+        <button class="sm-replay" id="smReplay" type="button">Replay</button>
+      </div>
+    </section>
+
     <section class="content-section">
       <div class="section-inner-book reveal-up">
         <h3 class="section-label">why we're special</h3>
@@ -161,5 +321,6 @@
   </main>
 
   <script src="script.js?v=b2b0e9d"></script>
+  <script src="saffron-map.js?v=20261118" defer></script>
 </body>
 </html>
